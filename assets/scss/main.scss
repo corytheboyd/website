@@ -35,3 +35,20 @@ section#header {
         @include typography-subtitle;
     }
 }
+
+article {
+    p {
+        @include typography-body;
+    }
+    h2 {
+        @include typography-section-title;
+    }
+    p {
+        + p {
+            padding-top: spacing(2);
+        }
+        + :not(p) {
+            padding-top: spacing(3);
+        }
+    }
+}

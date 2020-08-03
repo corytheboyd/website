@@ -1,12 +1,15 @@
 $typography-color-primary: black;
+$typography-font-family-1: Georgia, Cambria, "Times New Roman", Times, serif;
+$typography-font-family-2: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, sans-serif;
 
 @mixin typography-base {
     @include reset-typography;
+    font-family: $typography-font-family-1;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     color: $typography-color-primary;
-    font-family: Georgia, Cambria, "Times New Roman", Times, serif;
     font-weight: 400;
+    word-break: break-word;
 }
 
 @mixin typography-subdued($level: 1) {
@@ -27,13 +30,20 @@ $typography-color-primary: black;
 @mixin typography-subtitle {
     @include typography-base;
     @include typography-subdued(1);
-    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, sans-serif;
+    font-family: $typography-font-family-2;
     font-size: 1.25em;
     line-height: 1.5em;
-    font-weight: 300;
 }
 
 @mixin typography-body {
     @include typography-base;
-    font-size: 3em;
+    font-size: 1.2em;
+    line-height: 1.5em;
+}
+
+@mixin typography-section-title {
+    @include typography-base;
+    font-family: $typography-font-family-2;
+    font-size: 2em;
+    font-weight: 600;
 }
