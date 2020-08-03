@@ -1,3 +1,27 @@
-html {
-    color: red;
+@import './lib/reset';
+@import './lib/typography';
+
+body {
+    margin: 0;
+}
+
+header {
+    background: whitesmoke;
+    padding: 1em;
+
+    nav {
+        display: flex;
+
+        .brand {
+            @include reset-link;
+        }    
+
+        ul {
+            @include reset-list;
+            
+            li a {
+                @include reset-link;
+            }
+        }
+    }
 }

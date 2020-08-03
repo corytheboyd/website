@@ -7,12 +7,13 @@
 
     {{ $style := resources.Get "/scss/main.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
     <link rel="stylesheet" href="{{ $style.Permalink }}">
-
     <title>Cory Boyd</title>
 </head>
 
 <body>
-    {{ partial "nav" }}
+    <header>
+        {{ partial "nav" }}
+    </header>
     <main>
         {{ block "main" . }}
         {{ end }}

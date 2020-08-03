@@ -1,0 +1,5 @@
+$typography-color-primary: black;
+
+@mixin base {
+    color: $typography-color-primary;
+}
