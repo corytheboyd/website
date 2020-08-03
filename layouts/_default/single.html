@@ -4,6 +4,13 @@
 
 {{ define "main" }}
 <article>
-    {{.Content}}
+    <section id="header">
+        <h1>{{.Title}}</h1>
+        <h2>{{.Summary}}</h2>
+    </section>
+
+    <section id="content">
+        {{.Content}}
+    </section>
 </article>
 {{ end }}

@@ -1,5 +1,39 @@
 $typography-color-primary: black;
 
-@mixin base {
+@mixin typography-base {
+    @include reset-typography;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
     color: $typography-color-primary;
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+    font-weight: 400;
+}
+
+@mixin typography-subdued($level: 1) {
+    @if $level < 1 or $level > 1 {
+        @error "typography-subdued($level): Provided $level must be within range"
+    }
+    @if $level == 1 {
+        opacity: 0.5;
+    }
+}
+
+@mixin typography-title {
+    @include typography-base;
+    font-size: 2.5em;
+    line-height: 1.5em;
+}
+
+@mixin typography-subtitle {
+    @include typography-base;
+    @include typography-subdued(1);
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, sans-serif;
+    font-size: 1.25em;
+    line-height: 1.5em;
+    font-weight: 300;
+}
+
+@mixin typography-body {
+    @include typography-base;
+    font-size: 3em;
 }
