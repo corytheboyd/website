@@ -35,6 +35,7 @@ nav {
 }
 
 section#header {
+    padding-top: spacing(3);
     padding-bottom: spacing(4);
     h1 {
         @include typography-title;
