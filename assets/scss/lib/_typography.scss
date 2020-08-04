@@ -2,6 +2,8 @@ $typography-color-primary: black;
 $typography-font-family-1: Georgia, Cambria, "Times New Roman", Times, serif;
 $typography-font-family-2: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, sans-serif;
 
+$typography-font-size: 19px;
+
 @mixin typography-base {
     @include reset-typography;
     font-family: $typography-font-family-1;
@@ -41,6 +43,7 @@ $typography-font-family-2: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans"
 @mixin typography-body {
     @include typography-base;
     line-height: 1.5em;
+    font-size: $typography-font-size;
 }
 
 @mixin typography-section-title($factor: 1) {

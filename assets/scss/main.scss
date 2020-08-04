@@ -22,12 +22,17 @@ nav {
         max-width: 40em;
         display: flex;
         flex-direction: row;
+        
         .brand {
             @include reset-link;
+            @include typography-body;
+            font-weight: 600;
         }
+        
         ul {
             @include reset-list;
             list-style: none;
+        
             li a {
                 @include reset-link;
             }
@@ -81,8 +86,8 @@ article {
         margin: 0;
         li {
             @include typography-body;
-            font-size: 1em;
-            line-height: 29px;
+            font-size: $typography-font-size;
+            line-height: 35px;
         }
     }
     ul > li > ul,
