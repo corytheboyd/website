@@ -7,6 +7,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-x: hidden;
 }
 
 nav {
@@ -35,8 +36,8 @@ nav {
 }
 
 section#header {
-    padding-top: spacing(3);
-    padding-bottom: spacing(4);
+    margin-top: spacing(3);
+    margin-bottom: spacing(4);
     h1 {
         @include typography-title;
     }
@@ -65,16 +66,16 @@ article {
     }
     p {
         + p {
-            padding-top: spacing(2);
+            margin-top: spacing(2);
         }
         @for $i from 1 through 3 {
             + h#{$i + 1} {
-                padding-top: spacing(2.3);
+                margin-top: spacing(2.3);
             }
         }
     }
     ol + p, p + ol {
-        padding-top: spacing(2);
+        margin-top: spacing(2);
     }
     ul, ol {
         margin: 0;
