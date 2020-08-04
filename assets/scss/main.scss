@@ -38,7 +38,7 @@ section#header {
     }
     time {
         @include typography-base;
-        @include typography-subdued(1);
+        @include typography-subdued(2);
     }
 }
 
@@ -46,8 +46,10 @@ article {
     p {
         @include typography-body;
     }
-    h2 {
-        @include typography-section-title;
+    @for $i from 1 through 3 {
+        h#{$i + 1} {
+            @include typography-section-title($i);
+        }    
     }
     p {
         + p {

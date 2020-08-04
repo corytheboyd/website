@@ -13,11 +13,14 @@ $typography-font-family-2: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans"
 }
 
 @mixin typography-subdued($level: 1) {
-    @if $level < 1 or $level > 1 {
+    @if ($level < 1 or $level > 2) {
         @error "typography-subdued($level): Provided $level must be within range"
     }
-    @if $level == 1 {
-        opacity: 0.5;
+    
+    @if ($level == 1) {
+        opacity: 0.75;
+    } @else if ($level == 2) {
+        opacity: 0.6;
     }
 }
 
@@ -41,9 +44,23 @@ $typography-font-family-2: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans"
     line-height: 1.5em;
 }
 
-@mixin typography-section-title {
+@mixin typography-section-title($factor: 1) {
+    @if ($factor < 1 or $factor > 3) {
+        @error("typography-section-title($factor): $factor out of range 1-4")
+    }
     @include typography-base;
+
+    padding-bottom: spacing(1);
     font-family: $typography-font-family-2;
-    font-size: 2em;
     font-weight: 600;
+
+    @if $factor == 1 {
+        font-size: 1.6em;
+    } @else if $factor == 2 {
+        font-size: 1.4em;
+    } @else if $factor == 3 {
+        @include typography-subdued(1);
+        font-size: 0.9em;
+        text-transform: uppercase;
+    }
 }
