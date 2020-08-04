@@ -1,6 +1,7 @@
 @import './lib/reset';
 @import './lib/spacing';
 @import './lib/typography';
+@import './lib/shadow';
 
 $page-width: 40em;
 
@@ -46,66 +47,10 @@ nav {
     }
 }
 
-section#header {
-    margin-top: spacing(3);
-    margin-bottom: spacing(4);
-    h1 {
-        @include typography-title;
-    }
-    h2 {
-        @include typography-subtitle;
-    }
-    time {
-        @include typography-base;
-        @include typography-subdued(2);
-    }
-}
-
 main {
     max-width: $page-width;
     width: 100%;
     padding: 0 spacing(2);
-}
-
-article {
-    p {
-        @include typography-body;
-    }
-    @for $i from 1 through 3 {
-        h#{$i + 1} {
-            @include typography-section-title($i);
-        }    
-    }
-    p {
-        + p {
-            margin-top: spacing(2);
-        }
-        @for $i from 1 through 3 {
-            + h#{$i + 1} {
-                margin-top: spacing(2.3);
-            }
-        }
-    }
-    ol + p, p + ol {
-        margin-top: spacing(2);
-    }
-    ul, ol {
-        margin: 0;
-        li {
-            @include typography-body;
-            font-size: $typography-font-size;
-            line-height: 35px;
-        }
-    }
-    ul > li > ul,
-    ol > li > ol {
-        padding-left: spacing(4);
-    }
-    figure {
-        img {
-            width: 100%;
-        }
-    }
 }
 
 .dropcap {

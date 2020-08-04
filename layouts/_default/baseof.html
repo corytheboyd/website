@@ -7,6 +7,8 @@
 
     {{ $style := resources.Get "/scss/main.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
     <link rel="stylesheet" href="{{ $style.Permalink }}">
+    {{ block "head" . }}
+    {{ end }}
 
     <title>
         {{ block "title" . }}
