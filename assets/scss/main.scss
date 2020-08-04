@@ -9,17 +9,14 @@ body {
 header {
     background: whitesmoke;
     padding: spacing(2);
-
     nav {
         display: flex;
-
         .brand {
             @include reset-link;
         }    
-
         ul {
             @include reset-list;
-            
+            list-style: none;
             li a {
                 @include reset-link;
             }
@@ -29,7 +26,6 @@ header {
 
 section#header {
     padding-bottom: spacing(4);
-
     h1 {
         @include typography-title;
     }
@@ -58,6 +54,17 @@ article {
         + :not(p) {
             padding-top: spacing(3);
         }
+    }
+    ul, ol {
+        margin: 0;
+        li {
+            @include typography-body;
+            font-size: 1em;
+        }
+    }
+    ul > li > ul,
+    ol > li > ol {
+        padding-left: spacing(4);
     }
 }
 
