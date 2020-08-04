@@ -9,22 +9,28 @@ body {
     align-items: center;
 }
 
-header {
+nav {
     width: 100%;
-    background: whitesmoke;
     padding: spacing(2);
-    nav {
+    background: whitesmoke;
+    display: flex;
+    justify-content: center;
+
+    div {
+        width: 100%;
+        max-width: 40em;
         display: flex;
+        flex-direction: row;
         .brand {
             @include reset-link;
-        }    
+        }
         ul {
             @include reset-list;
             list-style: none;
             li a {
                 @include reset-link;
             }
-        }
+        }        
     }
 }
 
@@ -40,6 +46,10 @@ section#header {
         @include typography-base;
         @include typography-subdued(2);
     }
+}
+
+main {
+    padding: 0 spacing(2);
 }
 
 article {
@@ -76,6 +86,11 @@ article {
     ul > li > ul,
     ol > li > ol {
         padding-left: spacing(4);
+    }
+    figure {
+        img {
+            width: 100%;
+        }
     }
 }
 
