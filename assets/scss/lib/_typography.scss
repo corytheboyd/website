@@ -42,7 +42,7 @@ $typography-font-size: 19px;
 
 @mixin typography-body {
     @include typography-base;
-    line-height: 1.5em;
+    line-height: 1.8em;
     font-size: $typography-font-size;
 }
 
