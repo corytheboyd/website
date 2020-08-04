@@ -69,7 +69,7 @@ article {
         }
         @for $i from 1 through 3 {
             + h#{$i + 1} {
-                padding-top: spacing(3);
+                padding-top: spacing(2.3);
             }
         }
     }
