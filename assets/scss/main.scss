@@ -51,15 +51,21 @@ article {
         + p {
             padding-top: spacing(2);
         }
-        + :not(p) {
-            padding-top: spacing(3);
+        @for $i from 1 through 3 {
+            + h#{$i + 1} {
+                padding-top: spacing(3);
+            }
         }
+    }
+    ol + p, p + ol {
+        padding-top: spacing(2);
     }
     ul, ol {
         margin: 0;
         li {
             @include typography-body;
             font-size: 1em;
+            line-height: 29px;
         }
     }
     ul > li > ul,
