@@ -20,8 +20,10 @@
 <body>
     {{ partial "nav" }}
     <main>
-        {{ block "main" . }}
-        {{ end }}
+        <div id="inner">
+            {{ block "main" . }}
+            {{ end }}
+        </div>
     </main>
 </body>
 
