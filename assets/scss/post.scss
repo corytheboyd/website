@@ -26,35 +26,7 @@ section#title {
 
 section#content {
   p {
-    @include font-family(title, 1);
+    @include font-family(body);
     @include font-size(body);
   }
 }
-
-// ol + p,
-// p + ol {
-//   margin-top: spacing(2);
-// }
-
-// // ul,
-// // ol {
-// //   margin: 0;
-
-// //   li {
-// //     // @include typography-body;
-
-// //     font-size: font-size();
-// //     line-height: 35px;
-// //   }
-// // }
-
-// ul > li > ul,
-// ol > li > ol {
-//   padding-left: spacing(4);
-// }
-
-// figure {
-//   img {
-//     width: 100%;
-//   }
-// }
