@@ -1,8 +1,8 @@
 @import "./lib/font-family";
 
 body {
+  @include font-family(default);
   margin: 0;
-  font-family: font-family(default);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
