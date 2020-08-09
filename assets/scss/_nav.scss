@@ -1,12 +1,10 @@
-@import "./lib/spacing";
-@import "./lib/opacity";
 @import "./lib/fit-to-viewport";
+@import "./lib/font-size";
+@import "./lib/opacity";
+@import "./lib/spacing";
 
 nav {
-  width: 100%;
-
   background: whitesmoke;
-
   display: flex;
   justify-content: center;
 
@@ -14,7 +12,6 @@ nav {
     @include fit-to-viewport;
 
     padding: spacing(2);
-
     width: 100%;
     display: flex;
     justify-content: flex-start;
@@ -22,12 +19,11 @@ nav {
     flex-direction: row;
 
     .brand {
+      @include font-size(title, 4);
+
       font-weight: 600;
-      font-size: 1.2em;
       color: black;
-
       margin-right: spacing(3);
-
       text-decoration: none;
     }
 
@@ -38,6 +34,12 @@ nav {
 
       li {
         @include opacity(2);
+
+        a {
+          @include font-size(body);
+
+          font-weight: 600;
+        }
       }
     }
   }
