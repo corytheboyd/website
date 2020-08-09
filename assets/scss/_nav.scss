@@ -3,8 +3,19 @@
 @import "./lib/opacity";
 @import "./lib/spacing";
 
+// TODO consider dark mode utils
+@mixin _background {
+  background: #0c6ba5;
+}
+
+@mixin _color {
+  color: white;
+}
+
 nav {
-  background: whitesmoke;
+  // TODO consider dark mode
+  @include _background();
+
   display: flex;
   justify-content: center;
 
@@ -20,9 +31,9 @@ nav {
 
     .brand {
       @include font-size(title, 4);
+      @include _color();
 
       font-weight: 600;
-      color: black;
       margin-right: spacing(3);
       text-decoration: none;
     }
@@ -33,10 +44,11 @@ nav {
       margin: 0;
 
       li {
-        @include opacity(2);
+        @include opacity(1);
 
         a {
           @include font-size(body);
+          @include _color();
 
           font-weight: 600;
         }
