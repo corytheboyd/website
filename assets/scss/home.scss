@@ -1,29 +1,32 @@
-@import './lib/breakpoints';
-@import './lib/spacing';
+@import "./lib/breakpoints";
+@import "./lib/spacing";
 
 main #inner {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-    > :not(:last-child) {
-        @include respond-to('small') {
-            margin-right: spacing(2);
-        }
+  > :not(:last-child) {
+    @include respond-to("small") {
+      margin-right: spacing(2);
     }
+  }
 
-    @include respond-to('small') {
-        flex-direction: row;
-        justify-content: flex-start;
+  @include respond-to("small") {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  img {
+    $scale: 75%;
+    width: $scale;
+    height: $scale;
+
+    border-radius: spacing(2);
+
+    @include respond-to("small") {
+      max-width: 9em;
     }
-
-    img {
-        width: 75%;
-        border-radius: 2px;
-
-        @include respond-to('small') {
-            max-width: 9em;
-        }
-    }
+  }
 }

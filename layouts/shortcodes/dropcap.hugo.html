@@ -1,0 +1,7 @@
+{{ $end := default 1 (.Get 0) }}
+
+<p class="dropcap">
+  <span>{{ slicestr .Inner 0 (add $end 1) }}</span>
+  {{ slicestr .Inner (add $end 1) }}
+
+</p>

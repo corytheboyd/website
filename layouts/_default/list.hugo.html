@@ -1,0 +1,13 @@
+{{ define "title" }}
+{{ .Title }} · {{ .Site.Title }}
+{{ end }}
+
+{{ define "main" }}
+{{ range .Pages.ByPublishDate }}
+
+<article>
+  <span>{{ .Date.Format "2006-01-02" }}</span>
+  <a href="{{ .Permalink }}">{{ .Title }}</a>
+</article>
+{{ end }}
+{{ end }}

@@ -1,0 +1,20 @@
+{{ define "head" }}
+{{ $style := resources.Get "/scss/home.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+<link
+  rel="stylesheet"
+  href="{{ $style.Permalink }}"
+/>
+{{ end }} {{ define "main" }}
+<img
+  class="shadow"
+  src="/me.png"
+  alt="A handsome boi"
+/>
+<div>
+  <p>Software Engineer by day, cat dad by night.</p>
+  <p>
+    I make life easier for software companies by delivering simple systems built
+    on tactfully planned and thoroughly understood foundations.
+  </p>
+</div>
+{{ end }}
