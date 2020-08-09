@@ -29,4 +29,12 @@ section#content {
     @include font-family(body);
     @include font-size(body);
   }
+
+  // Default styles for h1-h4
+  @for $i from 1 through 4 {
+    h#{$i} {
+      @include font-family(title, 2);
+      @include font-size(title, $i);
+    }
+  }
 }

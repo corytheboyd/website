@@ -16,13 +16,13 @@ $_BASE: 19px;
     @if $scale == unspecified or $scale < 1 or $scale > 4 {
       @error ("font-size($type = #{$type}, $scale = #{$scale}): $type(#{$type}) requires $scale value in range 1...4");
     } @else if $scale == 1 {
-      $_size: $_BASE * 2;
+      $_size: $_BASE * 1.5;
     } @else if $scale == 2 {
-      $_size: $_BASE * 1.8;
-    } @else if $scale == 3 {
-      $_size: $_BASE * 1.6;
-    } @else if $scale == 4 {
       $_size: $_BASE * 1.4;
+    } @else if $scale == 3 {
+      $_size: $_BASE * 1.2;
+    } @else if $scale == 4 {
+      $_size: $_BASE * 1.1;
     }
   }
 
