@@ -23,7 +23,7 @@ main #inner {
     width: $scale;
     height: $scale;
 
-    border-radius: spacing(2);
+    border-radius: spacing(0.5);
 
     @include respond-to("small") {
       max-width: 9em;
