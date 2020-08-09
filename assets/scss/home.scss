@@ -13,15 +13,23 @@ main #inner {
     }
   }
 
+  p {
+    line-height: 1.5em;
+    text-align: center;
+  }
   @include respond-to("small") {
     flex-direction: row;
     justify-content: flex-start;
+
+    p {
+      text-align: left;
+    }
   }
 
   img {
-    $scale: 75%;
-    width: $scale;
-    height: $scale;
+    $size: 150px;
+    width: $size;
+    height: $size;
 
     border-radius: spacing(0.5);
 
