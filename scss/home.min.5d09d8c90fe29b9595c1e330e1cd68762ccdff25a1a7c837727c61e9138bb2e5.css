@@ -1,0 +1,1 @@
+main #inner{display:flex;flex-direction:column;justify-content:center;align-items:center}@media(min-width:767px){main #inner>:not(:last-child){margin-right:1em}}@media(min-width:767px){main #inner{flex-direction:row;justify-content:flex-start}}main #inner img{width:75%;height:75%;border-radius:1em}@media(min-width:767px){main #inner img{max-width:9em}}
