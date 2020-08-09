@@ -1,0 +1,14 @@
+@function font-family($type: default) {
+  @if $type != default and $type != title and $type != subtitle {
+    @error ("font-family($type): $type must be one of: default, title, subtitle");
+  } @else if $type == default {
+    @return -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      "Segoe UI Symbol";
+  } @else if $type == title {
+    @return Georgia, Cambria, "Times New Roman", Times, serif;
+  } @else if $type == subtitle {
+    @return "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial,
+      sans-serif;
+  }
+}

@@ -1,0 +1,11 @@
+@mixin opacity($level: 1) {
+  @if ($level < 1 or $level > 2) {
+    @error "opacity($level): Provided $level must be within range";
+  } @else if ($level == 1) {
+    opacity: 0.8;
+  } @else if ($level == 2) {
+    opacity: 0.6;
+  } @else if ($level == 3) {
+    opacity: 0.5;
+  }
+}

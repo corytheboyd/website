@@ -1,77 +1,53 @@
-@import './lib/reset';
-@import './lib/spacing';
-@import './lib/typography';
+@import "./lib/spacing";
+@import "./lib/opacity";
+@import "./lib/font-size";
 
-section#header {
-    margin-top: spacing(3);
-    margin-bottom: spacing(4);
-    h1 {
-        @include typography-title;
-    }
-    h2 {
-        @include typography-subtitle;
-    }
-    time {
-        @include typography-base;
-        @include typography-subdued(2);
-    }
-}
+section#title {
+  margin-bottom: spacing(4);
 
-p {
-    @include typography-body;
-}
-@for $i from 1 through 3 {
-    h#{$i + 1} {
-        @include typography-section-title($i);
-    }    
-}
-p {
-    + p {
-        margin-top: spacing(2);
-    }
-    @for $i from 1 through 3 {
-        + h#{$i + 1} {
-            margin-top: spacing(2.3);
-        }
-    }
-}
-ol + p, p + ol {
-    margin-top: spacing(2);
-}
-ul, ol {
+  h1 {
     margin: 0;
-    li {
-        @include typography-body;
-        font-size: $typography-font-size;
-        line-height: 35px;
-    }
-}
-ul > li > ul,
-ol > li > ol {
-    padding-left: spacing(4);
-}
-figure {
-    img {
-        width: 100%;
-    }
+    font-size: font-size(title, 1);
+  }
+
+  h2 {
+    @include opacity(1);
+    font-size: font-size(body, 4);
+    font-weight: 400;
+  }
+
+  time {
+    @include opacity(2);
+  }
 }
 
-.dropcap {
-    span {
-        float: left;
-        margin-right: spacing(0.3);
-        font-size: 3.5em;
-        line-height: 0.9em;
-        padding-top: 0.08em;
-    }
+section#content {
 }
 
-.dropcap {
-    span {
-        float: left;
-        margin-right: spacing(0.3);
-        font-size: 3.5em;
-        line-height: 0.9em;
-        padding-top: 0.08em;
-    }
-}
+// ol + p,
+// p + ol {
+//   margin-top: spacing(2);
+// }
+
+// // ul,
+// // ol {
+// //   margin: 0;
+
+// //   li {
+// //     // @include typography-body;
+
+// //     font-size: font-size();
+// //     line-height: 35px;
+// //   }
+// // }
+
+// ul > li > ul,
+// ol > li > ol {
+//   padding-left: spacing(4);
+// }
+
+// figure {
+//   img {
+//     width: 100%;
+//   }
+// }

@@ -1,0 +1,13 @@
+@import "./lib/font-family";
+
+body {
+  margin: 0;
+  font-family: font-family(default);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}

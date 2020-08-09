@@ -1,0 +1,7 @@
+$_PAGE_WIDTH: 600px;
+
+@mixin fit-to-viewport {
+  @include respond-to("medium") {
+    max-width: $_PAGE_WIDTH;
+  }
+}
