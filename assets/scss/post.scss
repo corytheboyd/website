@@ -27,7 +27,9 @@ section#title {
 }
 
 section#content {
-  p {
+  p,
+  ul,
+  ol {
     @include font-family(body);
     @include font-size(body);
   }
