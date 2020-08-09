@@ -10,12 +10,14 @@ section#title {
     @include font-family(title, 1);
     @include font-size(title, 1);
     margin: 0;
+    font-weight: 600;
   }
 
   h2 {
     @include opacity(1);
     @include font-family(title, 2);
-    @include font-size(body, 4);
+    @include font-size(title, 4);
+    line-height: 28px;
   }
 
   time {
