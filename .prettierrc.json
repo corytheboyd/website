@@ -1,0 +1,10 @@
+{
+  "overrides": [
+    {
+      "files": "*.hugo.html",
+      "options": {
+        "parser": "go-template"
+      }
+    }
+  ]
+}
