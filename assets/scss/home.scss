@@ -1,6 +1,11 @@
 @import "./lib/breakpoints";
+@import "./lib/font-size";
 @import "./lib/shadow";
 @import "./lib/spacing";
+
+section#content {
+  @include font-size(body);
+}
 
 section#profile {
   margin-top: spacing(1);
@@ -37,15 +42,17 @@ section#profile {
       list-style: none;
 
       li a {
-        [href*="github"] img {
-          background: red;
-          font-size: 2em;
+        &[href*="github"] img {
         }
 
         img {
           $size: 24px;
           height: $size;
           width: $size;
+
+          @media (prefers-color-scheme: dark) {
+            filter: invert(85%);
+          }
         }
       }
     }
