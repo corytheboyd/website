@@ -1,3 +1,4 @@
+@import "./lib/color";
 @import "./lib/fit-to-viewport";
 @import "./lib/font-size";
 @import "./lib/opacity";
@@ -5,9 +6,9 @@
 
 // TODO consider dark mode utils
 @mixin _background {
-  background: rgb(12, 107, 165);
+  background: color(primary);
 }
-
+// TODO consider dark mode utils
 @mixin _color {
   color: white;
 }

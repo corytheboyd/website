@@ -3,9 +3,12 @@
 @import "./lib/breakpoints";
 @import "./lib/fit-to-viewport";
 
+// Reset must come first. Do not sort alphabetically, you fool!
+@import "./reset";
+
 @import "./dropcap";
 @import "./nav";
-@import "./reset";
+@import "./links";
 
 body {
   display: flex;
