@@ -24,7 +24,7 @@ main {
 
   width: 100%;
 
-  #inner {
+  section#inner {
     padding: spacing(2);
 
     @include respond-to("medium") {

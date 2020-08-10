@@ -8,13 +8,12 @@ section#profile {
   justify-content: center;
 
   section#image {
-    margin-bottom: spacing(1);
+    margin-bottom: spacing(2);
 
     img {
-      $_size: 150px;
+      $_size: 175px;
       height: $_size;
       width: $_size;
-
       border-radius: spacing(1);
     }
   }
@@ -42,54 +41,50 @@ section#profile {
           $size: 24px;
           height: $size;
           width: $size;
-          color: red;
         }
       }
     }
   }
 }
 
-// main #inner {
-//   // display: flex;
-//   // flex-direction: column;
-//   // justify-content: center;
-//   // align-items: center;
+section#content {
+  p {
+    text-align: cen;
+  }
+}
 
-//   > :not(:last-child) {
-//     @include respond-to("small") {
-//       margin-right: spacing(2);
-//     }
-//   }
+@include respond-to("small") {
+  main section#inner {
+    display: flex;
+    justify-content: row;
+  }
 
-//   p {
-//     line-height: 1.5em;
-//     text-align: center;
-//   }
-//   @include respond-to("small") {
-//     flex-direction: row;
-//     justify-content: flex-start;
+  section#content {
+    p {
+      text-align: left;
+    }
+  }
 
-//     p {
-//       text-align: left;
-//     }
-//   }
+  section#profile {
+    flex-direction: column;
+    justify-content: flex-start;
 
-//   img {
-//     $size: 150px;
-//     width: $size;
-//     height: $size;
+    margin-right: spacing(3);
 
-//     margin-bottom: spacing(3);
-//     @include respond-to("small") {
-//       margin-bottom: 0;
-//     }
+    section#image {
+      margin-bottom: 0;
 
-//     border-radius: spacing(0.5);
-//   }
+      img {
+        $_size: 200px;
+        height: $_size;
+        width: $_size;
 
-//   @include respond-to("small") {
-//     hr {
-//       display: none;
-//     }
-//   }
-// }
+        border-radius: spacing(1);
+      }
+    }
+
+    section#links {
+      margin-top: spacing(2);
+    }
+  }
+}
