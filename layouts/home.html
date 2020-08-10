@@ -4,14 +4,50 @@
   rel="stylesheet"
   href="{{ $style.Permalink }}"
 />
-{{ end }} {{ define "main" }}
-<img
-  class="shadow"
-  src="/me.png"
-  alt="A handsome boi"
-/>
+{{ end }}
+ {{ define "main" }}
+
+<section id="profile">
+  <section id="image">
+    <img src="/me.png" alt="A handsome boi" />
+  </section>
+
+  <hr />
+
+  <section id="links">
+    <ul>
+      <li>
+        <a href="http://github.com/corytheboyd" target="_blank">
+          <img src="/icons/github.svg" alt="My GitHub profile" />
+        </a>
+      </li>
+      <li>
+        <a href="https://twitter.com/corytheboyd" target="_blank">
+          <img src="/icons/twitter.svg" alt="My Twitter profile" />
+        </a>
+      </li>
+      <li>
+        <a href="https://www.linkedin.com/in/corytheboyd" target="_blank">
+          <img src="/icons/linkedin.svg" alt="My LinkedIn profile" />
+        </a>
+      </li>
+      <li>
+        <a href="https://twitch.tv/corytheboyd" target="_blank">
+          <img src="/icons/twitch.svg" alt="My Twitch profile" />
+        </a>
+      </li>
+      <li>
+        <a href="mailto:cboyd@hey.com" target="_blank">
+          <img src="/icons/hey.svg" alt="My Twitch profile" />
+        </a>
+      </li>
+    </ul>
+  </section>
+</section>
+
 <hr />
-<div>
+
+<section id="content">
   <p>
     Professional software engineer by day, cat dad by night.
   </p>
@@ -20,5 +56,5 @@
     foundations.
   </p>
   <p>Do more by writing less code.</p>
-</div>
+</section>
 {{ end }}
