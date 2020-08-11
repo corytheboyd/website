@@ -1,0 +1,7 @@
+@import "./lib/spacing";
+
+section#inner {
+  article:not(:last-child) {
+    margin-bottom: spacing(1);
+  }
+}
