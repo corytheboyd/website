@@ -1,4 +1,4 @@
-$spacing-unit: 0.5em;
+$spacing-unit: 8px;
 
 @function spacing($multiplier: 1) {
   @return $spacing-unit * $multiplier;
