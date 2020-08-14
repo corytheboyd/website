@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Cory Boyd</title>
-    <link>https://corytheboyd.com/</link>
-    <description>Recent content on Cory Boyd</description>
+    <title>Projects on Cory Boyd</title>
+    <link>https://corytheboyd.com/projects/</link>
+    <description>Recent content in Projects on Cory Boyd</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     
-	<atom:link href="https://corytheboyd.com/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://corytheboyd.com/projects/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
