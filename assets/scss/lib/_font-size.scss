@@ -7,7 +7,7 @@ $_BASE: 19px;
   $_size: undefined;
   $_lineHeight: undefined;
 
-  @if $type != body and $type != title {
+  @if $type != body and $type != title and type {
     @error ("font-size($type = #{$type}, $scale = #{$scale}): $type must be one of: body, title");
   } @else if $type == body {
     $_size: $_BASE;

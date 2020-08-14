@@ -1,0 +1,31 @@
+{{ define "head" }}
+{{ $style := resources.Get "/scss/projects/list.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+<link
+  rel="stylesheet"
+  href="{{ $style.Permalink }}"
+/>
+{{ end }}
+{{ define "title" }}
+{{ .Title }} ·
+{{ .Site.Title }}
+{{ end }}
+{{ define "main" }}
+{{ range .Pages.ByDate.Reverse }}
+
+<article>
+  <h1>{{ .Title }}</h1>
+  {{ if .Params.technologies }}
+
+  <ul class="technologies">
+    {{ range .Params.technologies }}
+
+    <li>{{ . }}</li>
+    {{ end }}
+
+  </ul>
+  {{ end }}
+
+  <p>{{ .Description }}</p>
+</article>
+{{ end }}
+{{ end }}

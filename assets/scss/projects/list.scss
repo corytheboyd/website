@@ -1,0 +1,43 @@
+@import "../lib/spacing";
+@import "../lib/font-size";
+@import "../lib/font-family";
+@import "../lib/opacity";
+@import "../lib/color";
+
+h1 {
+  @include font-size(title, 1);
+  @include font-family(title, 2);
+
+  margin: 0;
+  margin-bottom: spacing();
+}
+
+p {
+  @include font-family(body);
+  line-height: 1.5em;
+}
+
+ul.technologies {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  text-transform: uppercase;
+
+  display: flex;
+  flex-direction: row;
+
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 25px;
+
+  :not(:last-child) {
+    margin-right: spacing(2);
+  }
+
+  li {
+    padding: 0 spacing(1.25);
+    background-color: color(black);
+    color: color(white);
+    border-radius: spacing();
+  }
+}

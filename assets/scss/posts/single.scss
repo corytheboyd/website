@@ -1,9 +1,9 @@
-@import "./lib/spacing";
-@import "./lib/opacity";
-@import "./lib/font-size";
-@import "./lib/font-family";
-@import "./lib/color";
-@import "./lib/icon";
+@import "../lib/spacing";
+@import "../lib/opacity";
+@import "../lib/font-size";
+@import "../lib/font-family";
+@import "../lib/color";
+@import "../lib/icon";
 
 section#title {
   margin: spacing(4) auto;

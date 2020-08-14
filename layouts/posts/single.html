@@ -1,5 +1,5 @@
 {{ define "head" }}
-{{ $style := resources.Get "/scss/single.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+{{ $style := resources.Get "/scss/posts/single.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
 <link
   rel="stylesheet"
   href="{{ $style.Permalink }}"

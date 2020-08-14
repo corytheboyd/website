@@ -1,5 +1,5 @@
 {{ define "head" }}
-{{ $style := resources.Get "/scss/list.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+{{ $style := resources.Get "/scss/posts/list.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
 <link
   rel="stylesheet"
   href="{{ $style.Permalink }}"
@@ -13,6 +13,12 @@
 {{ range .Pages.ByPublishDate.Reverse }}
 
 <article>
+  {{ $published_date_formatted := .PublishDate.Format "2006-01-02" }}
+
+  <time datetime="{{ $published_date_formatted }}"
+    >{{ $published_date_formatted }}</time
+  >
+
   <a href="{{ .Permalink }}">{{ .Title }}</a>
 </article>
 {{ end }}

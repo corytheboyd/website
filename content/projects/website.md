@@ -1,6 +1,11 @@
 ---
+draft: false
 title: Website
-summary:
-repositoryUrl: https://github.com/corytheboyd/website
+description: My take on a no-frills static content delivery framework without forcing a single line of JavaScript on viewers.
+repoUrl: https://github.com/corytheboyd/website
 projectUrl: https://corytheboyd.com
+technologies:
+  - Hugo
+  - SASS
+  - HTML
 ---
