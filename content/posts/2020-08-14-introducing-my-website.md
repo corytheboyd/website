@@ -29,7 +29,7 @@ Hugo offers a library of themes, but I personally find the usage of themes to be
 
 ## Hosting & deployment
 
-Hosting static content in 20202 is so easy it should be _illegal_. I use [GitHub Pages](https://pages.github.com/) as the host, which really is as simple as turning it on in the repository settings.
+Hosting static content in 2020 is so easy it should be _illegal_. I use [GitHub Pages](https://pages.github.com/) as the host, which really is as simple as turning it on in the repository settings.
 
 Similarly, deployment is disgustingly easy with [GitHub Actions](https://github.com/features/actions). My configuration file is triggered by every push to master, which then:
 
