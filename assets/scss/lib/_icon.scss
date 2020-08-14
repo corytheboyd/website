@@ -1,0 +1,62 @@
+@mixin icon($size: 24px, $brand-color: on) {
+  height: $size;
+  width: $size;
+
+  @if $brand-color != on and $brand-color != off {
+    @error ("icon($size = #{$size}, $brand-color = #{$brand-color})");
+  } @else if $brand-color == on {
+    &[src*="ycombinator"] {
+      filter: invert(60%)
+        sepia(44%)
+        saturate(6603%)
+        hue-rotate(344deg)
+        brightness(99%)
+        contrast(89%);
+    }
+
+    &[src*="twitter"] {
+      filter: invert(60%)
+        sepia(87%)
+        saturate(3222%)
+        hue-rotate(175deg)
+        brightness(97%)
+        contrast(95%);
+    }
+
+    &[src*="hey"] {
+      filter: invert(12%)
+        sepia(100%)
+        saturate(7158%)
+        hue-rotate(259deg)
+        brightness(99%)
+        contrast(98%);
+    }
+
+    &[src*="github"] {
+      filter: invert(0%)
+        sepia(5%)
+        saturate(1140%)
+        hue-rotate(337deg)
+        brightness(106%)
+        contrast(82%);
+    }
+
+    &[src*="linkedin"] {
+      filter: invert(26%)
+        sepia(38%)
+        saturate(6577%)
+        hue-rotate(184deg)
+        brightness(93%)
+        contrast(101%);
+    }
+
+    &[src*="twitch"] {
+      filter: invert(40%)
+        sepia(47%)
+        saturate(7211%)
+        hue-rotate(249deg)
+        brightness(99%)
+        contrast(103%);
+    }
+  }
+}

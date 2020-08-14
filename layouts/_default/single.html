@@ -1,5 +1,5 @@
 {{ define "head" }}
-{{ $style := resources.Get "/scss/post.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+{{ $style := resources.Get "/scss/single.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
 <link
   rel="stylesheet"
   href="{{ $style.Permalink }}"
@@ -23,6 +23,26 @@
   <section id="content">
     {{ .Content }}
 
+  </section>
+
+  <section id="engagement">
+    <ul>
+      <li>
+        <a href="https://twitter.com/corytheboyd" alt="Comment on Hacker News">
+          <img src="/icons/ycombinator.svg" alt="Hacker News" />
+          <span>Comment on Hacker News</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://twitter.com/corytheboyd" alt="Send me a Tweet">
+          <img src="/icons/twitter.svg" alt="Twitter" />
+          <span>Sent me a Tweet</span>
+        </a>
+      </li>
+      <li>
+        RSS feed
+      </li>
+    </ul>
   </section>
 </article>
 {{ end }}
