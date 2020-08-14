@@ -58,5 +58,14 @@
         brightness(99%)
         contrast(103%);
     }
+
+    &[src*="reddit"] {
+      filter: invert(39%)
+        sepia(47%)
+        saturate(5670%)
+        hue-rotate(359deg)
+        brightness(99%)
+        contrast(109%);
+    }
   }
 }
