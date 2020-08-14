@@ -42,10 +42,8 @@ section#profile {
       margin: 0;
       list-style: none;
 
-      li a {
-        img {
-          @include icon;
-        }
+      li a img {
+        @include icon;
       }
     }
   }

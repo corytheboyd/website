@@ -1,31 +1,39 @@
 {{ define "head" }}
-{{ $style := resources.Get "/scss/projects/list.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
-<link
-  rel="stylesheet"
-  href="{{ $style.Permalink }}"
-/>
+  {{ $style := resources.Get "/scss/projects/list.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+  <link
+    rel="stylesheet"
+    href="{{ $style.Permalink }}"
+  />
 {{ end }}
+
 {{ define "title" }}
-{{ .Title }} ·
-{{ .Site.Title }}
+  {{ .Title }} ·
+  {{ .Site.Title }}
 {{ end }}
+
 {{ define "main" }}
-{{ range .Pages.ByDate.Reverse }}
+  {{ range .Pages.ByDate.Reverse }}
+    <article>
+      <h1>{{ .Title }}</h1>
+      
+      {{ if .Params.technologies }}
+      <ul class="technologies">
+        {{ range .Params.technologies }}
+          <li><span>{{ . }}</span></li>
+        {{ end }}
+      </ul>
+      {{ end }}
 
-<article>
-  <h1>{{ .Title }}</h1>
-  {{ if .Params.technologies }}
-
-  <ul class="technologies">
-    {{ range .Params.technologies }}
-
-    <li>{{ . }}</li>
-    {{ end }}
-
-  </ul>
+      {{ if .Params.repoUrl }}
+      <a href="{{ .Params.repoUrl }}" target="_blank">
+        <img src="/icons/github.svg" alt="View on GitHub" />
+        <span>View on GitHub</span>
+      </a>
+      {{ end }}
+      
+      <p>
+        {{ .Description }}
+      </p>
+    </article>
   {{ end }}
-
-  <p>{{ .Description }}</p>
-</article>
-{{ end }}
 {{ end }}
