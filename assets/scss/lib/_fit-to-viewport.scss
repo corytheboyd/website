@@ -1,4 +1,4 @@
-$_PAGE_WIDTH: 60vw;
+$_PAGE_WIDTH: 70vw;
 
 @mixin fit-to-viewport {
   @include respond-to("medium") {

@@ -5,7 +5,7 @@ description: My take on a no-frills static content delivery framework without fo
 repoUrl: https://github.com/corytheboyd/website
 projectUrl: https://corytheboyd.com
 technologies:
-  - Hugo
-  - SASS
-  - HTML
+  - hugo
+  - sass
+  - html
 ---

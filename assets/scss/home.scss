@@ -5,7 +5,7 @@
 @import "./lib/icon";
 
 section#content {
-  @include font-size(body);
+  line-height: 1.5em;
 }
 
 section#profile {
