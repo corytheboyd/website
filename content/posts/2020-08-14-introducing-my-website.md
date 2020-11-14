@@ -1,8 +1,7 @@
 ---
 draft: false
 title: Inside my personal website
-summary: Static text does not require JavaScript. Period.
-date: 2020-08-14
+hugodate: 2020-08-14
 publishDate: 2020-08-14
 slug: inside-my-personal-website
 ---
