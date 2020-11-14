@@ -23,13 +23,8 @@
         contrast(95%);
     }
 
-    &[src*="hey"] {
-      filter: invert(12%)
-        sepia(100%)
-        saturate(7158%)
-        hue-rotate(259deg)
-        brightness(99%)
-        contrast(98%);
+    &[src*="protonmail"] {
+      filter: invert(59%) sepia(10%) saturate(1506%) hue-rotate(203deg) brightness(93%) contrast(90%);
     }
 
     &[src*="github"] {
