@@ -1,0 +1,23 @@
+{
+  "name": "corytheboyd.com",
+  "version": "1.0.0",
+  "description": "https://corytheboyd.com",
+  "author": "Cory Boyd <me@corytheboyd.com>",
+  "license": "WTFPL",
+  "private": true,
+  "scripts": {
+    "start": "npx parcel serve src/index.html"
+  },
+  "devDependencies": {
+    "@parcel/optimizer-htmlnano": "^2.0.0-nightly.616",
+    "@parcel/packager-html": "^2.0.0-nightly.616",
+    "@parcel/transformer-html": "^2.0.0-nightly.616",
+    "@parcel/transformer-posthtml": "^2.0.0-nightly.616",
+    "parcel": "^2.0.0-beta.1",
+    "prettier": "^2.2.1"
+  },
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
+}
