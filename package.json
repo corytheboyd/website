@@ -17,6 +17,9 @@
     "@parcel/transformer-html": "^2.0.0-nightly.616",
     "@parcel/transformer-postcss": "^2.0.0-nightly.616",
     "@parcel/transformer-posthtml": "^2.0.0-nightly.616",
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.1",
+    "@types/react-router-dom": "^5.1.7",
     "autoprefixer": "^10.2.4",
     "parcel": "^2.0.0-beta.1",
     "postcss": "^8.2.7",
@@ -25,6 +28,7 @@
   },
   "dependencies": {
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0"
   }
 }
