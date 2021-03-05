@@ -6,29 +6,23 @@
   "license": "WTFPL",
   "private": true,
   "scripts": {
-    "start": "npx parcel serve src/index.html"
+    "start": "npx webpack serve src/index.html"
   },
   "devDependencies": {
-    "@parcel/optimizer-cssnano": "^2.0.0-nightly.616",
-    "@parcel/optimizer-htmlnano": "^2.0.0-nightly.616",
-    "@parcel/packager-css": "^2.0.0-nightly.616",
-    "@parcel/packager-html": "^2.0.0-nightly.616",
-    "@parcel/transformer-css": "^2.0.0-nightly.616",
-    "@parcel/transformer-html": "^2.0.0-nightly.616",
-    "@parcel/transformer-postcss": "^2.0.0-nightly.616",
-    "@parcel/transformer-posthtml": "^2.0.0-nightly.616",
-    "@types/react": "^17.0.2",
-    "@types/react-dom": "^17.0.1",
-    "@types/react-router-dom": "^5.1.7",
+    "@tailwindcss/typography": "^0.4.0",
     "autoprefixer": "^10.2.4",
-    "parcel": "^2.0.0-beta.1",
+    "gulp": "^4.0.2",
+    "gulp-cli": "^2.3.0",
+    "gulp-connect": "^5.7.0",
+    "gulp-postcss": "^9.0.0",
+    "gulp-posthtml": "^3.0.5",
     "postcss": "^8.2.7",
+    "posthtml-doctype": "^1.1.1",
+    "posthtml-extend": "^0.6.0",
+    "posthtml-include": "^1.6.2",
+    "posthtml-loader": "^2.0.1",
+    "posthtml-md": "^1.1.0",
     "prettier": "^2.2.1",
     "tailwindcss": "^2.0.3"
-  },
-  "dependencies": {
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-router-dom": "^5.2.0"
   }
 }
