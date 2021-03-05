@@ -18,6 +18,7 @@
     "gulp-posthtml": "^3.0.5",
     "postcss": "^8.2.7",
     "posthtml-doctype": "^1.1.1",
+    "posthtml-expressions": "^1.7.1",
     "posthtml-extend": "^0.6.0",
     "posthtml-include": "^1.6.2",
     "posthtml-loader": "^2.0.1",
