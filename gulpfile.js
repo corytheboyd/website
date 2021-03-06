@@ -6,7 +6,7 @@ const connect = require("gulp-connect");
 
 function css() {
   return gulp
-    .src("./src/*.css")
+    .src("./src/**/*.css")
     .pipe(postcss())
     .pipe(gulp.dest("./dist"))
     .pipe(connect.reload());
@@ -14,7 +14,9 @@ function css() {
 
 function html() {
   return gulp
-    .src("./src/*.html")
+    .src("./src/**/*.html", {
+      ignore: "./src/templates/**/*",
+    })
     .pipe(posthtml())
     .pipe(gulp.dest("./dist"))
     .pipe(connect.reload());
