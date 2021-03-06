@@ -6,7 +6,7 @@
   "license": "WTFPL",
   "private": true,
   "scripts": {
-    "start": "npx webpack serve src/index.html"
+    "start": "npx gulp serve"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.4.0",
@@ -21,8 +21,6 @@
     "posthtml-expressions": "^1.7.1",
     "posthtml-extend": "^0.6.0",
     "posthtml-include": "^1.6.2",
-    "posthtml-loader": "^2.0.1",
-    "posthtml-md": "^1.1.0",
     "prettier": "^2.2.1",
     "tailwindcss": "^2.0.3"
   }

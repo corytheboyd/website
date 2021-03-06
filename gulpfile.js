@@ -5,7 +5,7 @@ const connect = require("gulp-connect");
 
 function css() {
   return gulp
-    .src("./src/**/*.css")
+    .src("./src/*.css")
     .pipe(postcss())
     .pipe(gulp.dest("./dist"))
     .pipe(connect.reload());
@@ -13,7 +13,7 @@ function css() {
 
 function html() {
   return gulp
-    .src("./src/**/*.html")
+    .src("./src/*.html")
     .pipe(posthtml())
     .pipe(gulp.dest("./dist"))
     .pipe(connect.reload());
@@ -21,7 +21,7 @@ function html() {
 
 function assets() {
   return gulp
-    .src("./assets/*")
+    .src("./assets/**/*")
     .pipe(gulp.dest("./dist"))
     .pipe(connect.reload());
 }
@@ -33,7 +33,11 @@ function devServer() {
   });
 
   gulp.watch(["./src/**/*.css"], {}, css);
-  gulp.watch(["./src/**/*.html"], {}, html);
+  gulp.watch(
+    ["./src/**/*.html", "./src/**/*.md", "./posthtml.config.js"],
+    {},
+    html
+  );
   gulp.watch(["./assets/*"], {}, assets);
 }
 
