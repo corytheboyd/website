@@ -1,3 +1,4 @@
+const rimraf = require("rimraf");
 const postcss = require("gulp-postcss");
 const gulp = require("gulp");
 const posthtml = require("gulp-posthtml");
@@ -26,6 +27,10 @@ function assets() {
     .pipe(connect.reload());
 }
 
+function clean(cb) {
+  rimraf("./dist", cb);
+}
+
 function devServer() {
   connect.server({
     root: "./dist",
@@ -41,4 +46,4 @@ function devServer() {
   gulp.watch(["./assets/*"], {}, assets);
 }
 
-exports.serve = gulp.series(gulp.parallel(css, html, assets), devServer);
+exports.serve = gulp.series(clean, gulp.parallel(css, html, assets), devServer);
