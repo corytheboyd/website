@@ -4,7 +4,7 @@ const gulp = require("gulp");
 const posthtml = require("gulp-posthtml");
 const connect = require("gulp-connect");
 
-function css() {
+function buildCss() {
   return gulp
     .src("./src/**/*.css")
     .pipe(postcss())
@@ -12,7 +12,7 @@ function css() {
     .pipe(connect.reload());
 }
 
-function html() {
+function buildHtml() {
   return gulp
     .src("./src/**/*.html", {
       ignore: "./src/templates/**/*",
@@ -22,14 +22,14 @@ function html() {
     .pipe(connect.reload());
 }
 
-function assets() {
+function copyAssets() {
   return gulp
     .src("./assets/**/*")
     .pipe(gulp.dest("./dist/assets"))
     .pipe(connect.reload());
 }
 
-function clean(cb) {
+function cleanAll(cb) {
   rimraf("./dist", cb);
 }
 
@@ -39,9 +39,21 @@ function devServer() {
     livereload: true,
   });
 
-  gulp.watch(["./src/**/*.css", "./*.config.js"], {}, css);
-  gulp.watch(["./src/**/*.html", "./src/**/*.md", "./*.config.js"], {}, html);
-  gulp.watch(["./assets/*"], {}, assets);
+  gulp.watch(
+    ["./src/**/*.css", "./{tailwind,postcss}.config.js"],
+    {},
+    gulp.series(buildCss)
+  );
+  gulp.watch(
+    ["./src/**/*.html", "./src/**/*.md", "./{posthtml,site}.config.js"],
+    {},
+    gulp.series(buildHtml)
+  );
+  gulp.watch(["./assets/*"], {}, copyAssets);
 }
 
-exports.serve = gulp.series(clean, gulp.parallel(css, html, assets), devServer);
+exports.serve = gulp.series(
+  cleanAll,
+  gulp.parallel(buildCss, buildHtml, copyAssets),
+  devServer
+);
