@@ -6,7 +6,8 @@
   "license": "WTFPL",
   "private": true,
   "scripts": {
-    "start": "npx gulp serve"
+    "start": "npx gulp serve",
+    "build": "npx gulp build"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.4.0",

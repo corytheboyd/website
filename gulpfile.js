@@ -57,3 +57,8 @@ exports.serve = gulp.series(
   gulp.parallel(buildCss, buildHtml, copyAssets),
   devServer
 );
+
+exports.build = gulp.series(
+  cleanAll,
+  gulp.parallel(buildCss, buildHtml, copyAssets)
+);
