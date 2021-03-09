@@ -25,7 +25,7 @@ function html() {
 function assets() {
   return gulp
     .src("./assets/**/*")
-    .pipe(gulp.dest("./dist"))
+    .pipe(gulp.dest("./dist/assets"))
     .pipe(connect.reload());
 }
 
@@ -39,12 +39,8 @@ function devServer() {
     livereload: true,
   });
 
-  gulp.watch(["./src/**/*.css"], {}, css);
-  gulp.watch(
-    ["./src/**/*.html", "./src/**/*.md", "./posthtml.config.js"],
-    {},
-    html
-  );
+  gulp.watch(["./src/**/*.css", "./*.config.js"], {}, css);
+  gulp.watch(["./src/**/*.html", "./src/**/*.md", "./*.config.js"], {}, html);
   gulp.watch(["./assets/*"], {}, assets);
 }
 
