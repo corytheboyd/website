@@ -5,54 +5,9 @@
 <body>
 <include src="templates/nav.html"></include>
 <main>
-  <div>
-    <article class="px-5 py-5 mt-5 mx-2 lg:mx-0 space-y-8 text-gray-100 bg-gray-800 rounded-lg">
-      <div class="prose prose-sm prose-pink sm:prose sm:prose-pink">
-        <header>
-          <h1>New city, new job, new... website?</h1>
-          <span class="opacity-75">2020-03-09</span>
-        </header>
-
-        <section markdown>
-          My partner and I made the big move across the country from San Francisco, California to Denver, Colorado about two weeks ago. We love our neighborhood, our home, and discovering all of the new things around us!
-
-          One crazy thing I decided to do was leave my job at Groove before moving out here. A couple motivations:
-          * I am very interested in bootstrapping my own project, Midishare, in pursuit of generating my own sources of income in the future. This gave me tons of time to try things out on the implementation front
-          * Instead of jumping directly back into a full time position for an established company, I wanted to test the waters of contract work in a few different realms
-          * Knowing that I'll need SOME form of income for the long term, I wanted plenty of time to consider a next full time position
-
-          ## Firing up the job search engine
-
-          After reviewing the portfolio I expose on my website... well, it still remained void of pretty much all meaningful content, because all I did the last time I worked on it was focus on the tech side of it and wrote a really stupid anti-JavaScript blog post because I wanted to parrot some bullshit I picked up on Hacker News for likes (hey, I'm just being honest lol)
-
-          So, time to update the website, but the first wall I hit was that I:
-          1. Forgot how my over-engineered SaaS was supposed to be used (no documentation because I built it myself and was lazy)
-          1. Forgot how to follow the esoteric Hugo conventions (has documentation, but it's not easy to parse at a glance)
-
-          I was pretty annoyed with myself for having fallen for the trap of not documenting my own systems, but not sure how I could have remembered all of the Hugo-isms, especially since I don't update this site very often and don't do static site generator work outside of this.
-
-          So let's build it up again from scratch, but simpler.
-
-          ## A simpler website
-
-          Having used TailwindCSS recently on Midishare, I have become a huge fan of house absolutely easy it makes creating great looking content, so that had to be included.
-
-          The only other requirement was that I can write blog posts in Markdown. This makes it very easy to draft content outside of the source code and trivially drop it into a page later, and it's also much easier to iterate on than HTML.
-
-          Having two tiny requirements made it really easy to translate to a tiny Gulp build system. Yes, Gulp. Not Webpack, or Hugo, or Rollup-- just good ol, nothing-was-ever-wrong-with-it Gulp. I have a build task that:
-          1. Processes the `index.css` file containing the TailwindCSS headers with `PostCSS`
-          1. Processes the HTML source files with `PostHTML` (using some light templating to avoid some duplication, and using a simple markdown renderer)
-
-          And that's it, it just emits one CSS file and some HTML documents, where the HTML documents are marked up with TailwindCSS classes.
-
-          I'm not doing anything new, I'm just doing something dumb and simple with technology that I like working with, and that is by design.
-
-          Source code is here if you're interested: [https://github.com/corytheboyd/website](https://github.com/corytheboyd/website)
-        </section>
-      </div>
-    </article>
-  </div>
+  <scope with="posts['2020-03-09']">
+    <include src="templates/post.html"></include>
+  </scope>
 </main>
 </body>
 </html>
-

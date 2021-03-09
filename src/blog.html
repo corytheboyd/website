@@ -6,12 +6,13 @@
 <include src="templates/nav.html"></include>
 <main>
   <div class="w-full max-w-4xl p-2 lg:px-0">
-    <article class="prose prose-sm prose-pink sm:prose sm:prose-pink">
-      <span class="text-gray-100">2020-03-09</span>
-      <a href="/posts/2020-03-09.html">New city, new job, new... website?</a>
-    </article>
+    <each loop="post in posts">
+      <article class="prose prose-sm prose-pink sm:prose sm:prose-pink">
+        <span class="text-gray-100">{{ post.date }}</span>
+        <a href="/posts/{{ post.date }}.html">{{ post.title }}</a>
+      </article>
+    </each>
   </div>
 </main>
 </body>
 </html>
-

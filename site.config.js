@@ -1,6 +1,14 @@
 const { readFileSync } = require("fs");
 
 module.exports = {
+  posts: {
+    // prettier-ignore
+    '2020-03-09': {
+      date: "2020-03-09",
+      title: "New city, new job, new... website?",
+      content: readFileSync("./src/posts/2020-03-09.md").toString(),
+    },
+  },
   projects: {
     midishare: {
       title: "Midishare",
