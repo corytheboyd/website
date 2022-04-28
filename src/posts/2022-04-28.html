@@ -1,0 +1,13 @@
+<html lang="en-us">
+<include src="templates/head.html">
+  { "cssPath": "../index.css" }
+</include>
+<body>
+<include src="templates/nav.html"></include>
+<main>
+  <scope with="posts['2022-04-28']">
+    <include src="templates/post.html"></include>
+  </scope>
+</main>
+</body>
+</html>
