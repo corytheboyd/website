@@ -5,14 +5,12 @@
 <body>
 <include src="templates/nav.html"></include>
 <main>
-  <div class="w-full max-w-4xl p-2 lg:px-0">
-    <each loop="post in posts">
-      <article class="prose prose-sm prose-pink sm:prose sm:prose-pink">
-        <span class="text-gray-100">{{ post.date }}</span>
-        <a href="/posts/{{ post.date }}.html">{{ post.title }}</a>
-      </article>
-    </each>
-  </div>
+  <each loop="post in posts">
+    <article>
+      <span>{{ post.date }}</span>
+      <a href="/posts/{{ post.date }}.html">{{ post.title }}</a>
+    </article>
+  </each>
 </main>
 </body>
 </html>

@@ -2,14 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    @apply bg-gray-900 flex-col;
-}
+body {}
 
-nav {
-    @apply bg-gray-700;
-}
+nav {}
 
-main {
-    @apply h-full flex-grow flex flex-col items-center;
-}
+main {}
