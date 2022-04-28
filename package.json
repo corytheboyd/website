@@ -19,7 +19,7 @@
     "gulp-posthtml": "^3.0.5",
     "markdown-it": "^12.0.4",
     "nightwind": "^1.1.6",
-    "postcss": "^8.2.7",
+    "postcss": "^8.2.13",
     "posthtml-content": "0.0.3",
     "posthtml-doctype": "^1.1.1",
     "posthtml-expressions": "^1.7.1",
