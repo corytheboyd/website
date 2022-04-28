@@ -38,9 +38,8 @@ function devServer() {
     root: "./dist",
     livereload: true,
   });
-
   gulp.watch(
-    ["./src/**/*.css", "./{tailwind,postcss}.config.js"],
+    ["./src/**/*.html", "./src/**/*.css", "./{tailwind,postcss}.config.js"],
     {},
     gulp.series(buildCss)
   );
