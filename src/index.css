@@ -2,8 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body {}
-
-nav {}
-
-main {}
+body {
+    @apply bg-blue-200;
+    background-image: url("assets/graph-paper.svg");
+}
