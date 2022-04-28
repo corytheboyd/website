@@ -1,5 +1,5 @@
 module.exports = {
-  purge: ["./src/**/*.html", "./src/**/*.tsx"],
+  content: ["./src/**/*.html", "./src/**/*.tsx"],
   plugins: [require("@tailwindcss/typography")],
   theme: {
     extend: {
