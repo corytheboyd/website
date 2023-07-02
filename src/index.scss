@@ -18,8 +18,7 @@
 
     .ProfileImage {
         @apply w-48;
-        @apply rounded-full shadow-xl;
-        @apply border-4 border-blue-500;
+        @apply rounded-full shadow-xl shadow-blue-100;
     }
 
     .TitleText {
@@ -44,8 +43,8 @@
 
         svg {
             @apply bg-blue-100;
-            @apply w-16 p-2;
-            @apply rounded-xl shadow-lg;
+            @apply w-14 p-2 sm:w-16;
+            @apply rounded-full shadow-lg;
             @apply fill-blue-800;
 
             @apply transition-all;
