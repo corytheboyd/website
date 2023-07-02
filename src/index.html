@@ -1,88 +1,120 @@
 <html lang="en-us">
-<include src="templates/head.html"> { "cssPath": "index.css" }</include>
+<include src="templates/head.html"></include>
 <body>
 
-<div class="flex flex-col items-center h-screen w-full">
-  <div class="flex flex-col items-center justify-center m-5">
-    <img class="w-64 mb-5 rounded-full border-4 border-gray-800" src="./assets/me.png"
-         alt="a handsome lad">
-    <div class="prose">
-      <section>
-        <h1 class="text-center">Cory Boyd</h1>
-        <p>Software engineer, amateur music producer, player of video games, and father of cats.</p>
-        <ul class="flex bg-red-300">
-          <li>GitHub</li>
-          <li>SoundCloud</li>
-          <li>Email</li>
-        </ul>
-      </section>
-      <hr>
-      <section class="text-sm">
-        <blockquote>
-          OMG where is your LinkedIn profile?!?!?
-        </blockquote>
+<div class=PageOuter>
+  <div class="PageInner">
+    <header class="HeaderContainer">
+      <img
+        class="ProfileImage"
+        src="/assets/me.png"
+        alt="a handsome lad"
+      />
+      <div class="TitleText">
+        <h1>Cory Boyd</h1>
         <p>
-          I don't need LinkedIn to collate my work experience, so I deleted my
-          profile.
+          Software engineer, amateur music producer, player of video games,
+          and father of cats.
         </p>
-        <p>
-          I can do that myself, without handing over personal data to
-          spam-vertising behemoths, by writing a resume.
-        </p>
-        <blockquote>
-          Okay... BUT WHERE IS YOUR TWITTER?!?!
-        </blockquote>
-        <p>
-          Mass social media is garbage.
-        </p>
-        <p>
-          We tried, and we failed. Shut it down and let's move on with our
-          lives. Find another gratification loop to engage in that is grounded
-          in reality.
-        </p>
-        <p>
-          Federated networks through ActivityPub are the next logical step for
-          online communities that won't get too big to be good, and won't be
-          sold out for short-term profit.
-        </p>
-        <blockquote>
-          We have an exciting new opportunity for you at a fast-paced AI
-          startup that will change the world.
-        </blockquote>
-        <p>
-          No you don't. You are yet another uninspired participant in the AI
-          gold rush. Your goal is to grift rubes out of their hard-earned cash.
-        </p>
-        <p>
-          LLMs are lauded under a false narrative of anthropomorphic wank. They
-          might be useful after the dust settles for certain workloads.
-        </p>
-        <p>
-          I don't need you to create 50% accurate summaries of my email inbox.
-          I know all you want to do is sell my Precious User Data ™️ to
-          advertisers. Jog on.
-        </p>
-        <blockquote>
-          So, do you enjoy anything in life?
-        </blockquote>
-        <p>
-          Yes! Many things!
-        </p>
-        <p>
-          I am fond of my employer, the team I get to work with, and my
-          employers acknowledgement that I work to live.
-        </p>
-        <p>
-          I am grateful for the beautiful setting I get to live in, and the
-          amazing friends and family that I have.
-        </p>
-        <p>
-          I am afforded the opportunity to satisfy my technical, musical, and
-          other such curiosities. I do so regularly. Or if I'm not feeling it I
-          play some video games. Life is good!
-        </p>
-      </section>
-    </div>
+      </div>
+    </header>
+
+    <section class="ExternalLinkItemContainer mt-5">
+      <div class="ExternalLinkItem">
+        <a href="https://github.com/corytheboyd">
+          <include src="icons/github.svg"></include>
+          <div>Code</div>
+        </a>
+      </div>
+      <div class="ExternalLinkItem">
+        <a href="https://soundcloud.com/corytheboyd">
+          <include src="icons/music.svg"></include>
+          <div>Music</div>
+        </a>
+      </div>
+      <div class="ExternalLinkItem">
+        <a href="mailto:public@corytheboyd.com">
+          <include src="icons/email.svg"></include>
+          <div>Email</div>
+        </a>
+      </div>
+    </section>
+
+    <section class="FrequentlyAskedQuestions">
+      <h2 class="text-center">FAQ</h2>
+      <blockquote>
+        OMG where is your LinkedIn profile?!?!?
+      </blockquote>
+      <p>
+        I don't need LinkedIn to collate my work experience, so I deleted my
+        profile.
+      </p>
+      <p>
+        I can do that myself, without handing over personal data to
+        spam-vertising behemoths, by writing a resume.
+      </p>
+      <blockquote>
+        Okay... wait, you don't use TWITTER either?!?! What is wrong with you!
+      </blockquote>
+      <p>
+        Mass social media is garbage.
+      </p>
+      <p>
+        We tried, and we failed. Shut it down and let's move on with our
+        lives. Find another gratification loop to engage in that is grounded
+        in reality.
+      </p>
+      <p>
+        Federated networks through ActivityPub seem like the next logical step
+        for online communities that won't be ruined by Too Many People, and
+        won't be sold to advertisers for short-term profit.
+      </p>
+      <blockquote>
+        We have an exciting opportunity for you at a fast-paced AI startup
+        that will change the world with chatbots
+      </blockquote>
+      <p>
+        No you don't. You are yet another uninspired participant in the AI
+        gold rush. Your goal is to grift rubes out of their hard-earned cash.
+      </p>
+      <p>
+        LLMs are lauded under a false narrative of anthropomorphic wank. They
+        might be useful after the dust settles for certain workloads, but
+        we're still going through the hysterical stupidity phase.
+      </p>
+      <blockquote>
+        So, do you... enjoy anything?
+      </blockquote>
+      <p>
+        Yes! Many things!
+      </p>
+      <p>
+        I am afforded the opportunity to satisfy my technical, musical, and
+        other such curiosities with regularity.
+      </p>
+      <p>
+        My job isn't actively trying to kill me. I don't have to pray to the
+        corporate mascot every morning to receive a paycheck. I get
+        time to do things right, learn new technologies, grow alongside other
+        pleasant folks, and don't live in constant fear of the pager going off.
+      </p>
+      <p>
+        Life is good!
+      </p>
+      <blockquote>
+        Are people really asking you these questions, and frequently?
+      </blockquote>
+      <p>
+        Nope, you caught me! 😅
+      </p>
+      <p>
+        This is merely a cheeky way to talk about myself, which I figured was
+        apt content to display on a personal website.
+      </p>
+    </section>
+    <footer class="text-center my-10">
+      <p class="text-sm text-gray-500">Cory Boyd ♡ 2023</p>
+    </footer>
   </div>
 </div>
 <script type="module" src="index.js"></script>
