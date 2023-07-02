@@ -1,7 +1,90 @@
 <html lang="en-us">
-  <include src="templates/head.html"> { "cssPath": "index.css" } </include>
-  <body>
-    <script defer src="index.js"></script>
-    <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "6a39557745744a89819e34b049a465a7"}'></script><!-- End Cloudflare Web Analytics -->
-  </body>
+<include src="templates/head.html"> { "cssPath": "index.css" }</include>
+<body>
+
+<div class="flex flex-col items-center h-screen w-full">
+  <div class="flex flex-col items-center justify-center m-5">
+    <img class="w-64 mb-5 rounded-full border-4 border-gray-800" src="./assets/me.png"
+         alt="a handsome lad">
+    <div class="prose">
+      <section>
+        <h1 class="text-center">Cory Boyd</h1>
+        <p>Software engineer, amateur music producer, player of video games, and father of cats.</p>
+        <ul class="flex bg-red-300">
+          <li>GitHub</li>
+          <li>SoundCloud</li>
+          <li>Email</li>
+        </ul>
+      </section>
+      <hr>
+      <section class="text-sm">
+        <blockquote>
+          OMG where is your LinkedIn profile?!?!?
+        </blockquote>
+        <p>
+          I don't need LinkedIn to collate my work experience, so I deleted my
+          profile.
+        </p>
+        <p>
+          I can do that myself, without handing over personal data to
+          spam-vertising behemoths, by writing a resume.
+        </p>
+        <blockquote>
+          Okay... BUT WHERE IS YOUR TWITTER?!?!
+        </blockquote>
+        <p>
+          Mass social media is garbage.
+        </p>
+        <p>
+          We tried, and we failed. Shut it down and let's move on with our
+          lives. Find another gratification loop to engage in that is grounded
+          in reality.
+        </p>
+        <p>
+          Federated networks through ActivityPub are the next logical step for
+          online communities that won't get too big to be good, and won't be
+          sold out for short-term profit.
+        </p>
+        <blockquote>
+          We have an exciting new opportunity for you at a fast-paced AI
+          startup that will change the world.
+        </blockquote>
+        <p>
+          No you don't. You are yet another uninspired participant in the AI
+          gold rush. Your goal is to grift rubes out of their hard-earned cash.
+        </p>
+        <p>
+          LLMs are lauded under a false narrative of anthropomorphic wank. They
+          might be useful after the dust settles for certain workloads.
+        </p>
+        <p>
+          I don't need you to create 50% accurate summaries of my email inbox.
+          I know all you want to do is sell my Precious User Data ™️ to
+          advertisers. Jog on.
+        </p>
+        <blockquote>
+          So, do you enjoy anything in life?
+        </blockquote>
+        <p>
+          Yes! Many things!
+        </p>
+        <p>
+          I am fond of my employer, the team I get to work with, and my
+          employers acknowledgement that I work to live.
+        </p>
+        <p>
+          I am grateful for the beautiful setting I get to live in, and the
+          amazing friends and family that I have.
+        </p>
+        <p>
+          I am afforded the opportunity to satisfy my technical, musical, and
+          other such curiosities. I do so regularly. Or if I'm not feeling it I
+          play some video games. Life is good!
+        </p>
+      </section>
+    </div>
+  </div>
+</div>
+<script type="module" src="index.js"></script>
+</body>
 </html>
