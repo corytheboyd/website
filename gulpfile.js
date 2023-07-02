@@ -42,13 +42,6 @@ function copyJs() {
     .pipe(connect.reload());
 }
 
-function copyJsLib() {
-  return gulp
-    .src(["./node_modules/animejs/lib/anime.es.js"])
-    .pipe(gulp.dest("./dist/lib"))
-    .pipe(connect.reload());
-}
-
 function cleanAll(cb) {
   rimraf("./dist", cb);
 }
@@ -71,18 +64,18 @@ function devServer() {
   gulp.watch(
     ["./src/**/*.js", "./{tailwind,postcss}.config.js"],
     {},
-    gulp.series(copyJs, copyJsLib)
+    gulp.series(copyJs)
   );
   gulp.watch(["./assets/*"], {}, copyAssets);
 }
 
 exports.serve = gulp.series(
   cleanAll,
-  gulp.parallel(buildCss, buildHtml, copyJs, copyJsLib, copyAssets),
+  gulp.parallel(buildCss, buildHtml, copyJs, copyAssets),
   devServer
 );
 
 exports.build = gulp.series(
   cleanAll,
-  gulp.parallel(buildCss, buildHtml, copyJs, copyJsLib, copyAssets)
+  gulp.parallel(buildCss, buildHtml, copyJs, copyAssets)
 );
