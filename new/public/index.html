@@ -11,75 +11,18 @@
       body {
         padding: 0;
         margin: 0;
-        background: #000 !important;
+        background: #383b41;
         overflow: hidden;
       }
-      #ascii-label {
-        margin: 2rem auto 0 auto;
-        color: #39ff14; /* Bright retro green */
-        font-family: "VT323", monospace;
-        font-size: 2.5rem;
-        font-weight: bold;
-        letter-spacing: 0.2em;
-        pointer-events: none;
-        z-index: 10;
-        position: relative;
-        text-shadow: 0 2px 8px #000, 0 0 2px #39ff14;
-        text-align: center;
+      #earth-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        /* width/height set dynamically */
       }
-      @media (max-width: 600px) {
-        #ascii-label {
-          font-size: 2.2rem;
-          letter-spacing: 0.1em;
-          padding: 0 0.5em;
-        }
-        #ascii-subtext {
-          font-size: 1.5rem;
-        }
-      }
-      #ascii-subtext {
-        font-size: 2rem;
-        font-weight: normal;
-        letter-spacing: 0.05em;
-        color: #00b140; /* Dimmer retro green */
-        font-family: "VT323", monospace;
-        margin-top: 0.3em;
-        text-shadow: 0 1px 4px #000, 0 0 2px #00b140;
-        text-align: center;
-        z-index: 10;
-        position: relative;
-      }
-      #ascii-nav {
-        width: 100vw;
-        display: flex;
-        justify-content: center;
-        gap: 2.5rem;
-        padding: 1.2rem 0 0.2rem 0;
-        z-index: 10;
-        background: transparent;
-        position: relative;
-      }
-      #ascii-nav a {
-        color: #39ff14;
-        font-family: "VT323", monospace;
-        font-size: 1.7rem;
-        text-decoration: none;
-        letter-spacing: 0.08em;
-        transition: color 0.2s;
-        text-shadow: 0 1px 4px #000, 0 0 2px #39ff14;
-      }
-      #ascii-nav a:hover {
-        color: #00b140;
-        text-shadow: 0 1px 8px #000, 0 0 4px #00b140;
-      }
-      .ascii-effect {
-        position: fixed !important;
-        top: 0;
-        left: 0;
-        width: 100vw !important;
-        height: 100vh !important;
-        z-index: 1;
-        pointer-events: none;
+      canvas {
+        display: block;
       }
     </style>
     <script type="importmap">
@@ -90,138 +33,102 @@
         }
       }
     </script>
-    <title>Document</title>
+    <title>corytheboyd.com</title>
   </head>
   <body>
-    <head>
-      <div id="ascii-label">
-        INTERNET WEB SITE
-        <div id="ascii-subtext">Cory Boyd</div>
-      </div>
-    </head>
-
-    <nav id="ascii-nav">
-      <a href="#contact">Contact</a>
-      <a href="#blog">Blog</a>
-      <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
-    </nav>
-
+    <div id="earth-container"></div>
     <script type="module">
       import * as THREE from "three";
-
-      import { AsciiEffect } from "three/addons/effects/AsciiEffect.js";
       import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-      import { TrackballControls } from "three/addons/controls/TrackballControls.js";
 
-      let camera, controls, scene, renderer, effect;
-      let model;
-      let textMesh; // Store globally for access in animate
-
-      const start = Date.now();
+      let camera, scene, renderer, model, box, size;
+      const container = document.getElementById("earth-container");
 
       init();
 
       function init() {
-        camera = new THREE.PerspectiveCamera(
-          10,
-          window.innerWidth / window.innerHeight,
-          1,
-          1000
-        );
-        camera.position.x = 0;
-        camera.position.y = 0;
-        camera.position.z = 0;
-
+        renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
         scene = new THREE.Scene();
-        scene.background = null;
 
-        const pointLight1 = new THREE.PointLight(0xffffff, 3, 0, 0);
-        pointLight1.position.set(500, 500, 500);
-        scene.add(pointLight1);
+        // Add a light
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(1, 1, 1).normalize();
+        scene.add(light);
 
-        renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setAnimationLoop(animate);
-
-        effect = new AsciiEffect(renderer, " .:-+*=%@#", { invert: true });
-        effect.setSize(window.innerWidth, window.innerHeight);
-        effect.domElement.style.color = "#39ff14"; // Bright retro green
-        effect.domElement.style.backgroundColor = "black";
-
-        effect.domElement.classList.add("ascii-effect");
-        document.body.appendChild(effect.domElement);
-
-        window.addEventListener("resize", onWindowResize);
-
-        createControls(camera);
-        loadModel();
-      }
-
-      function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        effect.setSize(window.innerWidth, window.innerHeight);
-
-        controls.handleResize();
-      }
-
-      function animate() {
-        effect.render(scene, camera);
-
-        if (model) {
-          model.rotation.y += 0.005;
-        }
-
-        controls.update();
-      }
-
-      function createControls(camera) {
-        controls = new TrackballControls(camera, renderer.domElement);
-
-        controls.rotateSpeed = 1.0;
-        controls.zoomSpeed = 1.2;
-        controls.panSpeed = 0.8;
-
-        controls.keys = ["KeyA", "KeyS", "KeyD"];
-      }
-
-      function loadModel() {
+        // Load the model
         const loader = new GLTFLoader();
-
         loader.load(
-          "globe_low_poly.glb",
+          "earth.glb",
           function (gltf) {
             model = gltf.scene;
             scene.add(model);
 
-            // Calculate bounding box of the model
-            const boundingBox = new THREE.Box3().setFromObject(model);
-            const center = boundingBox.getCenter(new THREE.Vector3());
-            const size = boundingBox.getSize(new THREE.Vector3());
+            // Center the model
+            box = new THREE.Box3().setFromObject(model);
+            const center = box.getCenter(new THREE.Vector3());
+            model.position.sub(center);
 
-            // Calculate distance based on model size
-            const maxDim = Math.max(size.x, size.y, size.z);
-            const fov = camera.fov * (Math.PI / 180);
-            let cameraDistance = maxDim / (2 * Math.tan(fov / 2));
+            // Get the size of the bounding box
+            size = box.getSize(new THREE.Vector3());
 
-            // Add some padding
-            cameraDistance *= 1.2;
+            // Create camera (will be updated in resizeToFit)
+            camera = new THREE.OrthographicCamera();
+            camera.position.set(0, 0, 100);
+            camera.lookAt(0, 0, 0);
 
-            // Position camera to look at center of the model
-            camera.position.set(center.x, center.y, center.z + cameraDistance);
-            camera.lookAt(center);
+            container.innerHTML = "";
+            container.appendChild(renderer.domElement);
 
-            // Update controls target to the center of the model
-            controls.target.copy(center);
-            controls.update();
+            resizeToFit();
+            window.addEventListener("resize", resizeToFit);
+
+            animate();
           },
           undefined,
           function (error) {
             console.error(error);
           }
         );
+      }
+
+      function resizeToFit() {
+        if (!size) return;
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        const modelAspect = size.x / size.y;
+        const windowAspect = windowWidth / windowHeight;
+
+        // Scale to fit model in window, maintaining aspect ratio
+        let scale;
+        if (modelAspect > windowAspect) {
+          // Fit to width
+          scale = windowWidth / size.x;
+        } else {
+          // Fit to height
+          scale = windowHeight / size.y;
+        }
+        const pixelWidth = Math.floor(size.x * scale);
+        const pixelHeight = Math.floor(size.y * scale);
+
+        renderer.setSize(pixelWidth, pixelHeight);
+        container.style.width = pixelWidth + "px";
+        container.style.height = pixelHeight + "px";
+
+        // Update camera
+        const frustumSize = Math.max(size.x, size.y);
+        const aspect = pixelWidth / pixelHeight;
+        camera.left = (-frustumSize * aspect) / 2;
+        camera.right = (frustumSize * aspect) / 2;
+        camera.top = frustumSize / 2;
+        camera.bottom = -frustumSize / 2;
+        camera.near = 0.1;
+        camera.far = 2000;
+        camera.updateProjectionMatrix();
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
       }
     </script>
   </body>
