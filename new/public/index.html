@@ -3,15 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
-      rel="stylesheet"
-    />
     <style>
       body {
         padding: 0;
         margin: 0;
-        background: #383b41;
+        /* background: rgb(252, 249, 226); */
+        background: black;
         overflow: hidden;
       }
       #earth-container {
@@ -19,10 +16,28 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        /* width/height set dynamically */
+        background-color: rgba(10, 10, 30, 0.5);
       }
       canvas {
         display: block;
+      }
+      #ascii-stars {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        z-index: 0;
+        color: #fff;
+        background: transparent;
+        font-family: monospace;
+        font-size: 12px;
+        line-height: 12px;
+        pointer-events: none;
+        user-select: none;
+        white-space: pre;
       }
     </style>
     <script type="importmap">
@@ -36,99 +51,161 @@
     <title>corytheboyd.com</title>
   </head>
   <body>
+    <pre id="ascii-stars"></pre>
     <div id="earth-container"></div>
+    <style>
+      #ascii-stars {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        z-index: 0;
+        color: #fff;
+        background: transparent;
+        font-family: monospace;
+        font-size: 12px;
+        line-height: 12px;
+        pointer-events: none;
+        user-select: none;
+        white-space: pre;
+      }
+    </style>
+    <script>
+      // ASCII Starfield
+      const starChars = [".", "*", "+"];
+      let starCount = 120; // number of stars
+      let width = Math.floor(window.innerWidth / 12);
+      let height = Math.floor(window.innerHeight / 12);
+      let stars = [];
+
+      function randomStar() {
+        return {
+          x: Math.floor(Math.random() * width),
+          y: Math.floor(Math.random() * height),
+          char: starChars[Math.floor(Math.random() * starChars.length)],
+          twinkle: Math.random() * 2 * Math.PI,
+        };
+      }
+
+      function createStars() {
+        stars = [];
+        for (let i = 0; i < starCount; i++) {
+          stars.push(randomStar());
+        }
+      }
+      createStars();
+
+      function drawStars(time) {
+        let grid = Array.from({ length: height }, () => Array(width).fill(" "));
+        for (let star of stars) {
+          // Twinkle effect
+          const tw = Math.abs(Math.sin(time / 500 + star.twinkle));
+          if (tw > 0.5) {
+            grid[star.y][star.x] = star.char;
+          }
+        }
+        document.getElementById("ascii-stars").textContent = grid
+          .map((row) => row.join(""))
+          .join("\n");
+      }
+
+      function animateStars(time = 0) {
+        drawStars(time);
+        requestAnimationFrame(animateStars);
+      }
+      animateStars();
+
+      window.addEventListener("resize", () => {
+        width = Math.floor(window.innerWidth / 12);
+        height = Math.floor(window.innerHeight / 12);
+        createStars();
+      });
+    </script>
     <script type="module">
       import * as THREE from "three";
       import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+      import { AsciiEffect } from "three/addons/effects/AsciiEffect.js";
 
-      let camera, scene, renderer, model, box, size;
+      let camera, scene, renderer, effect, model;
       const container = document.getElementById("earth-container");
 
-      init();
+      // Setup renderer and scene
+      renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+      renderer.setClearColor(0x000000, 0); // transparent
+      scene = new THREE.Scene();
 
-      function init() {
-        renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
-        scene = new THREE.Scene();
+      // Camera
+      const aspect = window.innerWidth / window.innerHeight;
+      camera = new THREE.PerspectiveCamera(40, aspect, 0.1, 2000);
+      camera.position.set(0, 0, 100);
 
-        // Add a light
-        const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(1, 1, 1).normalize();
-        scene.add(light);
+      // Lighting
+      // Add a much stronger main directional light
+      const light = new THREE.DirectionalLight(0xffffff, 7.0);
+      light.position.set(0, 0, 100);
+      light.target.position.set(0, 0, 0);
+      scene.add(light);
+      scene.add(light.target);
 
-        // Load the model
-        const loader = new GLTFLoader();
-        loader.load(
-          "earth.glb",
-          function (gltf) {
-            model = gltf.scene;
-            scene.add(model);
+      // Add a second directional light from the side
+      const sideLight = new THREE.DirectionalLight(0xffffff, 4.0);
+      sideLight.position.set(100, 0, 100);
+      sideLight.target.position.set(0, 0, 0);
+      scene.add(sideLight);
+      scene.add(sideLight.target);
 
-            // Center the model
-            box = new THREE.Box3().setFromObject(model);
-            const center = box.getCenter(new THREE.Vector3());
-            model.position.sub(center);
+      // Brighter ambient light
+      const ambient = new THREE.AmbientLight(0xffffff, 1.5);
+      scene.add(ambient);
 
-            // Get the size of the bounding box
-            size = box.getSize(new THREE.Vector3());
+      // Load model
+      const loader = new GLTFLoader();
+      loader.load("earth_low_poly.glb", (gltf) => {
+        model = gltf.scene;
+        scene.add(model);
 
-            // Create camera (will be updated in resizeToFit)
-            camera = new THREE.OrthographicCamera();
-            camera.position.set(0, 0, 100);
-            camera.lookAt(0, 0, 0);
+        // Center model
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        model.position.sub(center);
 
-            container.innerHTML = "";
-            container.appendChild(renderer.domElement);
+        // Scale model to fit nicely in view
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        model.scale.setScalar(40 / maxDim);
 
-            resizeToFit();
-            window.addEventListener("resize", resizeToFit);
+        // Setup AsciiEffect
+        effect = new AsciiEffect(renderer, " .:-=+*%@#", {
+          invert: true,
+          color: true,
+        });
+        effect.setSize(window.innerWidth, window.innerHeight);
+        effect.domElement.classList.add("ascii");
+        effect.domElement.style.background = "transparent";
+        container.innerHTML = "";
+        container.appendChild(effect.domElement);
 
-            animate();
-          },
-          undefined,
-          function (error) {
-            console.error(error);
-          }
-        );
-      }
+        // Animation loop
+        renderer.setAnimationLoop(animate);
 
-      function resizeToFit() {
-        if (!size) return;
-        const windowWidth = window.innerWidth;
-        const windowHeight = window.innerHeight;
-        const modelAspect = size.x / size.y;
-        const windowAspect = windowWidth / windowHeight;
-
-        // Scale to fit model in window, maintaining aspect ratio
-        let scale;
-        if (modelAspect > windowAspect) {
-          // Fit to width
-          scale = windowWidth / size.x;
-        } else {
-          // Fit to height
-          scale = windowHeight / size.y;
-        }
-        const pixelWidth = Math.floor(size.x * scale);
-        const pixelHeight = Math.floor(size.y * scale);
-
-        renderer.setSize(pixelWidth, pixelHeight);
-        container.style.width = pixelWidth + "px";
-        container.style.height = pixelHeight + "px";
-
-        // Update camera
-        const frustumSize = Math.max(size.x, size.y);
-        const aspect = pixelWidth / pixelHeight;
-        camera.left = (-frustumSize * aspect) / 2;
-        camera.right = (frustumSize * aspect) / 2;
-        camera.top = frustumSize / 2;
-        camera.bottom = -frustumSize / 2;
-        camera.near = 0.1;
-        camera.far = 2000;
-        camera.updateProjectionMatrix();
-      }
+        // Responsive resize
+        window.addEventListener("resize", onWindowResize);
+      });
 
       function animate() {
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
+        if (model) model.rotation.y += 0.03;
+        effect.render(scene, camera);
+      }
+
+      function onWindowResize() {
+        const w = window.innerWidth,
+          h = window.innerHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        effect.setSize(w, h);
       }
     </script>
   </body>
