@@ -50,18 +50,14 @@
     <title>corytheboyd.com</title>
   </head>
   <body>
-    <div class="bg-red-500 w-screen h-screen">
-      <h1>INTERNET</h1>
-      <div class="flex items-center justify-center w-full h-full">
-        <div
-          id="earth-square"
-          class="relative bg-blue-500"
-          style="aspect-ratio: 1/1; width: min(100vw, 100vh)"
-        >
-          <div id="earth-container" class="absolute inset-0"></div>
+    <main>
+      <div class="flex flex-col items-center justify-center w-full">
+        <div></div>
+        <div class="flex-1 bg-red-500">
+          <earth-globe />
         </div>
       </div>
-    </div>
+    </main>
 
     <script>
       // ASCII Starfield (fixed font size, always fills viewport)
@@ -119,115 +115,84 @@
       import * as THREE from "three";
       import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-      const EARTH_ROTATION_SPEED = 0.3;
-
-      const square = document.getElementById("earth-square");
-      const container = document.getElementById("earth-container");
-
-      let previousTime = 0;
-      let earthBoundingSphere = null;
-      let camera, scene, renderer, model;
-
-      scene = new THREE.Scene();
-
-      function getSquareSize() {
-        return Math.min(window.innerWidth, window.innerHeight);
-      }
-
-      camera = new THREE.PerspectiveCamera(40, 1, 0.1, 2000);
-
-      function fitCameraToEarth() {
-        if (!earthBoundingSphere) return;
-        const fov = (camera.fov * Math.PI) / 180;
-        // Model is scaled so radius is 1
-        camera.position.set(0, 0, 1.77);
-        camera.lookAt(0, -0.015, 0);
-        camera.updateProjectionMatrix();
-      }
-
-      // Lighting
-      // Add a much stronger main directional light
-      const light = new THREE.DirectionalLight(0xffffff, 7.0);
-      light.position.set(0, 0, 100);
-      light.target.position.set(0, 0, 0);
-      scene.add(light);
-      scene.add(light.target);
-
-      // Add a second directional light from the side
-      const sideLight = new THREE.DirectionalLight(0xffffff, 4.0);
-      sideLight.position.set(100, 0, 100);
-      sideLight.target.position.set(0, 0, 0);
-      scene.add(sideLight);
-      scene.add(sideLight.target);
-
-      // Brighter ambient light
-      const ambient = new THREE.AmbientLight(0xffffff, 1.5);
-      scene.add(ambient);
-
-      // Setup renderer and scene
-      renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false });
-      renderer.setClearColor(0x2222ff, 1); // debug blue
-
-      // Load model
-      const loader = new GLTFLoader();
-      loader.load("earth_low_poly.glb", (gltf) => {
-        model = gltf.scene;
-        scene.add(model);
-        console.log("Earth model loaded and added to scene:", model);
-
-        // Center model
-        const box = new THREE.Box3().setFromObject(model);
-        const center = box.getCenter(new THREE.Vector3());
-        model.position.sub(center);
-
-        // Scale model so bounding sphere radius is 1
-        const sphere = box.getBoundingSphere(new THREE.Sphere());
-        const scale = 1 / sphere.radius;
-        model.scale.setScalar(scale);
-        console.log(
-          "Model centered at",
-          model.position,
-          "and scaled by",
-          scale
-        );
-
-        // Compute bounding sphere for fitting (should now be radius 1)
-        earthBoundingSphere = sphere;
-        console.log("Bounding sphere:", earthBoundingSphere);
-
-        // Setup renderer output
-        container.innerHTML = "";
-        container.appendChild(renderer.domElement);
-        const squareSize = getSquareSize();
-        renderer.setSize(squareSize, squareSize);
-        camera.aspect = 1;
-        camera.updateProjectionMatrix();
-
-        fitCameraToEarth();
-
-        // Animation loop
-        renderer.setAnimationLoop(animate);
-
-        // Responsive resize
-        window.addEventListener("resize", onWindowResize);
-      });
-
-      function animate(time) {
-        if (model) {
-          const deltaTime = (time - previousTime) / 1000; // Convert to seconds
-          model.rotation.y += deltaTime * EARTH_ROTATION_SPEED;
-          previousTime = time;
+      class EarthGlobe extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+          const style = document.createElement("style");
+          style.textContent = `:host { aspect-ratio: 1/1; width: min(100vw, 100vh); display: block; }`;
+          this.shadowRoot.appendChild(style);
+          this.container = document.createElement("div");
+          this.container.style.width = "100%";
+          this.container.style.height = "100%";
+          this.container.style.position = "relative";
+          this.shadowRoot.appendChild(this.container);
         }
-        renderer.render(scene, camera);
+        connectedCallback() {
+          this.initThree();
+          window.addEventListener("resize", this.handleResize);
+        }
+        disconnectedCallback() {
+          window.removeEventListener("resize", this.handleResize);
+          if (this.renderer) this.renderer.setAnimationLoop(null);
+        }
+        getSquareSize = () => {
+          // Use the actual rendered size of the element
+          return Math.min(this.offsetWidth, this.offsetHeight);
+        };
+        handleResize = () => {
+          const size = this.getSquareSize();
+          if (this.renderer) this.renderer.setSize(size, size);
+          if (this.camera) {
+            this.camera.aspect = 1;
+            this.camera.updateProjectionMatrix();
+          }
+          if (this.fitCameraToEarth) this.fitCameraToEarth();
+        };
+        initThree() {
+          const EARTH_ROTATION_SPEED = 0.3;
+          let previousTime = 0;
+          this.scene = new THREE.Scene();
+          this.camera = new THREE.PerspectiveCamera(48.5, 1, 0.1, 2000);
+          // Lighting
+          const light = new THREE.DirectionalLight(0xffffff, 5.5);
+          light.position.set(0, 0, 100);
+          light.target.position.set(0, 0, 0);
+          this.scene.add(light);
+          this.scene.add(light.target);
+          this.renderer = new THREE.WebGLRenderer({
+            antialias: false,
+            alpha: true,
+          });
+          this.renderer.setClearColor(0x2222ff, 1);
+          this.container.innerHTML = "";
+          this.container.appendChild(this.renderer.domElement);
+          // Load model
+          const loader = new GLTFLoader();
+          loader.load("earth_low_poly.glb", (gltf) => {
+            this.model = gltf.scene;
+            this.scene.add(this.model);
+            this.fitCameraToEarth = () => {
+              const fov = (this.camera.fov * Math.PI) / 180;
+              this.camera.position.set(0, 0, 1.7);
+              this.camera.lookAt(0, 0, 0);
+              this.camera.updateProjectionMatrix();
+            };
+            this.handleResize();
+            // Animation loop
+            this.renderer.setAnimationLoop((time) => {
+              if (this.model) {
+                const deltaTime = (time - previousTime) / 1000;
+                this.model.rotation.y += deltaTime * EARTH_ROTATION_SPEED;
+                previousTime = time;
+              }
+              this.renderer.render(this.scene, this.camera);
+            });
+          });
+          this.handleResize();
+        }
       }
-
-      function onWindowResize() {
-        const squareSize = getSquareSize();
-        renderer.setSize(squareSize, squareSize);
-        camera.aspect = 1;
-        camera.updateProjectionMatrix();
-        fitCameraToEarth();
-      }
+      customElements.define("earth-globe", EarthGlobe);
     </script>
   </body>
 </html>
