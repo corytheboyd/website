@@ -42,11 +42,11 @@
             <div class="flex flex-row space-x-3 items-center">
               <picture-frame class="w-24"></picture-frame>
               <div class="flex flex-col space-y-2">
+                <p>Welcome to my ✨ <b>personal website</b> ✨</p>
                 <p>
-                  Welcome to my ✨ <b>personal website</b> ✨, internet
-                  traveler.
+                  Learn more about me by following the below 🔗
+                  <b>hyperlinks</b> 🔗
                 </p>
-                <p>Take joy in perusing my various hyperlinks.</p>
               </div>
             </div>
           </div>
@@ -359,7 +359,7 @@
               font-size: 13px;
               color: white;
               text-shadow: 1px 1px 0 #000, 0 0 2px #000;
-              cursor: pointer;
+              /* cursor: pointer; */
               user-select: none;
             }
             a {
@@ -368,10 +368,18 @@
               align-items: center;
               text-decoration: none;
               color: inherit;
+              cursor: pointer;
             }
             .label {
               margin-top: 4px;
               word-break: break-word;
+              border: 1px dotted transparent;
+              border-radius: 0;
+              padding: 2px 4px;
+              box-sizing: border-box;
+            }
+            a:hover .label {
+              border-color: #fff;
             }
           `;
           this.shadowRoot.appendChild(style);
