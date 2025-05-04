@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,35 +7,7 @@
       body {
         padding: 0;
         margin: 0;
-        /* background: rgb(252, 249, 226); */
-        background: black;
         overflow: hidden;
-      }
-      canvas {
-        display: block;
-      }
-      .ascii {
-        z-index: 2;
-        position: relative;
-        display: block;
-      }
-      #ascii-stars {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        margin: 0;
-        padding: 0;
-        z-index: 0;
-        color: #fff;
-        background: transparent;
-        font-family: monospace;
-        font-size: 12px;
-        line-height: 12px;
-        pointer-events: none;
-        user-select: none;
-        white-space: pre;
       }
     </style>
     <script type="importmap">
@@ -49,13 +21,18 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <title>corytheboyd.com</title>
   </head>
-  <body>
-    <main>
-      <div class="flex flex-col items-center justify-center w-full">
-        <div></div>
-        <div class="flex-1 bg-red-500">
-          <earth-globe />
+  <body class="h-screen w-screen">
+    <div class="h-full flex items-center flex-col bg-amber-500">
+      <div
+        class="flex flex-col items-center w-full h-full max-w-5xl bg-green-500"
+      >
+        <div>
+          <h1 class="text-4xl font-bold">INTERNET</h1>
+          <h1 class="text-4xl font-bold">INTERNET</h1>
+          <h1 class="text-4xl font-bold">INTERNET</h1>
+          <h1 class="text-4xl font-bold">INTERNET</h1>
         </div>
+        <earth-globe class="w-xl"></earth-globe>
       </div>
     </main>
 
@@ -120,7 +97,7 @@
           super();
           this.attachShadow({ mode: "open" });
           const style = document.createElement("style");
-          style.textContent = `:host { aspect-ratio: 1/1; width: min(100vw, 100vh); display: block; }`;
+          style.textContent = `:host { display: block; aspect-ratio: 1/1; height: 100%; width: auto; max-width: 100vw; margin: auto; }`;
           this.shadowRoot.appendChild(style);
           this.container = document.createElement("div");
           this.container.style.width = "100%";
@@ -164,7 +141,7 @@
             antialias: false,
             alpha: true,
           });
-          this.renderer.setClearColor(0x2222ff, 1);
+          this.renderer.setClearColor(0x2222ff, 0);
           this.container.innerHTML = "";
           this.container.appendChild(this.renderer.domElement);
           // Load model
