@@ -226,7 +226,8 @@
         };
         initThree() {
           this.scene = new THREE.Scene();
-          this.camera = new THREE.PerspectiveCamera(31, 0, 1, 0);
+          // Adjust camera near/far planes for better depth precision
+          this.camera = new THREE.PerspectiveCamera(31, 1, 0.1, 10);
           this.renderer = new THREE.WebGLRenderer({
             antialias: false,
             alpha: true,
@@ -236,8 +237,6 @@
           this.renderer.domElement.style.width = "100%";
           this.renderer.domElement.style.height = "100%";
           this.handleResize();
-          // this.renderer.domElement.style.width = '100%';
-          // this.renderer.domElement.style.imageRendering = 'pixelated';
           // Add picture frame with me_dither.png
           const textureLoader = new THREE.TextureLoader();
           textureLoader.load("me_dither.png", (texture) => {
@@ -261,7 +260,8 @@
             );
             const picMaterial = new THREE.MeshBasicMaterial({ map: texture });
             const picMesh = new THREE.Mesh(picGeometry, picMaterial);
-            picMesh.position.set(0, 0, 0.01); // Slightly in front of frame
+            // Increase z-separation to avoid z-fighting
+            picMesh.position.set(0, 0, 0.05); // Increased from 0.01 to 0.05
             this.scene.add(picMesh);
             // Camera: angled for 3D effect
             this.camera.position.set(0.3, 0.2, 1.5);
@@ -276,7 +276,8 @@
               picMesh.rotation.y = frameMesh.rotation.y;
               picMesh.rotation.x = frameMesh.rotation.x;
               frameMesh.position.z = Math.sin(t * 0.5) * 0.04;
-              picMesh.position.z = 0.01 + frameMesh.position.z;
+              // Keep the image always in front of the frame
+              picMesh.position.z = 0.05 + frameMesh.position.z;
               this.renderer.render(this.scene, this.camera);
               this._animationFrameId = requestAnimationFrame(animate);
             };
