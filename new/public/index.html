@@ -8,6 +8,7 @@
         padding: 0;
         margin: 0;
         overflow: hidden;
+        background-color: black;
       }
     </style>
     <script type="importmap">
@@ -22,72 +23,17 @@
     <title>corytheboyd.com</title>
   </head>
   <body class="h-screen w-screen">
-    <div class="h-full flex items-center flex-col bg-amber-500">
+    <div class="h-full flex items-center flex-col">
       <div
-        class="flex flex-col items-center w-full h-full max-w-5xl bg-green-500"
+        class="flex flex-col items-center w-full h-full max-w-5xl"
       >
         <div>
-          <h1 class="text-4xl font-bold">INTERNET</h1>
-          <h1 class="text-4xl font-bold">INTERNET</h1>
-          <h1 class="text-4xl font-bold">INTERNET</h1>
-          <h1 class="text-4xl font-bold">INTERNET</h1>
+          <h1 class="text-white text-8xl font-bold font-mono">INTERNET</h1>
         </div>
         <earth-globe class="w-xl"></earth-globe>
       </div>
     </main>
 
-    <script>
-      // ASCII Starfield (fixed font size, always fills viewport)
-      const starChars = [".", "*", "+"];
-      let starCount = 120;
-      let cols, rows;
-      let stars = [];
-      const asciiStars = document.getElementById("ascii-stars");
-      const FONT_SIZE = 12; // px, must match CSS
-
-      function updateGridSize() {
-        cols = Math.floor(window.innerWidth / FONT_SIZE);
-        rows = Math.floor(window.innerHeight / FONT_SIZE);
-      }
-      function randomStar() {
-        return {
-          x: Math.floor(Math.random() * cols),
-          y: Math.floor(Math.random() * rows),
-          char: starChars[Math.floor(Math.random() * starChars.length)],
-          twinkle: Math.random() * 2 * Math.PI,
-        };
-      }
-      function createStars() {
-        stars = [];
-        for (let i = 0; i < starCount; i++) {
-          stars.push(randomStar());
-        }
-      }
-      function drawStars(time) {
-        let grid = Array.from({ length: rows }, () => Array(cols).fill(" "));
-        for (let star of stars) {
-          const tw = Math.abs(Math.sin(time / 500 + star.twinkle));
-          if (tw > 0.5) {
-            grid[star.y][star.x] = star.char;
-          }
-        }
-        asciiStars.textContent = grid.map((row) => row.join("")).join("\n");
-      }
-      function animateStars(time = 0) {
-        drawStars(time);
-        requestAnimationFrame(animateStars);
-      }
-      function resizeStars() {
-        updateGridSize();
-        createStars();
-      }
-
-      // window.addEventListener("resize", resizeStars);
-      // // Initial setup
-      // updateGridSize();
-      // createStars();
-      // animateStars();
-    </script>
     <script type="module">
       import * as THREE from "three";
       import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
@@ -111,7 +57,7 @@
         }
         disconnectedCallback() {
           window.removeEventListener("resize", this.handleResize);
-          if (this.renderer) this.renderer.setAnimationLoop(null);
+          if (this._animationFrameId) cancelAnimationFrame(this._animationFrameId);
         }
         getSquareSize = () => {
           // Use the actual rendered size of the element
@@ -119,7 +65,7 @@
         };
         handleResize = () => {
           const size = this.getSquareSize();
-          if (this.renderer) this.renderer.setSize(size, size);
+          if (this.renderer) this.renderer.setSize(128, 128, false);
           if (this.camera) {
             this.camera.aspect = 1;
             this.camera.updateProjectionMatrix();
@@ -141,9 +87,11 @@
             antialias: false,
             alpha: true,
           });
-          this.renderer.setClearColor(0x2222ff, 0);
           this.container.innerHTML = "";
           this.container.appendChild(this.renderer.domElement);
+          // Style the canvas for pixelation
+          this.renderer.domElement.style.width = '100%';
+          this.renderer.domElement.style.imageRendering = 'pixelated';
           // Load model
           const loader = new GLTFLoader();
           loader.load("earth_low_poly.glb", (gltf) => {
@@ -151,20 +99,22 @@
             this.scene.add(this.model);
             this.fitCameraToEarth = () => {
               const fov = (this.camera.fov * Math.PI) / 180;
-              this.camera.position.set(0, 0, 1.7);
+              this.camera.position.set(0, 0, 1.7); // Adjust if needed for better framing
               this.camera.lookAt(0, 0, 0);
               this.camera.updateProjectionMatrix();
             };
             this.handleResize();
             // Animation loop
-            this.renderer.setAnimationLoop((time) => {
+            const animate = (time) => {
               if (this.model) {
                 const deltaTime = (time - previousTime) / 1000;
                 this.model.rotation.y += deltaTime * EARTH_ROTATION_SPEED;
                 previousTime = time;
               }
               this.renderer.render(this.scene, this.camera);
-            });
+              this._animationFrameId = requestAnimationFrame(animate);
+            };
+            this._animationFrameId = requestAnimationFrame(animate);
           });
           this.handleResize();
         }
