@@ -11,14 +11,12 @@
         background: black;
         overflow: hidden;
       }
-      #earth-container {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: rgba(10, 10, 30, 0.5);
-      }
       canvas {
+        display: block;
+      }
+      .ascii {
+        z-index: 2;
+        position: relative;
         display: block;
       }
       #ascii-stars {
@@ -48,99 +46,104 @@
         }
       }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <title>corytheboyd.com</title>
   </head>
   <body>
-    <pre id="ascii-stars"></pre>
-    <div id="earth-container"></div>
-    <style>
-      #ascii-stars {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        margin: 0;
-        padding: 0;
-        z-index: 0;
-        color: #fff;
-        background: transparent;
-        font-family: monospace;
-        font-size: 12px;
-        line-height: 12px;
-        pointer-events: none;
-        user-select: none;
-        white-space: pre;
-      }
-    </style>
-    <script>
-      // ASCII Starfield
-      const starChars = [".", "*", "+"];
-      let starCount = 120; // number of stars
-      let width = Math.floor(window.innerWidth / 12);
-      let height = Math.floor(window.innerHeight / 12);
-      let stars = [];
+    <div class="bg-red-500 w-screen h-screen">
+      <h1>INTERNET</h1>
+      <div class="flex items-center justify-center w-full h-full">
+        <div
+          id="earth-square"
+          class="relative bg-blue-500"
+          style="aspect-ratio: 1/1; width: min(100vw, 100vh)"
+        >
+          <div id="earth-container" class="absolute inset-0"></div>
+        </div>
+      </div>
+    </div>
 
+    <script>
+      // ASCII Starfield (fixed font size, always fills viewport)
+      const starChars = [".", "*", "+"];
+      let starCount = 120;
+      let cols, rows;
+      let stars = [];
+      const asciiStars = document.getElementById("ascii-stars");
+      const FONT_SIZE = 12; // px, must match CSS
+
+      function updateGridSize() {
+        cols = Math.floor(window.innerWidth / FONT_SIZE);
+        rows = Math.floor(window.innerHeight / FONT_SIZE);
+      }
       function randomStar() {
         return {
-          x: Math.floor(Math.random() * width),
-          y: Math.floor(Math.random() * height),
+          x: Math.floor(Math.random() * cols),
+          y: Math.floor(Math.random() * rows),
           char: starChars[Math.floor(Math.random() * starChars.length)],
           twinkle: Math.random() * 2 * Math.PI,
         };
       }
-
       function createStars() {
         stars = [];
         for (let i = 0; i < starCount; i++) {
           stars.push(randomStar());
         }
       }
-      createStars();
-
       function drawStars(time) {
-        let grid = Array.from({ length: height }, () => Array(width).fill(" "));
+        let grid = Array.from({ length: rows }, () => Array(cols).fill(" "));
         for (let star of stars) {
-          // Twinkle effect
           const tw = Math.abs(Math.sin(time / 500 + star.twinkle));
           if (tw > 0.5) {
             grid[star.y][star.x] = star.char;
           }
         }
-        document.getElementById("ascii-stars").textContent = grid
-          .map((row) => row.join(""))
-          .join("\n");
+        asciiStars.textContent = grid.map((row) => row.join("")).join("\n");
       }
-
       function animateStars(time = 0) {
         drawStars(time);
         requestAnimationFrame(animateStars);
       }
-      animateStars();
-
-      window.addEventListener("resize", () => {
-        width = Math.floor(window.innerWidth / 12);
-        height = Math.floor(window.innerHeight / 12);
+      function resizeStars() {
+        updateGridSize();
         createStars();
-      });
+      }
+
+      // window.addEventListener("resize", resizeStars);
+      // // Initial setup
+      // updateGridSize();
+      // createStars();
+      // animateStars();
     </script>
     <script type="module">
       import * as THREE from "three";
       import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-      import { AsciiEffect } from "three/addons/effects/AsciiEffect.js";
 
-      let camera, scene, renderer, effect, model;
+      const EARTH_ROTATION_SPEED = 0.3;
+
+      const square = document.getElementById("earth-square");
       const container = document.getElementById("earth-container");
 
-      // Setup renderer and scene
-      renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
-      renderer.setClearColor(0x000000, 0); // transparent
+      let previousTime = 0;
+      let earthBoundingSphere = null;
+      let camera, scene, renderer, model;
+
       scene = new THREE.Scene();
 
-      // Camera
-      const aspect = window.innerWidth / window.innerHeight;
-      camera = new THREE.PerspectiveCamera(40, aspect, 0.1, 2000);
-      camera.position.set(0, 0, 100);
+      function getSquareSize() {
+        return Math.min(window.innerWidth, window.innerHeight);
+      }
+
+      camera = new THREE.PerspectiveCamera(40, 1, 0.1, 2000);
+
+      function fitCameraToEarth() {
+        if (!earthBoundingSphere) return;
+        const fov = (camera.fov * Math.PI) / 180;
+        // Model is scaled so radius is 1
+        camera.position.set(0, 0, 1.77);
+        camera.lookAt(0, -0.015, 0);
+        camera.updateProjectionMatrix();
+      }
 
       // Lighting
       // Add a much stronger main directional light
@@ -161,32 +164,46 @@
       const ambient = new THREE.AmbientLight(0xffffff, 1.5);
       scene.add(ambient);
 
+      // Setup renderer and scene
+      renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false });
+      renderer.setClearColor(0x2222ff, 1); // debug blue
+
       // Load model
       const loader = new GLTFLoader();
       loader.load("earth_low_poly.glb", (gltf) => {
         model = gltf.scene;
         scene.add(model);
+        console.log("Earth model loaded and added to scene:", model);
 
         // Center model
         const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
         model.position.sub(center);
 
-        // Scale model to fit nicely in view
-        const size = box.getSize(new THREE.Vector3());
-        const maxDim = Math.max(size.x, size.y, size.z);
-        model.scale.setScalar(40 / maxDim);
+        // Scale model so bounding sphere radius is 1
+        const sphere = box.getBoundingSphere(new THREE.Sphere());
+        const scale = 1 / sphere.radius;
+        model.scale.setScalar(scale);
+        console.log(
+          "Model centered at",
+          model.position,
+          "and scaled by",
+          scale
+        );
 
-        // Setup AsciiEffect
-        effect = new AsciiEffect(renderer, " .:-=+*%@#", {
-          invert: true,
-          color: true,
-        });
-        effect.setSize(window.innerWidth, window.innerHeight);
-        effect.domElement.classList.add("ascii");
-        effect.domElement.style.background = "transparent";
+        // Compute bounding sphere for fitting (should now be radius 1)
+        earthBoundingSphere = sphere;
+        console.log("Bounding sphere:", earthBoundingSphere);
+
+        // Setup renderer output
         container.innerHTML = "";
-        container.appendChild(effect.domElement);
+        container.appendChild(renderer.domElement);
+        const squareSize = getSquareSize();
+        renderer.setSize(squareSize, squareSize);
+        camera.aspect = 1;
+        camera.updateProjectionMatrix();
+
+        fitCameraToEarth();
 
         // Animation loop
         renderer.setAnimationLoop(animate);
@@ -195,17 +212,21 @@
         window.addEventListener("resize", onWindowResize);
       });
 
-      function animate() {
-        if (model) model.rotation.y += 0.03;
-        effect.render(scene, camera);
+      function animate(time) {
+        if (model) {
+          const deltaTime = (time - previousTime) / 1000; // Convert to seconds
+          model.rotation.y += deltaTime * EARTH_ROTATION_SPEED;
+          previousTime = time;
+        }
+        renderer.render(scene, camera);
       }
 
       function onWindowResize() {
-        const w = window.innerWidth,
-          h = window.innerHeight;
-        camera.aspect = w / h;
+        const squareSize = getSquareSize();
+        renderer.setSize(squareSize, squareSize);
+        camera.aspect = 1;
         camera.updateProjectionMatrix();
-        effect.setSize(w, h);
+        fitCameraToEarth();
       }
     </script>
   </body>
