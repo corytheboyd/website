@@ -8,7 +8,7 @@
         padding: 0;
         margin: 0;
         overflow: hidden;
-        background-color: black;
+        background-color: #008080;
       }
     </style>
     <script type="importmap">
@@ -20,19 +20,82 @@
       }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://unpkg.com/98.css" />
     <title>corytheboyd.com</title>
   </head>
   <body class="h-screen w-screen">
-    <div class="h-full flex items-center flex-col">
-      <div
-        class="flex flex-col items-center w-full h-full max-w-5xl"
-      >
-        <div>
-          <h1 class="text-white text-8xl font-bold font-mono">INTERNET</h1>
+    <div class="h-full flex items-center flex-col mt-5">
+      <div class="flex flex-col items-center w-full h-full max-w-5xl px-5">
+        <div class="space-y-10">
+          <div class="window">
+            <div class="title-bar">
+              <div class="title-bar-text">Welcome</div>
+              <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize" disabled></button>
+                <button aria-label="Close"></button>
+              </div>
+            </div>
+            <div class="window-body">
+              <div class="flex flex-row space-x-3 items-center">
+                <picture-frame class="w-24"></picture-frame>
+                <div class="flex flex-col space-y-2">
+                  <p>
+                    Welcome to my ✨ <b>personal website</b> ✨, internet
+                    traveler.
+                  </p>
+                  <p>Take joy in perusing my various hyperlinks.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-row items-center justify-center space-x-8">
+            <win98-link-icon
+              icon="mailbox_world-2"
+              label="Email"
+              href="mailto:public@corytheboyd.com"
+            ></win98-link-icon>
+            <win98-link-icon
+              icon="console_prompt-0"
+              label="Code"
+              href="https://github.com/corytheboyd"
+              target="_blank"
+            ></win98-link-icon>
+            <win98-link-icon
+              icon="write_yellow-1"
+              label="Blog"
+              href="https://blog.corytheboyd.com"
+              target="_blank"
+            ></win98-link-icon>
+            <win98-link-icon
+              icon="wm-4"
+              label="Music"
+              href="https://soundcloud.com/corytheboyd"
+              target="_blank"
+            ></win98-link-icon>
+          </div>
+          <div class="window">
+            <div class="title-bar">
+              <div class="title-bar-text">Earth</div>
+              <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize" disabled></button>
+                <button aria-label="Close"></button>
+              </div>
+            </div>
+            <div class="window-body" style="padding: 0; margin: 0">
+              <div
+                class="flex flex-col items-center justify-center p-2 bg-gray-900"
+              >
+                <earth-globe
+                  style="width: 350px; height: 350px; display: block"
+                ></earth-globe>
+              </div>
+            </div>
+          </div>
         </div>
-        <earth-globe class="w-xl"></earth-globe>
       </div>
-    </main>
+    </div>
 
     <script type="module">
       import * as THREE from "three";
@@ -43,7 +106,7 @@
           super();
           this.attachShadow({ mode: "open" });
           const style = document.createElement("style");
-          style.textContent = `:host { display: block; aspect-ratio: 1/1; height: 100%; width: auto; max-width: 100vw; margin: auto; }`;
+          style.textContent = `:host { display: block; width: 100%; height: 100%; }`;
           this.shadowRoot.appendChild(style);
           this.container = document.createElement("div");
           this.container.style.width = "100%";
@@ -57,7 +120,8 @@
         }
         disconnectedCallback() {
           window.removeEventListener("resize", this.handleResize);
-          if (this._animationFrameId) cancelAnimationFrame(this._animationFrameId);
+          if (this._animationFrameId)
+            cancelAnimationFrame(this._animationFrameId);
         }
         getSquareSize = () => {
           // Use the actual rendered size of the element
@@ -65,7 +129,7 @@
         };
         handleResize = () => {
           const size = this.getSquareSize();
-          if (this.renderer) this.renderer.setSize(128, 128, false);
+          if (this.renderer) this.renderer.setSize(size, size, false);
           if (this.camera) {
             this.camera.aspect = 1;
             this.camera.updateProjectionMatrix();
@@ -89,9 +153,11 @@
           });
           this.container.innerHTML = "";
           this.container.appendChild(this.renderer.domElement);
+          this.renderer.domElement.style.width = "100%";
+          this.renderer.domElement.style.height = "100%";
+          this.handleResize();
           // Style the canvas for pixelation
-          this.renderer.domElement.style.width = '100%';
-          this.renderer.domElement.style.imageRendering = 'pixelated';
+          this.renderer.domElement.style.imageRendering = "pixelated";
           // Load model
           const loader = new GLTFLoader();
           loader.load("earth_low_poly.glb", (gltf) => {
@@ -120,6 +186,277 @@
         }
       }
       customElements.define("earth-globe", EarthGlobe);
+
+      // PictureFrame web component
+      class PictureFrame extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+          // const style = document.createElement("style");
+          // style.textContent = `:host { display: block; aspect-ratio: 1/1; height: 100%; width: auto; max-width: 100vw; margin: auto; }`;
+          // this.shadowRoot.appendChild(style);
+          this.container = document.createElement("div");
+          this.container.style.width = "100%";
+          // this.container.style.height = "100%";
+          // this.container.style.position = "relative";
+          this.shadowRoot.appendChild(this.container);
+        }
+        connectedCallback() {
+          this.initThree();
+          window.addEventListener("resize", this.handleResize);
+        }
+        disconnectedCallback() {
+          window.removeEventListener("resize", this.handleResize);
+          if (this._animationFrameId)
+            cancelAnimationFrame(this._animationFrameId);
+        }
+        getSquareSize = () => {
+          return Math.min(this.offsetWidth, this.offsetHeight);
+        };
+        handleResize = () => {
+          const size = this.getSquareSize();
+          if (this.renderer) {
+            this.renderer.setPixelRatio(window.devicePixelRatio);
+            this.renderer.setSize(size, size, false);
+          }
+          if (this.camera) {
+            this.camera.aspect = 1;
+            this.camera.updateProjectionMatrix();
+          }
+        };
+        initThree() {
+          this.scene = new THREE.Scene();
+          this.camera = new THREE.PerspectiveCamera(31, 0, 1, 0);
+          this.renderer = new THREE.WebGLRenderer({
+            antialias: false,
+            alpha: true,
+          });
+          this.container.innerHTML = "";
+          this.container.appendChild(this.renderer.domElement);
+          this.renderer.domElement.style.width = "100%";
+          this.renderer.domElement.style.height = "100%";
+          this.handleResize();
+          // this.renderer.domElement.style.width = '100%';
+          // this.renderer.domElement.style.imageRendering = 'pixelated';
+          // Add picture frame with me_dither.png
+          const textureLoader = new THREE.TextureLoader();
+          textureLoader.load("me_dither.png", (texture) => {
+            const frameWidth = 0.7;
+            const frameHeight = 0.7;
+            // Picture frame border
+            const frameGeometry = new THREE.PlaneGeometry(
+              frameWidth + 0.06,
+              frameHeight + 0.06
+            );
+            const frameMaterial = new THREE.MeshBasicMaterial({
+              color: 0x222200,
+            });
+            const frameMesh = new THREE.Mesh(frameGeometry, frameMaterial);
+            frameMesh.position.set(0, 0, 0);
+            this.scene.add(frameMesh);
+            // Picture itself
+            const picGeometry = new THREE.PlaneGeometry(
+              frameWidth,
+              frameHeight
+            );
+            const picMaterial = new THREE.MeshBasicMaterial({ map: texture });
+            const picMesh = new THREE.Mesh(picGeometry, picMaterial);
+            picMesh.position.set(0, 0, 0.01); // Slightly in front of frame
+            this.scene.add(picMesh);
+            // Camera: angled for 3D effect
+            this.camera.position.set(0.3, 0.2, 1.5);
+            this.camera.lookAt(0, 0, 0);
+            this.camera.updateProjectionMatrix();
+            // Animation loop with sin-based movement
+            const animate = (time = 0) => {
+              const t = time * 0.001;
+              // Subtle rotation and position animation
+              frameMesh.rotation.y = Math.sin(t) * 0.15;
+              frameMesh.rotation.x = Math.sin(t * 0.7) * 0.08;
+              picMesh.rotation.y = frameMesh.rotation.y;
+              picMesh.rotation.x = frameMesh.rotation.x;
+              frameMesh.position.z = Math.sin(t * 0.5) * 0.04;
+              picMesh.position.z = 0.01 + frameMesh.position.z;
+              this.renderer.render(this.scene, this.camera);
+              this._animationFrameId = requestAnimationFrame(animate);
+            };
+            this._animationFrameId = requestAnimationFrame(animate);
+          });
+          this.handleResize();
+        }
+      }
+      customElements.define("picture-frame", PictureFrame);
+
+      // Win98Icon web component
+      class Win98Icon extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+          const style = document.createElement("style");
+          style.textContent = `
+            :host { 
+              display: inline-block;
+              width: 32px;
+              height: 32px;
+              cursor: pointer;
+            }
+            img {
+              width: 100%;
+              height: 100%;
+              image-rendering: pixelated;
+            }
+          `;
+          this.shadowRoot.appendChild(style);
+          this.container = document.createElement("div");
+          this.shadowRoot.appendChild(this.container);
+        }
+
+        static get observedAttributes() {
+          return ["icon"];
+        }
+
+        attributeChangedCallback(name, oldValue, newValue) {
+          if (name === "icon" && oldValue !== newValue) {
+            this.updateIcon();
+          }
+        }
+
+        updateIcon() {
+          const iconName = this.getAttribute("icon");
+          if (iconName) {
+            const img = document.createElement("img");
+            img.src = `win98icon/${iconName}.png`;
+            img.alt = iconName;
+            this.container.innerHTML = "";
+            this.container.appendChild(img);
+          }
+        }
+
+        connectedCallback() {
+          this.updateIcon();
+        }
+      }
+      customElements.define("win98-icon", Win98Icon);
+
+      // Win98LinkIcon web component
+      class Win98LinkIcon extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+          const style = document.createElement("style");
+          style.textContent = `
+            :host {
+              display: inline-block;
+              width: 64px;
+              text-align: center;
+              font-family: 'Tahoma', 'Geneva', sans-serif;
+              font-size: 13px;
+              color: white;
+              text-shadow: 1px 1px 0 #000, 0 0 2px #000;
+              cursor: pointer;
+              user-select: none;
+            }
+            a {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              text-decoration: none;
+              color: inherit;
+            }
+            .label {
+              margin-top: 4px;
+              word-break: break-word;
+            }
+          `;
+          this.shadowRoot.appendChild(style);
+          this.link = document.createElement("a");
+          this.link.setAttribute("tabindex", "0");
+          this.iconElem = document.createElement("win98-icon");
+          this.labelElem = document.createElement("div");
+          this.labelElem.className = "label";
+          this.link.appendChild(this.iconElem);
+          this.link.appendChild(this.labelElem);
+          this.shadowRoot.appendChild(this.link);
+        }
+        static get observedAttributes() {
+          return ["icon", "label", "href", "target"];
+        }
+        attributeChangedCallback(name, oldValue, newValue) {
+          if (name === "icon") {
+            this.iconElem.setAttribute("icon", newValue);
+          } else if (name === "label") {
+            this.labelElem.textContent = newValue;
+          } else if (name === "href") {
+            this.link.setAttribute("href", newValue);
+          } else if (name === "target") {
+            if (newValue) {
+              this.link.setAttribute("target", newValue);
+            } else {
+              this.link.removeAttribute("target");
+            }
+          }
+        }
+        connectedCallback() {
+          if (this.hasAttribute("icon")) {
+            this.iconElem.setAttribute("icon", this.getAttribute("icon"));
+          }
+          if (this.hasAttribute("label")) {
+            this.labelElem.textContent = this.getAttribute("label");
+          }
+          if (this.hasAttribute("href")) {
+            this.link.setAttribute("href", this.getAttribute("href"));
+          }
+          if (this.hasAttribute("target")) {
+            this.link.setAttribute("target", this.getAttribute("target"));
+          } else {
+            this.link.removeAttribute("target");
+          }
+        }
+      }
+      customElements.define("win98-link-icon", Win98LinkIcon);
+
+      // Win98Window web component
+      class Win98Window extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+          const windowDiv = document.createElement("div");
+          windowDiv.className = "window";
+          // Title bar
+          const titleBar = document.createElement("div");
+          titleBar.className = "title-bar";
+          // Optional icon
+          const icon = document.createElement("img");
+          icon.className = "icon";
+          icon.src = "win98icon/app_win-0.png";
+          icon.alt = "";
+          titleBar.appendChild(icon);
+          // Title text
+          const title = document.createElement("span");
+          title.className = "title";
+          title.textContent = this.getAttribute("title") || "Window";
+          titleBar.appendChild(title);
+          // Window controls
+          const controls = document.createElement("span");
+          controls.className = "window-controls";
+          controls.innerHTML = `
+            <button class="title-bar-button" title="Minimize">_</button>
+            <button class="title-bar-button" title="Maximize">□</button>
+            <button class="title-bar-button" title="Close">×</button>
+          `;
+          titleBar.appendChild(controls);
+          windowDiv.appendChild(titleBar);
+          // Content
+          const content = document.createElement("div");
+          content.className = "window-body";
+          // Slot for children
+          const slot = document.createElement("slot");
+          content.appendChild(slot);
+          windowDiv.appendChild(content);
+          this.shadowRoot.appendChild(windowDiv);
+        }
+      }
+      customElements.define("win98-window", Win98Window);
     </script>
   </body>
 </html>
