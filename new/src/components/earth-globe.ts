@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 export class EarthGlobe extends HTMLElement {
   private container: HTMLDivElement;
@@ -72,12 +72,11 @@ export class EarthGlobe extends HTMLElement {
 
     // Load Earth model
     const loader = new GLTFLoader();
-    loader.load("/earth_low_poly.glb", (gltf: GLTF) => {
+    loader.load("/earth_low_poly.glb", (gltf) => {
       this.model = gltf.scene;
       this.scene.add(this.model);
       this.fitCameraToEarth = () => {
-        const fov = (this.camera.fov * Math.PI) / 180;
-        this.camera.position.set(0, 0, 1.7); // Adjust if needed for better framing
+        this.camera.position.set(0, 0, 1.7);
         this.camera.lookAt(0, 0, 0);
         this.camera.updateProjectionMatrix();
       };
