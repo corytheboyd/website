@@ -1,5 +1,3 @@
-import "./style.css";
-
 // Import all the custom elements
 import "./components/earth-globe.ts";
 import "./components/picture-frame.ts";
