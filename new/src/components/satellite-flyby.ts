@@ -43,12 +43,12 @@ export class SatelliteFlyby extends HTMLElement {
       {
         name: "satellite_1.glb",
         scale: 0.05,
-        enabled: false,
+        enabled: true,
       },
       {
         name: "shiba_inu.glb",
         scale: 0.3,
-        enabled: false,
+        enabled: true,
         rotateRate: 1.25,
       },
       {
@@ -61,12 +61,12 @@ export class SatelliteFlyby extends HTMLElement {
         name: "ifruit_computer.glb",
         scale: 3,
         rotateRate: 1.25,
-        enabled: false,
+        enabled: true,
       },
       {
         name: "pizza.glb",
         scale: 2.75,
-        enabled: false,
+        enabled: true,
         rotateRate: 1.25,
         initialRotation: { x: 1, y: 1, z: 0 },
       },
