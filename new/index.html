@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>corytheboyd.com</title>
+  </head>
+  <body class="h-screen w-screen">
+    <div class="h-full flex items-center flex-col">
+      <div
+        class="flex flex-col items-center w-full h-full max-w-5xl p-5 space-y-10"
+      >
+        <!-- WELCOME WINDOW -->
+        <section class="window">
+          <div class="title-bar">
+            <div class="title-bar-text">Welcome</div>
+            <div class="title-bar-controls">
+              <button aria-label="Minimize"></button>
+              <button aria-label="Maximize" disabled></button>
+              <button aria-label="Close"></button>
+            </div>
+          </div>
+          <div class="window-body">
+            <div class="flex flex-row space-x-3 items-center">
+              <picture-frame class="w-24"></picture-frame>
+              <div class="flex flex-col space-y-2">
+                <p>
+                  Hello, my name is <b>Cory Boyd</b>, and welcome to my personal
+                  website
+                </p>
+                <p>To learn more about me, click on the below hyperlinks.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ICONS ON DESKTOP -->
+        <section class="flex-1 flex flex-row space-x-8">
+          <win98-link-icon
+            icon="mailbox_world-2"
+            label="Email"
+            href="mailto:public@corytheboyd.com"
+          ></win98-link-icon>
+          <win98-link-icon
+            icon="console_prompt-0"
+            label="Code"
+            href="https://github.com/corytheboyd"
+            target="_blank"
+          ></win98-link-icon>
+          <win98-link-icon
+            icon="write_yellow-1"
+            label="Blog"
+            href="https://blog.corytheboyd.com"
+            target="_blank"
+          ></win98-link-icon>
+          <win98-link-icon
+            icon="wm-4"
+            label="Music"
+            href="https://soundcloud.com/corytheboyd"
+            target="_blank"
+          ></win98-link-icon>
+        </section>
+
+        <!-- EARTH WINDOW -->
+        <section class="window w-full self-end">
+          <div class="title-bar">
+            <div class="title-bar-text">Earth</div>
+            <div class="title-bar-controls">
+              <button aria-label="Minimize"></button>
+              <button aria-label="Maximize" disabled></button>
+              <button aria-label="Close"></button>
+            </div>
+          </div>
+          <div class="window-body" style="padding: 0; margin: 0">
+            <div
+              class="flex flex-col items-center justify-center p-2 bg-gray-900"
+              style="position: relative; overflow: hidden"
+            >
+              <star-bg
+                style="
+                  position: absolute;
+                  inset: 0;
+                  width: 100%;
+                  height: 100%;
+                  z-index: 0;
+                "
+              ></star-bg>
+              <earth-globe
+                style="
+                  width: 350px;
+                  height: 350px;
+                  display: block;
+                  position: relative;
+                  z-index: 1;
+                "
+              ></earth-globe>
+              <satellite-flyby
+                style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                  pointer-events: none;
+                  z-index: 2;
+                "
+              ></satellite-flyby>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
