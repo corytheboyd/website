@@ -1,25 +1,35 @@
 import * as THREE from "three";
 
 export class PictureFrame extends HTMLElement {
+  private container: HTMLDivElement;
+  private scene!: THREE.Scene;
+  private camera!: THREE.PerspectiveCamera;
+  private renderer!: THREE.WebGLRenderer;
+  private _animationFrameId?: number;
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
     this.container = document.createElement("div");
     this.container.style.width = "100%";
-    this.shadowRoot.appendChild(this.container);
+    this.shadowRoot!.appendChild(this.container);
   }
-  connectedCallback() {
+
+  connectedCallback(): void {
     this.initThree();
     window.addEventListener("resize", this.handleResize);
   }
-  disconnectedCallback() {
+
+  disconnectedCallback(): void {
     window.removeEventListener("resize", this.handleResize);
     if (this._animationFrameId) cancelAnimationFrame(this._animationFrameId);
   }
-  getSquareSize = () => {
+
+  private getSquareSize = (): number => {
     return Math.min(this.offsetWidth, this.offsetHeight);
   };
-  handleResize = () => {
+
+  private handleResize = (): void => {
     const size = this.getSquareSize();
     if (this.renderer) {
       this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -30,7 +40,8 @@ export class PictureFrame extends HTMLElement {
       this.camera.updateProjectionMatrix();
     }
   };
-  initThree() {
+
+  private initThree(): void {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(31, 1, 0.1, 10);
     this.renderer = new THREE.WebGLRenderer({
@@ -44,7 +55,7 @@ export class PictureFrame extends HTMLElement {
     this.handleResize();
     // Add picture frame with me_dither.png
     const textureLoader = new THREE.TextureLoader();
-    textureLoader.load("/me_dither.png", (texture) => {
+    textureLoader.load("/me_dither.png", (texture: THREE.Texture) => {
       const frameWidth = 0.7;
       const frameHeight = 0.7;
       // Picture frame border
@@ -70,7 +81,7 @@ export class PictureFrame extends HTMLElement {
       this.camera.lookAt(0, 0, 0);
       this.camera.updateProjectionMatrix();
       // Animation loop with sin-based movement
-      const animate = (time = 0) => {
+      const animate = (time: number = 0) => {
         const t = time * 0.001;
         // Subtle rotation and position animation
         frameMesh.rotation.y = Math.sin(t) * 0.15;

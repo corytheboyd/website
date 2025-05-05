@@ -35,7 +35,7 @@ export class Win98Window extends HTMLElement {
     const slot = document.createElement("slot");
     content.appendChild(slot);
     windowDiv.appendChild(content);
-    this.shadowRoot.appendChild(windowDiv);
+    this.shadowRoot!.appendChild(windowDiv);
   }
 }
 
