@@ -1,4 +1,8 @@
 export class Win98LinkIcon extends HTMLElement {
+  private link: HTMLAnchorElement;
+  private iconElem: HTMLElement;
+  private labelElem: HTMLDivElement;
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -34,7 +38,7 @@ export class Win98LinkIcon extends HTMLElement {
         border-color: #fff;
       }
     `;
-    this.shadowRoot.appendChild(style);
+    this.shadowRoot!.appendChild(style);
     this.link = document.createElement("a");
     this.link.setAttribute("tabindex", "0");
     this.iconElem = document.createElement("win98-icon");
@@ -42,18 +46,24 @@ export class Win98LinkIcon extends HTMLElement {
     this.labelElem.className = "label";
     this.link.appendChild(this.iconElem);
     this.link.appendChild(this.labelElem);
-    this.shadowRoot.appendChild(this.link);
+    this.shadowRoot!.appendChild(this.link);
   }
-  static get observedAttributes() {
+
+  static get observedAttributes(): string[] {
     return ["icon", "label", "href", "target"];
   }
-  attributeChangedCallback(name, oldValue, newValue) {
+
+  attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null
+  ): void {
     if (name === "icon") {
-      this.iconElem.setAttribute("icon", newValue);
+      this.iconElem.setAttribute("icon", newValue || "");
     } else if (name === "label") {
-      this.labelElem.textContent = newValue;
+      this.labelElem.textContent = newValue || "";
     } else if (name === "href") {
-      this.link.setAttribute("href", newValue);
+      this.link.setAttribute("href", newValue || "");
     } else if (name === "target") {
       if (newValue) {
         this.link.setAttribute("target", newValue);
@@ -62,18 +72,19 @@ export class Win98LinkIcon extends HTMLElement {
       }
     }
   }
-  connectedCallback() {
+
+  connectedCallback(): void {
     if (this.hasAttribute("icon")) {
-      this.iconElem.setAttribute("icon", this.getAttribute("icon"));
+      this.iconElem.setAttribute("icon", this.getAttribute("icon") || "");
     }
     if (this.hasAttribute("label")) {
-      this.labelElem.textContent = this.getAttribute("label");
+      this.labelElem.textContent = this.getAttribute("label") || "";
     }
     if (this.hasAttribute("href")) {
-      this.link.setAttribute("href", this.getAttribute("href"));
+      this.link.setAttribute("href", this.getAttribute("href") || "");
     }
     if (this.hasAttribute("target")) {
-      this.link.setAttribute("target", this.getAttribute("target"));
+      this.link.setAttribute("target", this.getAttribute("target") || "");
     } else {
       this.link.removeAttribute("target");
     }

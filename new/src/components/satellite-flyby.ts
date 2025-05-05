@@ -1,18 +1,44 @@
 import * as THREE from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+
+interface ModelConfig {
+  name: string;
+  scale: number;
+  enabled?: boolean;
+  rotateRate?: number;
+  initialRotation?: { x: number; y: number; z: number };
+  scene?: THREE.Group;
+}
+
+interface Size {
+  w: number;
+  h: number;
+}
 
 export class SatelliteFlyby extends HTMLElement {
+  private container: HTMLDivElement;
+  private scene!: THREE.Scene;
+  private camera!: THREE.PerspectiveCamera;
+  private renderer!: THREE.WebGLRenderer;
+  private models: ModelConfig[];
+  private enabledModels: ModelConfig[];
+  private modelIndex: number;
+  private activeModel?: THREE.Group;
+  private _animationFrameId?: number;
+  private _prevT: number;
+  private flybyStartTime?: number;
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
     const style = document.createElement("style");
     style.textContent = `:host { display: block; width: 100%; height: 100%; pointer-events: none; }`;
-    this.shadowRoot.appendChild(style);
+    this.shadowRoot!.appendChild(style);
     this.container = document.createElement("div");
     this.container.style.width = "100%";
     this.container.style.height = "100%";
     this.container.style.position = "relative";
-    this.shadowRoot.appendChild(this.container);
+    this.shadowRoot!.appendChild(this.container);
     this.models = [
       {
         name: "satellite_1.glb",
@@ -41,19 +67,24 @@ export class SatelliteFlyby extends HTMLElement {
     ];
     this.modelIndex = 0;
     this._prevT = 0;
+    this.enabledModels = [];
   }
-  connectedCallback() {
+
+  connectedCallback(): void {
     this.initThree();
     window.addEventListener("resize", this.handleResize);
   }
-  disconnectedCallback() {
+
+  disconnectedCallback(): void {
     window.removeEventListener("resize", this.handleResize);
     if (this._animationFrameId) cancelAnimationFrame(this._animationFrameId);
   }
-  getRectSize = () => {
+
+  private getRectSize = (): Size => {
     return { w: this.offsetWidth, h: this.offsetHeight };
   };
-  handleResize = () => {
+
+  private handleResize = (): void => {
     const { w, h } = this.getRectSize();
     if (this.renderer) this.renderer.setSize(w, h, false);
     if (this.camera) {
@@ -61,7 +92,8 @@ export class SatelliteFlyby extends HTMLElement {
       this.camera.updateProjectionMatrix();
     }
   };
-  initThree() {
+
+  private initThree(): void {
     this.scene = new THREE.Scene();
     // Add ambient light for general illumination
     const ambient = new THREE.AmbientLight(0xffffff, 0.7); // Soft white light
@@ -90,7 +122,7 @@ export class SatelliteFlyby extends HTMLElement {
     // Only load and use enabled models
     this.enabledModels = this.models.filter((m) => m.enabled !== false);
     this.enabledModels.forEach((model) => {
-      loader.load(model.name, (gltf) => {
+      loader.load(model.name, (gltf: GLTF) => {
         const scene = gltf.scene;
         scene.visible = false;
         scene.scale.set(model.scale, model.scale, model.scale);
@@ -100,13 +132,14 @@ export class SatelliteFlyby extends HTMLElement {
         if (loadedCount === this.enabledModels.length) {
           // Start animation after all models are loaded
           this.pickNextModel();
-          this.animate(performance.now());
+          this.animateFlyby(performance.now());
         }
       });
     });
     this.modelIndex = 0;
   }
-  pickNextModel() {
+
+  private pickNextModel(): void {
     // Hide all models
     this.enabledModels.forEach((model) => {
       if (model.scene) model.scene.visible = false;
@@ -119,7 +152,8 @@ export class SatelliteFlyby extends HTMLElement {
     // Store the start time for this flyby
     this.flybyStartTime = performance.now();
   }
-  animate = (time) => {
+
+  private animateFlyby = (time: number): void => {
     if (this.activeModel) {
       // Flyby: move from left to right, reset after offscreen
       const duration = 20; // seconds for a full flyby
@@ -165,7 +199,7 @@ export class SatelliteFlyby extends HTMLElement {
       this._prevT = t;
     }
     this.renderer.render(this.scene, this.camera);
-    this._animationFrameId = requestAnimationFrame(this.animate);
+    this._animationFrameId = requestAnimationFrame(this.animateFlyby);
   };
 }
 

@@ -1,8 +1,5 @@
-@import "98.css";
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* @import "tailwindcss"; */
+/* @import "98.css"; */
 
 body {
   padding: 0;

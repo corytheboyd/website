@@ -1,4 +1,6 @@
 export class Win98Icon extends HTMLElement {
+  private container!: HTMLDivElement;
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -16,22 +18,26 @@ export class Win98Icon extends HTMLElement {
         image-rendering: pixelated;
       }
     `;
-    this.shadowRoot.appendChild(style);
+    this.shadowRoot!.appendChild(style);
     this.container = document.createElement("div");
-    this.shadowRoot.appendChild(this.container);
+    this.shadowRoot!.appendChild(this.container);
   }
 
-  static get observedAttributes() {
+  static get observedAttributes(): string[] {
     return ["icon"];
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+  attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null
+  ): void {
     if (name === "icon" && oldValue !== newValue) {
       this.updateIcon();
     }
   }
 
-  updateIcon() {
+  private updateIcon(): void {
     const iconName = this.getAttribute("icon");
     if (iconName) {
       const img = document.createElement("img");
@@ -42,7 +48,7 @@ export class Win98Icon extends HTMLElement {
     }
   }
 
-  connectedCallback() {
+  connectedCallback(): void {
     this.updateIcon();
   }
 }

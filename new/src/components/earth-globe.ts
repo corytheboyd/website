@@ -1,31 +1,43 @@
 import * as THREE from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 export class EarthGlobe extends HTMLElement {
+  private container: HTMLDivElement;
+  private scene!: THREE.Scene;
+  private camera!: THREE.PerspectiveCamera;
+  private renderer!: THREE.WebGLRenderer;
+  private model?: THREE.Group;
+  private _animationFrameId?: number;
+  private fitCameraToEarth?: () => void;
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
     const style = document.createElement("style");
     style.textContent = `:host { display: block; width: 100%; height: 100%; }`;
-    this.shadowRoot.appendChild(style);
+    this.shadowRoot!.appendChild(style);
     this.container = document.createElement("div");
     this.container.style.width = "100%";
     this.container.style.height = "100%";
     this.container.style.position = "relative";
-    this.shadowRoot.appendChild(this.container);
+    this.shadowRoot!.appendChild(this.container);
   }
-  connectedCallback() {
+
+  connectedCallback(): void {
     this.initThree();
     window.addEventListener("resize", this.handleResize);
   }
-  disconnectedCallback() {
+
+  disconnectedCallback(): void {
     window.removeEventListener("resize", this.handleResize);
     if (this._animationFrameId) cancelAnimationFrame(this._animationFrameId);
   }
-  getSquareSize = () => {
+
+  private getSquareSize = (): number => {
     return Math.min(this.offsetWidth, this.offsetHeight);
   };
-  handleResize = () => {
+
+  private handleResize = (): void => {
     const size = this.getSquareSize();
     if (this.renderer) this.renderer.setSize(size, size, false);
     if (this.camera) {
@@ -34,7 +46,8 @@ export class EarthGlobe extends HTMLElement {
     }
     if (this.fitCameraToEarth) this.fitCameraToEarth();
   };
-  initThree() {
+
+  private initThree(): void {
     const EARTH_ROTATION_SPEED = 0.3;
     let previousTime = 0;
     this.scene = new THREE.Scene();
@@ -59,7 +72,7 @@ export class EarthGlobe extends HTMLElement {
 
     // Load Earth model
     const loader = new GLTFLoader();
-    loader.load("/earth_low_poly.glb", (gltf) => {
+    loader.load("/earth_low_poly.glb", (gltf: GLTF) => {
       this.model = gltf.scene;
       this.scene.add(this.model);
       this.fitCameraToEarth = () => {
@@ -70,11 +83,10 @@ export class EarthGlobe extends HTMLElement {
       };
       this.handleResize();
       // Animation loop
-      const animate = (time) => {
+      const animate = (time: number) => {
         if (this.model) {
           const deltaTime = (time - previousTime) / 1000;
           this.model.rotation.y += deltaTime * EARTH_ROTATION_SPEED;
-
           previousTime = time;
         }
         this.renderer.render(this.scene, this.camera);

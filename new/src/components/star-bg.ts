@@ -1,4 +1,19 @@
+interface Star {
+  x: number;
+  y: number;
+  z: number;
+  phase: number;
+}
+
 export class StarBg extends HTMLElement {
+  private canvas: HTMLCanvasElement;
+  private ctx!: CanvasRenderingContext2D;
+  private width: number = 0;
+  private height: number = 0;
+  private STAR_COUNT: number = 80;
+  private stars: Star[] = [];
+  private _animationFrameId?: number;
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -17,28 +32,32 @@ export class StarBg extends HTMLElement {
         pointer-events: none;
       }
     `;
-    this.shadowRoot.appendChild(style);
+    this.shadowRoot!.appendChild(style);
     this.canvas = document.createElement("canvas");
     this.canvas.className = "star-canvas";
-    this.shadowRoot.appendChild(this.canvas);
+    this.shadowRoot!.appendChild(this.canvas);
   }
-  connectedCallback() {
-    this.ctx = this.canvas.getContext("2d");
-    this.STAR_COUNT = 80;
+
+  connectedCallback(): void {
+    const context = this.canvas.getContext("2d");
+    if (!context) return;
+    this.ctx = context;
     this.stars = [];
     this.resize = this.resize.bind(this);
-    this.animate = this.animate.bind(this);
+    this.animateStars = this.animateStars.bind(this);
     window.addEventListener("resize", this.resize);
     setTimeout(() => {
       this.resize();
-      this.animate();
+      this.animateStars();
     }, 100);
   }
-  disconnectedCallback() {
+
+  disconnectedCallback(): void {
     window.removeEventListener("resize", this.resize);
     if (this._animationFrameId) cancelAnimationFrame(this._animationFrameId);
   }
-  resize() {
+
+  private resize(): void {
     const parent = this.parentElement;
     if (!parent) return;
     this.width = parent.offsetWidth;
@@ -56,24 +75,25 @@ export class StarBg extends HTMLElement {
       });
     }
   }
-  animate() {
+
+  private animateStars(): void {
     this.draw();
-    this._animationFrameId = requestAnimationFrame(this.animate);
+    this._animationFrameId = requestAnimationFrame(this.animateStars);
   }
-  draw() {
-    const ctx = this.ctx;
-    ctx.clearRect(0, 0, this.width, this.height);
+
+  private draw(): void {
+    this.ctx.clearRect(0, 0, this.width, this.height);
     const now = performance.now() * 0.002;
     for (const star of this.stars) {
       const twinkle = 0.6 + 0.4 * Math.sin(now * star.z + star.phase);
-      ctx.globalAlpha = twinkle;
-      if (Math.random() < 0.03) ctx.fillStyle = "#88f";
-      else if (Math.random() < 0.03) ctx.fillStyle = "#ff8";
-      else ctx.fillStyle = "#fff";
+      this.ctx.globalAlpha = twinkle;
+      if (Math.random() < 0.03) this.ctx.fillStyle = "#88f";
+      else if (Math.random() < 0.03) this.ctx.fillStyle = "#ff8";
+      else this.ctx.fillStyle = "#fff";
       const size = star.z > 1.2 ? 2 : 1;
-      ctx.fillRect(Math.round(star.x), Math.round(star.y), size, size);
+      this.ctx.fillRect(Math.round(star.x), Math.round(star.y), size, size);
     }
-    ctx.globalAlpha = 1;
+    this.ctx.globalAlpha = 1;
   }
 }
 
