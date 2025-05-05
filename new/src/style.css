@@ -2,8 +2,8 @@
 @import "98.css/dist/98.css";
 
 body {
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
   background-color: #008080;
+
+  @apply px-8 pt-5;
+  @apply overflow-x-hidden;
 }
