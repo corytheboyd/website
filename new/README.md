@@ -7,3 +7,11 @@ Earth by Zoe XR [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly 
 win98icon:
 
 https://win98icons.alexmeub.com/
+
+sattelite:
+
+https://poly.pizza/m/1C3zb8Q9USk
+
+Satellite by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/1C3zb8Q9USk)
+
+98.css https://jdan.github.io/98.css/#window

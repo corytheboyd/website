@@ -112,6 +112,17 @@
                   z-index: 1;
                 "
               ></earth-globe>
+              <satellite-flyby
+                style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                  pointer-events: none;
+                  z-index: 2;
+                "
+              ></satellite-flyby>
             </div>
           </div>
         </section>
@@ -179,7 +190,8 @@
           this.handleResize();
           // Style the canvas for pixelation
           this.renderer.domElement.style.imageRendering = "pixelated";
-          // Load model
+
+          // Load Earth model
           const loader = new GLTFLoader();
           loader.load("earth_low_poly.glb", (gltf) => {
             this.model = gltf.scene;
@@ -196,6 +208,7 @@
               if (this.model) {
                 const deltaTime = (time - previousTime) / 1000;
                 this.model.rotation.y += deltaTime * EARTH_ROTATION_SPEED;
+
                 previousTime = time;
               }
               this.renderer.render(this.scene, this.camera);
@@ -569,6 +582,95 @@
         }
       }
       customElements.define("star-bg", StarBg);
+
+      // SatelliteFlyby web component
+      class SatelliteFlyby extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+          const style = document.createElement("style");
+          style.textContent = `:host { display: block; width: 100%; height: 100%; pointer-events: none; }`;
+          this.shadowRoot.appendChild(style);
+          this.container = document.createElement("div");
+          this.container.style.width = "100%";
+          this.container.style.height = "100%";
+          this.container.style.position = "relative";
+          this.shadowRoot.appendChild(this.container);
+        }
+        connectedCallback() {
+          this.initThree();
+          window.addEventListener("resize", this.handleResize);
+        }
+        disconnectedCallback() {
+          window.removeEventListener("resize", this.handleResize);
+          if (this._animationFrameId)
+            cancelAnimationFrame(this._animationFrameId);
+        }
+        getRectSize = () => {
+          return { w: this.offsetWidth, h: this.offsetHeight };
+        };
+        handleResize = () => {
+          const { w, h } = this.getRectSize();
+          if (this.renderer) this.renderer.setSize(w, h, false);
+          if (this.camera) {
+            this.camera.aspect = w / h;
+            this.camera.updateProjectionMatrix();
+          }
+        };
+        initThree() {
+          this.scene = new THREE.Scene();
+          this.camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+          this.camera.position.set(0, 0, 5);
+          this.camera.lookAt(0, 0, 0);
+          this.renderer = new THREE.WebGLRenderer({
+            antialias: false,
+            alpha: true,
+          });
+          this.container.innerHTML = "";
+          this.container.appendChild(this.renderer.domElement);
+          this.renderer.domElement.style.width = "100%";
+          this.renderer.domElement.style.height = "100%";
+          this.handleResize();
+          this.renderer.domElement.style.imageRendering = "pixelated";
+          this.renderer.setClearColor(0x000000, 0); // transparent background
+          // Lighting
+          const light = new THREE.DirectionalLight(0xffffff, 2.5);
+          light.position.set(0, 0, 10);
+          this.scene.add(light);
+          // Load satellite model
+          const loader = new GLTFLoader();
+          loader.load("satellite_1.glb", (gltf) => {
+            this.satellite = gltf.scene;
+            this.satellite.scale.set(0.12, 0.12, 0.12);
+            this.scene.add(this.satellite);
+            this.animate(performance.now());
+          });
+        }
+        animate = (time) => {
+          if (this.satellite) {
+            // Flyby: move from left to right, reset after offscreen
+            const duration = 10; // seconds for a full flyby
+            const { w, h } = this.getRectSize();
+            // Map t from left to right edge in world units
+            // We'll use the camera's frustum at z=0 for width
+            const aspect = w / h;
+            const vFOV = (this.camera.fov * Math.PI) / 180;
+            const viewHeight = 2 * Math.tan(vFOV / 2) * this.camera.position.z;
+            const viewWidth = viewHeight * aspect;
+            const margin = 8; // so the satellite starts and ends further offscreen
+            const t = ((time * 0.001) % duration) / duration;
+            const x = -viewWidth / 2 - margin + t * (viewWidth + 2 * margin);
+            const amplitude = -1.5; // gentle arc
+            const y = 0.5 + Math.sin(t * Math.PI) * amplitude;
+            this.satellite.position.set(x, y, 0);
+            this.satellite.rotation.y = Math.PI / 2;
+            this.satellite.rotation.z = Math.sin(time * 0.001) * 0.2;
+          }
+          this.renderer.render(this.scene, this.camera);
+          this._animationFrameId = requestAnimationFrame(this.animate);
+        };
+      }
+      customElements.define("satellite-flyby", SatelliteFlyby);
     </script>
   </body>
 </html>
