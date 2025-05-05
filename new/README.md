@@ -1,4 +1,51 @@
-# new
+# Cory Boyd's Personal Website
+
+A Windows 98-themed personal website built with Vite, Tailwind CSS, and Three.js.
+
+## Development
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Start the development server:
+
+```bash
+npm run dev
+```
+
+3. Build for production:
+
+```bash
+npm run build
+```
+
+4. Preview the production build:
+
+```bash
+npm run preview
+```
+
+## Project Structure
+
+- `src/` - Source files
+  - `components/` - Web components
+  - `style.css` - Main styles
+  - `main.js` - Entry point
+- `public/` - Static assets
+  - `earth_low_poly.glb` - Earth 3D model
+  - `me_dither.png` - Profile picture
+  - `win98icon/` - Windows 98 icons
+  - Other 3D models for the satellite flyby
+
+## Technologies Used
+
+- [Vite](https://vitejs.dev/) - Build tool
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [98.css](https://github.com/jdan/98.css) - Windows 98 CSS framework
+- [Three.js](https://threejs.org/) - 3D graphics library
 
 earth_low_poly:
 
