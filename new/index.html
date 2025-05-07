@@ -6,7 +6,7 @@
     <link href="/src/style.css" rel="stylesheet" />
     <title>corytheboyd.com</title>
   </head>
-  <body class="h-screen bg-black">
+  <body class="h-full bg-black">
     <star-bg class="fixed inset-0 w-full h-full z-0"></star-bg>
     <div
       class="relative z-10 flex flex-col items-center h-full max-w-4xl mx-auto background-windows-teal"
@@ -36,75 +36,72 @@
       </section>
 
       <!-- ICONS AND SOCIAL LINKS -->
-      <div
-        class="mt-6 flex flex-col sm:flex-row w-full items-center justify-center"
-      >
-        <!-- ICONS -->
-        <section
-          class="flex flex-row justify-center items-center gap-x-4 w-full"
-        >
-          <win98-link-icon
-            icon="mailbox_world-2"
-            label="Email"
-            href="mailto:public@corytheboyd.com"
-          ></win98-link-icon>
-          <win98-link-icon
-            icon="console_prompt-0"
-            label="Code"
-            href="https://github.com/corytheboyd"
-            target="_blank"
-          ></win98-link-icon>
-          <win98-link-icon
-            icon="write_yellow-1"
-            label="Blog"
-            href="https://blog.corytheboyd.com/blog"
-            target="_blank"
-          ></win98-link-icon>
-          <win98-link-icon
-            icon="wm-4"
-            label="Music"
-            href="https://soundcloud.com/corytheboyd"
-            target="_blank"
-          ></win98-link-icon>
-        </section>
 
-        <!-- SOCIAL LINKS WINDOW -->
-        <section class="window w-auto mr-3 mt-6 sm:mt-0">
-          <div class="title-bar">
-            <div class="title-bar-text">Social Links</div>
-            <div class="title-bar-controls">
-              <button aria-label="Minimize"></button>
-              <button aria-label="Maximize" disabled></button>
-              <button aria-label="Close"></button>
-            </div>
+      <!-- ICONS -->
+      <section
+        class="mt-6 flex flex-row justify-center items-center gap-x-4 w-full"
+      >
+        <win98-link-icon
+          icon="mailbox_world-2"
+          label="Email"
+          href="mailto:public@corytheboyd.com"
+        ></win98-link-icon>
+        <win98-link-icon
+          icon="console_prompt-0"
+          label="Code"
+          href="https://github.com/corytheboyd"
+          target="_blank"
+        ></win98-link-icon>
+        <win98-link-icon
+          icon="write_yellow-1"
+          label="Blog"
+          href="https://blog.corytheboyd.com/blog"
+          target="_blank"
+        ></win98-link-icon>
+        <win98-link-icon
+          icon="wm-4"
+          label="Music"
+          href="https://soundcloud.com/corytheboyd"
+          target="_blank"
+        ></win98-link-icon>
+      </section>
+
+      <!-- SOCIAL LINKS WINDOW -->
+      <section class="window w-auto mr-3 mt-6">
+        <div class="title-bar">
+          <div class="title-bar-text">Social Links</div>
+          <div class="title-bar-controls">
+            <button aria-label="Minimize"></button>
+            <button aria-label="Maximize" disabled></button>
+            <button aria-label="Close"></button>
           </div>
-          <div class="window-body">
-            <p class="mb-2">Only offline WEIRDOS don't have these! 🤮</p>
-            <div class="flex flex-col space-y-2">
-              <ul class="space-y-1.5">
-                <li>
-                  <a
-                    href="https://mastodon.social/@corytheboyd"
-                    target="_blank"
-                    class="text-blue-600 hover:underline"
-                  >
-                    https://mastodon.social/@corytheboyd
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://bsky.app/profile/corytheboyd.bsky.social"
-                    target="_blank"
-                    class="text-blue-600 hover:underline"
-                  >
-                    https://bsky.app/profile/corytheboyd.bsky.social
-                  </a>
-                </li>
-              </ul>
-            </div>
+        </div>
+        <div class="window-body">
+          <p class="mb-2">Only offline WEIRDOS don't have these! 🤮</p>
+          <div class="flex flex-col space-y-2">
+            <ul class="space-y-1.5">
+              <li>
+                <a
+                  href="https://mastodon.social/@corytheboyd"
+                  target="_blank"
+                  class="text-blue-600 hover:underline"
+                >
+                  https://mastodon.social/@corytheboyd
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://bsky.app/profile/corytheboyd.bsky.social"
+                  target="_blank"
+                  class="text-blue-600 hover:underline"
+                >
+                  https://bsky.app/profile/corytheboyd.bsky.social
+                </a>
+              </li>
+            </ul>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
 
       <div class="flex-1"></div>
 
@@ -124,7 +121,7 @@
               class="flex flex-col items-center justify-center p-2 bg-gray-900 relative overflow-hidden"
             >
               <earth-globe
-                class="w-52 sm:w-64 md:w-72 lg:w-96 z-10"
+                class="w-38 sm:w-64 md:w-72 lg:w-96 z-10"
               ></earth-globe>
               <satellite-flyby
                 class="absolute top-0 left-0 w-full h-full pointer-events-none z-20"
