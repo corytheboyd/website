@@ -43,7 +43,7 @@
         <div class="title-bar">
           <div class="title-bar-text">Welcome</div>
           <div class="title-bar-controls">
-            <button aria-label="Close"></button>
+            <button aria-label="Close" data-close></button>
           </div>
         </div>
         <div class="window-body">
@@ -96,7 +96,7 @@
         <div class="title-bar">
           <div class="title-bar-text">Social Links</div>
           <div class="title-bar-controls">
-            <button aria-label="Close"></button>
+            <button aria-label="Close" data-close></button>
           </div>
         </div>
         <div class="window-body">
@@ -134,7 +134,7 @@
           <div class="title-bar">
             <div class="title-bar-text">Earth</div>
             <div class="title-bar-controls">
-              <button aria-label="Close"></button>
+              <button aria-label="Close" data-close></button>
             </div>
           </div>
           <div class="window-body p-0 m-0">
@@ -172,5 +172,13 @@
     </div>
 
     <script type="module" src="/src/main.ts"></script>
+    <script>
+      document.querySelectorAll("[data-close]").forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const win = btn.closest(".window");
+          if (win) win.style.visibility = "hidden";
+        });
+      });
+    </script>
   </body>
 </html>
