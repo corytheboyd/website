@@ -2,8 +2,9 @@
 @import "98.css/dist/98.css";
 
 body {
-  background-color: #008080;
+  overscroll-behavior-y: none;
+}
 
-  @apply px-8 pt-5;
-  @apply overflow-x-hidden;
+.background-windows-teal {
+  background-color: #008080;
 }
