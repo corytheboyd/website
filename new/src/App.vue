@@ -1,24 +1,30 @@
 <template>
-  <div class="h-full bg-black">
+  <template v-if="!isMobile">
     <Starscape class="fixed inset-0 w-full h-full z-0" />
     <SolitaireMadness class="fixed inset-0 w-full h-full z-10" />
-
-    <div class="relative z-20 flex flex-col items-center justify-center h-full w-full">
-      <div
-        class="background-windows-teal w-full h-full max-w-full max-h-full flex flex-col items-center shadow-[0_30px_70px_rgba(0,0,0,0.7)] aspect-[4/3] md:max-w-[1200px] md:max-h-[900px]">
-        <WelcomeWindow class="mt-3 mx-3" />
-
-        <SocialIcons class="mt-6" />
-        <SocialLinks class="w-auto mr-3 mt-6" />
-
-        <EarthWindow />
-        <TaskbarFooter />
-      </div>
+  </template>
+  <div class="relative z-20 h-full">
+    <!-- DESKTOP -->
+    <div
+      :class="[
+        'background-windows-teal',
+        'shadow-[0_30px_70px_rgba(0,0,0,0.7)]',
+        'md:aspect-[4/3]',
+        'h-full',
+        'flex flex-col items-center relative',
+        'overflow-hidden',
+      ]"
+    >
+      <WelcomeWindow />
+      <SocialIcons />
+      <SocialLinks />
+      <TaskbarFooter />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted } from "vue";
 import WelcomeWindow from "./components/WelcomeWindow.vue";
 import SocialIcons from "./components/SocialIcons.vue";
 import SocialLinks from "./components/SocialLinks.vue";
@@ -26,6 +32,20 @@ import EarthWindow from "./components/EarthWindow.vue";
 import TaskbarFooter from "./components/TaskbarFooter.vue";
 import Starscape from "./components/custom/Starscape.vue";
 import SolitaireMadness from "./components/custom/SolitaireMadness.vue";
+
+const isMobile = ref(false);
+
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 768;
+};
+
+onMounted(() => {
+  checkMobile();
+  window.addEventListener("resize", checkMobile);
+});
+onUnmounted(() => {
+  window.removeEventListener("resize", checkMobile);
+});
 </script>
 
 <style>
