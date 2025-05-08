@@ -1,5 +1,5 @@
 <template>
-  <div ref="container"></div>
+  <div ref="container" class="w-full h-full flex items-center justify-center"></div>
 </template>
 
 <script setup lang="ts">

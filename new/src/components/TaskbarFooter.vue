@@ -1,5 +1,7 @@
 <template>
-  <win98-window class="w-full flex flex-row justify-between items-center">
+  <div
+    class="window w-full flex flex-row justify-between items-center absolute left-0 bottom-0 z-50 bg-[#c0c0c0]"
+  >
     <button
       class="button flex justify-center items-center gap-1 px-0 mx-0 w-16"
     >
@@ -12,9 +14,5 @@
       </p>
       <p class="status-bar-field">With Love From 20XX</p>
     </div>
-  </win98-window>
+  </div>
 </template>
-
-<script setup lang="ts">
-import Win98Window from "./base/Win98Window.vue";
-</script>
