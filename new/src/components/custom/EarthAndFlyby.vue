@@ -17,14 +17,19 @@ let animationFrameId: number | undefined
 let prevTime = 0
 let flybyIndex = 0
 let earthRadius = 0.2
-let orbitRadius = 0.3
+
+// Model orbit radius around earth
+const ORBIT_RADIUS = 1.2
 
 // Scale multipliers for flyby model
-const FLYBY_MAX_SCALE_MULTIPLIER = 0.25;
 const FLYBY_MIN_SCALE_MULTIPLIER = 1.5;
+const FLYBY_MAX_SCALE_MULTIPLIER = 0.25;
 
 // Orbit speed multiplier (higher = faster orbit)
 const FLYBY_ORBIT_SPEED = 5;
+
+// Controls how much of the world is visible vertically (smaller = more zoomed in)
+const GLOBE_VIEW_HEIGHT = 1.75;
 
 const FLYBY_MODELS = [
   { name: 'chicken.glb', scale: 0.005, rotateRate: 1, yOffset: 0 },
@@ -44,20 +49,17 @@ const handleResize = () => {
   const { w, h } = getRectSize()
   renderer.setSize(w, h, false)
   if (camera) {
-    // Set orthographic frustum based on aspect ratio and content
-    const aspect = w / h
-    // Use orbitRadius for sizing
-    const maxRadius = orbitRadius + 0.5
-    let viewSize = maxRadius * 1.5
-    camera.left = -viewSize * aspect
-    camera.right = viewSize * aspect
-    camera.top = viewSize
-    camera.bottom = -viewSize
-    camera.near = -100
-    camera.far = 100
-    camera.position.set(0, 0, 10)
-    camera.lookAt(0, 0, 0)
-    camera.updateProjectionMatrix()
+    // Sane orthographic frustum: fixed vertical, horizontal based on aspect
+    const aspect = w / h;
+    camera.top = GLOBE_VIEW_HEIGHT / 2;
+    camera.bottom = -GLOBE_VIEW_HEIGHT / 2;
+    camera.right = (GLOBE_VIEW_HEIGHT * aspect) / 2;
+    camera.left = -(GLOBE_VIEW_HEIGHT * aspect) / 2;
+    camera.near = -100;
+    camera.far = 100;
+    camera.position.set(0, 0, 10);
+    camera.lookAt(0, 0, 0);
+    camera.updateProjectionMatrix();
   }
 }
 
@@ -67,7 +69,6 @@ const pickNextFlyby = () => {
   flybyModels.forEach((fm, idx) => {
     fm.model.visible = (idx === flybyIndex);
   });
-  console.log('pickNextFlyby', flybyIndex)
 }
 
 const animate = (time: number) => {
@@ -83,8 +84,8 @@ const animate = (time: number) => {
     const active = flybyModels[flybyIndex]
 
     // Orbit in XZ plane around (0,0,0) with shared orbitRadius
-    const x = Math.cos(-angle) * orbitRadius
-    const z = Math.sin(-angle) * orbitRadius
+    const x = Math.cos(-angle) * ORBIT_RADIUS
+    const z = Math.sin(-angle) * ORBIT_RADIUS
     const y = active.config.yOffset !== undefined ? active.config.yOffset : 0;
     active.model.position.set(x, y, z)
 
@@ -126,23 +127,27 @@ const getModelBoundingRadius = (group: THREE.Group) => {
 const initThree = () => {
   scene = new THREE.Scene()
   camera = new THREE.OrthographicCamera(-2, 2, 2, -2, -100, 100)
-  camera.position.set(0, 10, 0)
-  camera.lookAt(0, 0, 0)
+  camera.position.set(0, 0, 10);
+  camera.lookAt(0, 0, 0);
+
   renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true })
+
   if (!container.value) return
   container.value.innerHTML = ''
   container.value.appendChild(renderer.domElement)
+
   renderer.domElement.style.width = '100%'
   renderer.domElement.style.height = '100%'
   renderer.domElement.style.imageRendering = 'pixelated'
-  renderer.setClearColor(0x000000, 0)
   handleResize()
+
   // Lighting
   const ambient = new THREE.AmbientLight(0xffffff, 0.7)
   scene.add(ambient)
   const light = new THREE.DirectionalLight(0xffffff, 5.5)
   light.position.set(0, 0, 100)
   scene.add(light)
+
   // Load Earth
   const loader = new GLTFLoader()
   loader.load('/earth_low_poly.glb', (gltf) => {
@@ -150,8 +155,10 @@ const initThree = () => {
     scene.add(earth)
     // Compute earth radius
     earthRadius = getModelBoundingRadius(earth)
+
     // After Earth, set a shared orbitRadius and load flyby models
-    orbitRadius = earthRadius + 0.1; // margin for clearance, adjust as needed
+    // orbitRadius = earthRadius + 0.25;
+
     // Load all flyby models, then start animation deterministically
     const loadPromises = FLYBY_MODELS.map((config) => {
       return new Promise((resolve) => {
@@ -190,8 +197,5 @@ onUnmounted(() => {
 .earth-and-flyby-container {
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 </style>
