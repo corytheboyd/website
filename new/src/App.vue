@@ -6,7 +6,7 @@
       class="relative z-20 flex flex-col items-center justify-center h-full w-full"
     >
       <div
-        class="background-windows-teal w-full h-full md:w-[133vh] md:h-[100vh] md:max-w-[1200px] md:max-h-[900px] flex flex-col items-center shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
+        class="background-windows-teal w-full h-full max-w-full max-h-full flex flex-col items-center shadow-[0_30px_70px_rgba(0,0,0,0.7)] aspect-[4/3] md:max-w-[1200px] md:max-h-[900px]"
       >
         <!-- Welcome Window -->
         <welcome-window class="mt-3 mx-3" />
