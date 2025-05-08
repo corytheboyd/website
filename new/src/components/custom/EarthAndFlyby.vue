@@ -1,5 +1,5 @@
 <template>
-  <div ref="container" class="earth-and-flyby-container"></div>
+  <div ref="container"></div>
 </template>
 
 <script setup lang="ts">
@@ -192,10 +192,3 @@ onUnmounted(() => {
   if (animationFrameId) cancelAnimationFrame(animationFrameId)
 })
 </script>
-
-<style scoped>
-.earth-and-flyby-container {
-  width: 100%;
-  height: 100%;
-}
-</style>

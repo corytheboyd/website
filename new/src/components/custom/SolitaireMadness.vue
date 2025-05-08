@@ -33,7 +33,7 @@ let animationFrameId: number | null = null
 const shuffle = <T,>(array: T[]): T[] => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
-    ;[array[i], array[j]] = [array[j], array[i]]
+      ;[array[i], array[j]] = [array[j], array[i]]
   }
   return array
 }
@@ -129,16 +129,10 @@ const loadImages = () => {
     imagesLoaded--
     if (imagesLoaded === 0) start()
   }
-  imagesLoaded = 3
-  iBg = new window.Image()
-  iBg.onload = imgLoad
-  iBg.src = 'https://i.imgur.com/fPH6QI7.png'
+  imagesLoaded = 1
   iCards = new window.Image()
   iCards.onload = imgLoad
-  iCards.src = 'https://i.imgur.com/XZlSH3r.png'
-  iSpot = new window.Image()
-  iSpot.onload = imgLoad
-  iSpot.src = 'https://i.imgur.com/LP5T0IN.png'
+  iCards.src = '/solitaire/cards.png'
 }
 
 onMounted(() => {
@@ -164,4 +158,4 @@ onUnmounted(() => {
   pointer-events: none;
   z-index: 10;
 }
-</style> 
+</style>
