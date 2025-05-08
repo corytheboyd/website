@@ -4,10 +4,7 @@
       <div
         class="flex flex-col items-center justify-center p-2 bg-gray-900 relative overflow-hidden"
       >
-        <EarthGlobe class="w-38 sm:w-64 md:w-72 lg:w-96 z-10" />
-        <SatelliteFlyby
-          class="absolute top-0 left-0 w-full h-full pointer-events-none z-20"
-        />
+        <EarthAndFlyby class="w-38 sm:w-64 md:w-72 lg:w-96 z-10" />
       </div>
     </win98-window>
   </section>
@@ -15,6 +12,5 @@
 
 <script setup lang="ts">
 import Win98Window from "./base/Win98Window.vue";
-import EarthGlobe from './custom/EarthGlobe.vue'
-import SatelliteFlyby from './custom/SatelliteFlyby.vue'
+import EarthAndFlyby from './custom/EarthAndFlyby.vue'
 </script>

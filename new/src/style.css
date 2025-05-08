@@ -3,6 +3,7 @@
 
 body {
   overscroll-behavior-y: none;
+  @apply overflow-hidden;
 }
 
 .background-windows-teal {
