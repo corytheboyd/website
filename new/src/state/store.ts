@@ -1,4 +1,6 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
+import { v4 as uuidv4 } from "uuid";
+import type { DesktopWindowComponent } from './windowTypes';
 
 type Position = {
   x: number;
@@ -12,11 +14,15 @@ type Window = {
   width: number;
   height: number;
   position: Position;
+  icon?: string;
+  component: DesktopWindowComponent;
 };
 
 interface WindowState {
   focusedWindowId: string | null;
   windows: Window[];
+  taskbarOrder: string[]; // Array of window IDs in taskbar order
+  desktopOrder: string[]; // Array of window IDs in z-index order
 }
 
 const DEFAULT_WINDOW_SIZE = {
@@ -29,42 +35,69 @@ const DEFAULT_WINDOW_POSITION = {
   y: 100,
 };
 
-export const useWindowStore = defineStore('windows', {
+export const useWindowStore = defineStore("windows", {
   state: (): WindowState => ({
     focusedWindowId: null,
     windows: [],
+    taskbarOrder: [],
+    desktopOrder: [],
   }),
 
   getters: {
-    getWindow: (state) => (id: string): Window | undefined => 
-      state.windows.find((w) => w.id === id),
-    
-    getWindowIndex: (state) => (id: string): number =>
-      state.windows.findIndex((w) => w.id === id),
+    getWindow:
+      (state) =>
+      (id: string): Window | undefined =>
+        state.windows.find((w) => w.id === id),
+
+    getWindowIndex:
+      (state) =>
+      (id: string): number =>
+        state.windows.findIndex((w) => w.id === id),
+
+    getTaskbarIndex:
+      (state) =>
+      (id: string): number =>
+        state.taskbarOrder.indexOf(id),
+
+    getDesktopIndex:
+      (state) =>
+      (id: string): number =>
+        state.desktopOrder.indexOf(id),
   },
 
   actions: {
     setFocusedWindowId(id: string | null) {
       this.focusedWindowId = id;
       if (id) {
-        // Move window to top of array
-        const windowIndex = this.getWindowIndex(id);
-        if (windowIndex !== -1) {
-          const window = this.windows[windowIndex];
-          this.windows.splice(windowIndex, 1);
-          this.windows.push(window);
+        // Move window to top of desktop order
+        const desktopIndex = this.getDesktopIndex(id);
+        if (desktopIndex !== -1) {
+          this.desktopOrder.splice(desktopIndex, 1);
+          this.desktopOrder.push(id);
         }
       }
     },
 
-    addWindow(window: Omit<Window, "minimized"> & Partial<Pick<Window, "width" | "height" | "position">>) {
+    addWindow(
+      window: Omit<Window, "minimized" | "id"> &
+        Partial<Pick<Window, "width" | "height" | "position" | "icon">>,
+    ) {
+      const id = uuidv4();
       this.windows.push({
         ...window,
+        id,
         minimized: false,
         width: window.width ?? DEFAULT_WINDOW_SIZE.width,
         height: window.height ?? DEFAULT_WINDOW_SIZE.height,
         position: window.position ?? DEFAULT_WINDOW_POSITION,
+        icon: window.icon,
       });
+
+      // Add to end of taskbar
+      this.taskbarOrder.push(id);
+      // Add to end of desktop order
+      this.desktopOrder.push(id);
+      return id; // Return the generated ID
     },
 
     minimizeWindow(id: string) {
@@ -75,7 +108,22 @@ export const useWindowStore = defineStore('windows', {
     },
 
     closeWindow(id: string) {
+      // Remove from windows array
       this.windows = this.windows.filter((w) => w.id !== id);
+
+      // Remove from taskbar order
+      const taskbarIndex = this.getTaskbarIndex(id);
+      if (taskbarIndex !== -1) {
+        this.taskbarOrder.splice(taskbarIndex, 1);
+      }
+
+      // Remove from desktop order
+      const desktopIndex = this.getDesktopIndex(id);
+      if (desktopIndex !== -1) {
+        this.desktopOrder.splice(desktopIndex, 1);
+      }
+
+      // Clear focus if needed
       if (this.focusedWindowId === id) {
         this.focusedWindowId = null;
       }
