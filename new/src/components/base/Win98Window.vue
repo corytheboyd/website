@@ -59,6 +59,8 @@ const dragStart = ref({ x: 0, y: 0 });
 const desktopBounds = ref({
   width: window.innerWidth,
   height: window.innerHeight - 40,
+  left: 0,
+  top: 0,
   taskbarHeight: 40,
 });
 
@@ -89,11 +91,26 @@ onUnmounted(() => {
 });
 
 const updateBounds = () => {
-  desktopBounds.value = {
-    width: window.innerWidth,
-    height: window.innerHeight - desktopBounds.value.taskbarHeight,
-    taskbarHeight: desktopBounds.value.taskbarHeight,
-  };
+  // Use the actual desktop area if available
+  const desktopArea = window.__desktopArea?.value;
+  if (desktopArea) {
+    const rect = desktopArea.getBoundingClientRect();
+    desktopBounds.value = {
+      width: rect.width,
+      height: rect.height - desktopBounds.value.taskbarHeight,
+      left: rect.left,
+      top: rect.top,
+      taskbarHeight: desktopBounds.value.taskbarHeight,
+    };
+  } else {
+    desktopBounds.value = {
+      width: window.innerWidth,
+      height: window.innerHeight - desktopBounds.value.taskbarHeight,
+      left: 0,
+      top: 0,
+      taskbarHeight: desktopBounds.value.taskbarHeight,
+    };
+  }
 };
 
 const handleFocus = () => {
@@ -109,8 +126,8 @@ const startDrag = (e: MouseEvent) => {
   }
   isDragging.value = true;
   dragStart.value = {
-    x: e.clientX - position.value.x,
-    y: e.clientY - position.value.y,
+    x: e.clientX - position.value.x - desktopBounds.value.left,
+    y: e.clientY - position.value.y - desktopBounds.value.top,
   };
 
   // Add document-level mouse handlers
@@ -125,14 +142,14 @@ const handleMouseMove = (e: MouseEvent) => {
   const newX = Math.max(
     0,
     Math.min(
-      e.clientX - dragStart.value.x,
+      e.clientX - dragStart.value.x - desktopBounds.value.left,
       desktopBounds.value.width - props.width,
     ),
   );
   const newY = Math.max(
     0,
     Math.min(
-      e.clientY - dragStart.value.y,
+      e.clientY - dragStart.value.y - desktopBounds.value.top,
       desktopBounds.value.height - (minimized.value ? 0 : props.height),
     ),
   );
