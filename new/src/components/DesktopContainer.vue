@@ -68,8 +68,8 @@ onMounted(() => {
     });
     store.addWindow({
       name: "Social Links",
-      width: 400,
-      height: 300,
+      width: 275,
+      height: 110,
       position: { x: 250, y: 250 },
       icon: "/win98icon/users-0.png",
       component: "SocialLinksWindowContent",
