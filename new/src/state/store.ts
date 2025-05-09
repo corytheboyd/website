@@ -83,13 +83,36 @@ export const useWindowStore = defineStore("windows", {
         Partial<Pick<Window, "width" | "height" | "position" | "icon">>,
     ) {
       const id = uuidv4();
+      let width = window.width ?? DEFAULT_WINDOW_SIZE.width;
+      let height = window.height ?? DEFAULT_WINDOW_SIZE.height;
+      let position = window.position ?? DEFAULT_WINDOW_POSITION;
+      // Try to get desktop width and height from DOM
+      let desktopRect = typeof window !== 'undefined' && (window as any).__desktopArea?.value
+        ? (window as any).__desktopArea.value.getBoundingClientRect()
+        : undefined;
+      if (desktopRect !== undefined) {
+        // Clamp width and x
+        if (width > desktopRect.width) {
+          width = desktopRect.width;
+          position.x = 0;
+        } else {
+          position.x = Math.max(0, Math.min(position.x, desktopRect.width - width));
+        }
+        // Clamp height and y
+        if (height > desktopRect.height) {
+          height = desktopRect.height;
+          position.y = 0;
+        } else {
+          position.y = Math.max(0, Math.min(position.y, desktopRect.height - height));
+        }
+      }
       this.windows.push({
         ...window,
         id,
         minimized: false,
-        width: window.width ?? DEFAULT_WINDOW_SIZE.width,
-        height: window.height ?? DEFAULT_WINDOW_SIZE.height,
-        position: window.position ?? DEFAULT_WINDOW_POSITION,
+        width,
+        height,
+        position,
         icon: window.icon,
       });
 

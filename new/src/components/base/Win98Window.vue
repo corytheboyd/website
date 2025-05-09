@@ -83,6 +83,21 @@ onMounted(() => {
   // Update bounds on window resize
   window.addEventListener("resize", updateBounds);
   updateBounds();
+
+  // Clamp window position and size after mount (simulate drag correction)
+  // Only run after next tick to ensure DOM is ready
+  setTimeout(() => {
+    const windowObj = store.getWindow(props.id);
+    if (!windowObj) return;
+    const maxX = desktopBounds.value.width - (windowObj.width ?? props.width);
+    const maxY =
+      desktopBounds.value.height - (windowObj.height ?? props.height);
+    let newX = Math.max(0, Math.min(windowObj.position.x, maxX));
+    let newY = Math.max(0, Math.min(windowObj.position.y, maxY));
+    if (windowObj.position.x !== newX || windowObj.position.y !== newY) {
+      store.setWindowPosition(props.id, { x: newX, y: newY });
+    }
+  }, 0);
 });
 
 onUnmounted(() => {
