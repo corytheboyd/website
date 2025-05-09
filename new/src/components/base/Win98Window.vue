@@ -7,11 +7,14 @@
       top: `${position.y}px`,
       width: `${width}px`,
       height: minimized ? 'auto' : `${height}px`,
-      zIndex: isFocused ? 1 : 0,
+      zIndex: windowIndex + Z_INDEX_OFFSET,
     }"
     @mousedown="handleFocus"
   >
-    <div class="title-bar" @mousedown="startDrag">
+    <div
+      :class="['title-bar', { inactive: !isFocused }]"
+      @mousedown="startDrag"
+    >
       <div class="title-bar-text">{{ title }}</div>
       <div class="title-bar-controls">
         <button aria-label="Minimize" @click="handleMinimize"></button>
@@ -27,6 +30,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useWindowStore } from "@/state/store";
+
+const Z_INDEX_OFFSET = 100;
 
 interface Props {
   id: string;
@@ -68,6 +73,8 @@ const minimized = computed(() => {
 });
 
 const isFocused = computed(() => store.focusedWindowId === props.id);
+
+const windowIndex = computed(() => store.getWindowIndex(props.id));
 
 onMounted(() => {
   store.addWindow({
