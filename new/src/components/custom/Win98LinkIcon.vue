@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import Win98Icon from "./Win98Icon.vue";
+import Win98Icon from "@/components/custom/Win98Icon.vue";
 
 defineProps<{
   icon: string;

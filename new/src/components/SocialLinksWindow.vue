@@ -1,5 +1,12 @@
 <template>
-  <Win98Window title="Social Links" class="w-auto">
+  <Win98Window
+    id="social-links"
+    title="Social Links"
+    class="w-auto"
+    :width="500"
+    :height="200"
+    :position="{ x: 300, y: 300 }"
+  >
     <p class="mb-2">Only offline WEIRDOS don't have these! 🤮</p>
     <div class="flex flex-col space-y-2">
       <ul class="space-y-1.5">
@@ -27,5 +34,5 @@
 </template>
 
 <script setup lang="ts">
-import Win98Window from "./base/Win98Window.vue";
+import Win98Window from "@/components/base/Win98Window.vue";
 </script>

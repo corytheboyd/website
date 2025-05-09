@@ -32,5 +32,5 @@
   </div>
 </template>
 <script setup lang="ts">
-import TaskbarDivider from "./TaskbarDivider.vue";
+import TaskbarDivider from "@/components/TaskbarDivider.vue";
 </script>
