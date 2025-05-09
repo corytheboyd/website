@@ -26,7 +26,7 @@
       </div>
     </div>
     <div
-      class="window-body"
+      class="window-body h-full"
       :class="bodyClass"
       v-show="!minimized"
       :style="{
@@ -72,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useWindowStore } from "@/state/store";
 
 const Z_INDEX_OFFSET = 100;
@@ -423,5 +423,16 @@ const stopResize = () => {
 .window.minimized {
   opacity: 0.8;
   transition: opacity 0.2s ease;
+}
+
+.window {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.window-body {
+  flex: 1 1 0%;
+  min-height: 0;
 }
 </style>
