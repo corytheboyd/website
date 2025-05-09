@@ -21,9 +21,9 @@
 </template>
 
 <script setup lang="ts">
-import TaskbarFooter from "./TaskbarFooter.vue";
-import EarthWindow from "./EarthWindow.vue";
-import WelcomeWindow from "./WelcomeWindow.vue";
-import SocialLinksWindow from "./SocialLinksWindow.vue";
-import SocialDesktopIcons from "./SocialDesktopIcons.vue";
+import TaskbarFooter from "@/components/TaskbarFooter.vue";
+import EarthWindow from "@/components/EarthWindow.vue";
+import WelcomeWindow from "@/components/WelcomeWindow.vue";
+import SocialLinksWindow from "@/components/SocialLinksWindow.vue";
+import SocialDesktopIcons from "@/components/SocialDesktopIcons.vue";
 </script>
