@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
-import type { DesktopWindowComponent } from './windowTypes';
+import type { WindowContentComponent } from './windowTypes';
 
 type Position = {
   x: number;
@@ -15,7 +15,7 @@ type Window = {
   height: number;
   position: Position;
   icon?: string;
-  component: DesktopWindowComponent;
+  component: WindowContentComponent;
 };
 
 interface WindowState {

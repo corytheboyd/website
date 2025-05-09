@@ -10,12 +10,17 @@
         'md:mx-5 md:aspect-4/3 md:h-auto md:max-h-full md:max-w-screen-lg',
       ]"
     >
-      <component
+      <Win98Window
         v-for="window in windows"
         :key="window.id"
-        :is="componentMap[window.component]"
         :id="window.id"
-      />
+        :title="window.name"
+        :width="window.width"
+        :height="window.height"
+        :position="window.position"
+      >
+        <component :is="contentComponentMap[window.component]" />
+      </Win98Window>
 
       <SocialDesktopIcons />
       <TaskbarFooter />
@@ -28,16 +33,17 @@ import { computed, onMounted } from "vue";
 import { useWindowStore } from "@/state/store";
 import TaskbarFooter from "@/components/TaskbarFooter.vue";
 import SocialDesktopIcons from "@/components/SocialDesktopIcons.vue";
-import WelcomeWindow from "@/components/WelcomeWindow.vue";
-import EarthWindow from "@/components/EarthWindow.vue";
-import SocialLinksWindow from "@/components/SocialLinksWindow.vue";
+import Win98Window from "@/components/base/Win98Window.vue";
+import WelcomeWindowContent from "@/components/WelcomeWindowContent.vue";
+import EarthWindowContent from "@/components/EarthWindowContent.vue";
+import SocialLinksWindowContent from "@/components/SocialLinksWindowContent.vue";
 import type { Component } from "vue";
-import type { DesktopWindowComponent } from "@/state/windowTypes";
+import type { WindowContentComponent } from "@/state/windowTypes";
 
-const componentMap: Record<DesktopWindowComponent, Component> = {
-  WelcomeWindow,
-  EarthWindow,
-  SocialLinksWindow,
+const contentComponentMap: Record<WindowContentComponent, Component> = {
+  WelcomeWindowContent,
+  EarthWindowContent,
+  SocialLinksWindowContent,
 };
 
 const store = useWindowStore();
@@ -52,7 +58,7 @@ onMounted(() => {
       height: 100,
       position: { x: 50, y: 50 },
       icon: "/win98icon/windows-4.png",
-      component: "WelcomeWindow",
+      component: "WelcomeWindowContent",
     });
     store.addWindow({
       name: "Earth",
@@ -60,7 +66,7 @@ onMounted(() => {
       height: 600,
       position: { x: 150, y: 150 },
       icon: "/win98icon/globe.png",
-      component: "EarthWindow",
+      component: "EarthWindowContent",
     });
     store.addWindow({
       name: "Social Links",
@@ -68,7 +74,7 @@ onMounted(() => {
       height: 300,
       position: { x: 250, y: 250 },
       icon: "/win98icon/network.png",
-      component: "SocialLinksWindow",
+      component: "SocialLinksWindowContent",
     });
   }
 });
