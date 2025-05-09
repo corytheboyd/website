@@ -1,5 +1,5 @@
 <template>
-  <div class="window flex" :class="['absolute bottom-0 left-0 w-full']">
+  <div class="window flex" :class="['absolute bottom-0 left-0 w-full']" style="z-index: 9999;">
     <!-- START BUTTON -->
     <button
       class="button mx-0 flex w-16 items-center justify-center gap-1 px-0"

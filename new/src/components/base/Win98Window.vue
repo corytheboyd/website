@@ -97,7 +97,7 @@ const updateBounds = () => {
     const rect = desktopArea.getBoundingClientRect();
     desktopBounds.value = {
       width: rect.width,
-      height: rect.height - desktopBounds.value.taskbarHeight,
+      height: rect.height,
       left: rect.left,
       top: rect.top,
       taskbarHeight: desktopBounds.value.taskbarHeight,
