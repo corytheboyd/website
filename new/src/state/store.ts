@@ -162,6 +162,14 @@ export const useWindowStore = defineStore("windows", {
       }
     },
 
+    setWindowSize(id: string, size: { width: number; height: number }) {
+      const window = this.getWindow(id);
+      if (window) {
+        window.width = size.width;
+        window.height = size.height;
+      }
+    },
+
     moveWindow(id: string, delta: Position) {
       const window = this.getWindow(id);
       if (window) {
