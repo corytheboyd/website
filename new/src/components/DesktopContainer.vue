@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import type { Component } from "vue";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, onBeforeUnmount } from "vue";
 import { useWindowStore } from "@/state/store";
 import TaskbarFooter from "@/components/TaskbarFooter.vue";
 import SocialDesktopIcons from "@/components/SocialDesktopIcons.vue";
@@ -48,7 +48,7 @@ const contentComponentMap: Record<WindowContentComponent, Component> = {
 };
 
 const store = useWindowStore();
-const windows = computed(() => store.windows);
+const windows = computed(() => store.windows.filter((w) => !w.minimized));
 
 const desktopArea = ref<HTMLElement | null>(null);
 
@@ -58,14 +58,6 @@ onMounted(() => {
 
   // Add default windows if none exist
   if (store.windows.length === 0) {
-    store.addWindow({
-      name: "Welcome",
-      width: 400,
-      height: 100,
-      position: { x: 50, y: 50 },
-      icon: "/win98icon/windows-4.png",
-      component: "WelcomeWindowContent",
-    });
     store.addWindow({
       name: "Earth",
       width: 400,
@@ -82,6 +74,31 @@ onMounted(() => {
       icon: "/win98icon/users-0.png",
       component: "SocialLinksWindowContent",
     });
+    store.addWindow({
+      name: "Welcome",
+      width: 400,
+      height: 100,
+      position: { x: 50, y: 50 },
+      icon: "/win98icon/windows-4.png",
+      component: "WelcomeWindowContent",
+    });
   }
+
+  // Clamp windows on resize
+  const handleResize = () => {
+    if (desktopArea.value) {
+      const rect = desktopArea.value.getBoundingClientRect();
+      store.clampAllWindowsToDesktop(rect);
+    }
+  };
+  window.addEventListener("resize", handleResize);
+
+  // Optionally, clamp once on mount
+  handleResize();
+
+  // Clean up
+  onBeforeUnmount(() => {
+    window.removeEventListener("resize", handleResize);
+  });
 });
 </script>

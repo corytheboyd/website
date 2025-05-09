@@ -1,6 +1,6 @@
 <template>
   <section
-    :class="['window', containerClass]"
+    :class="['window', containerClass, { minimized }]"
     :style="{
       position: 'absolute',
       left: `${position.x}px`,
@@ -266,5 +266,10 @@ const stopTouchDrag = () => {
   height: 16px;
   margin-right: 6px;
   vertical-align: middle;
+}
+
+.window.minimized {
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
 }
 </style>

@@ -121,6 +121,8 @@ export const useWindowStore = defineStore("windows", {
       this.taskbarOrder.push(id);
       // Add to end of desktop order
       this.desktopOrder.push(id);
+      // Set focus to the new window
+      this.setFocusedWindowId(id);
       return id; // Return the generated ID
     },
 
@@ -168,6 +170,37 @@ export const useWindowStore = defineStore("windows", {
           y: window.position.y + delta.y,
         };
       }
+    },
+
+    clampAllWindowsToDesktop(desktopRect?: DOMRect) {
+      // Try to get desktop width and height from DOM if not provided
+      if (!desktopRect && typeof window !== 'undefined' && (window as any).__desktopArea?.value) {
+        desktopRect = (window as any).__desktopArea.value.getBoundingClientRect();
+      }
+      if (!desktopRect) return;
+      const BORDER_BUFFER = 12;
+      this.windows.forEach(win => {
+        let width = win.width;
+        let height = win.height;
+        let position = { ...win.position };
+        // Clamp width and x
+        if (width > desktopRect.width) {
+          width = desktopRect.width - BORDER_BUFFER;
+          position.x = 0;
+        } else {
+          position.x = Math.max(0, Math.min(position.x, desktopRect.width - width));
+        }
+        // Clamp height and y
+        if (height > desktopRect.height) {
+          height = desktopRect.height - BORDER_BUFFER;
+          position.y = 0;
+        } else {
+          position.y = Math.max(0, Math.min(position.y, desktopRect.height - height));
+        }
+        win.width = width;
+        win.height = height;
+        win.position = position;
+      });
     },
   },
 });
