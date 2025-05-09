@@ -15,7 +15,7 @@
       <button
         v-for="windowId in taskbarOrder"
         :key="windowId"
-        class="button flex items-center gap-1 px-2"
+        class="button flex items-center gap-1 px-2 min-w-[80px] max-w-[140px] w-auto"
         :class="{ active: windowId === focusedWindowId }"
         @click="focusWindow(windowId)"
       >
