@@ -8,15 +8,29 @@
       <span class="font-bold">Wow</span>
     </button>
 
+    <TaskbarDivider />
+
+    <!-- OPEN WINDOWS -->
+    <div class="flex gap-1">
+      <button class="button focused flex items-center gap-1 px-2">
+        <img src="/win98icon/notepad-1.png" alt="Notepad" class="h-4 w-4" />
+        <span>Untitled - Notepad</span>
+      </button>
+    </div>
+
     <!-- SPACER -->
     <div class="flex-1"></div>
+
+    <TaskbarDivider />
 
     <!-- STATUS INFO -->
     <div class="status-bar">
       <p class="status-bar-field">
         <img src="/nyan.gif" alt="Nyan Cat" class="w-12" />
       </p>
-      <p class="status-bar-field">With Love From 20XX</p>
     </div>
   </div>
 </template>
+<script setup lang="ts">
+import TaskbarDivider from "./TaskbarDivider.vue";
+</script>
