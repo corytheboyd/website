@@ -30,35 +30,35 @@
     </div>
     <!-- Resize handles -->
     <div
-      class="resize-handle resize-handle-n"
+      class="absolute top-0 right-2 left-2 z-10 h-2 cursor-row-resize"
       @mousedown="startResize('n', $event)"
     />
     <div
-      class="resize-handle resize-handle-e"
+      class="absolute top-2 right-0 bottom-2 z-10 w-2 cursor-col-resize"
       @mousedown="startResize('e', $event)"
     />
     <div
-      class="resize-handle resize-handle-s"
+      class="absolute right-2 bottom-0 left-2 z-10 h-2 cursor-row-resize"
       @mousedown="startResize('s', $event)"
     />
     <div
-      class="resize-handle resize-handle-w"
+      class="absolute top-2 bottom-2 left-0 z-10 w-2 cursor-col-resize"
       @mousedown="startResize('w', $event)"
     />
     <div
-      class="resize-handle resize-handle-nw"
+      class="absolute top-0 left-0 z-10 h-3 w-3 cursor-nwse-resize"
       @mousedown="startResize('nw', $event)"
     />
     <div
-      class="resize-handle resize-handle-ne"
+      class="absolute top-0 right-0 z-10 h-3 w-3 cursor-nesw-resize"
       @mousedown="startResize('ne', $event)"
     />
     <div
-      class="resize-handle resize-handle-se"
+      class="absolute right-0 bottom-0 z-10 h-3 w-3 cursor-nwse-resize"
       @mousedown="startResize('se', $event)"
     />
     <div
-      class="resize-handle resize-handle-sw"
+      class="absolute bottom-0 left-0 z-10 h-3 w-3 cursor-nesw-resize"
       @mousedown="startResize('sw', $event)"
     />
   </section>
@@ -416,66 +416,5 @@ const stopResize = () => {
 .window.minimized {
   opacity: 0.8;
   transition: opacity 0.2s ease;
-}
-
-.resize-handle {
-  position: absolute;
-  z-index: 10;
-}
-.resize-handle-n {
-  top: -2px;
-  left: 8px;
-  right: 8px;
-  height: 6px;
-  cursor: n-resize;
-}
-.resize-handle-e {
-  top: 8px;
-  right: -2px;
-  bottom: 8px;
-  width: 6px;
-  cursor: e-resize;
-}
-.resize-handle-s {
-  left: 8px;
-  right: 8px;
-  bottom: -2px;
-  height: 6px;
-  cursor: s-resize;
-}
-.resize-handle-w {
-  top: 8px;
-  left: -2px;
-  bottom: 8px;
-  width: 6px;
-  cursor: w-resize;
-}
-.resize-handle-nw {
-  top: -2px;
-  left: -2px;
-  width: 10px;
-  height: 10px;
-  cursor: nw-resize;
-}
-.resize-handle-ne {
-  top: -2px;
-  right: -2px;
-  width: 10px;
-  height: 10px;
-  cursor: ne-resize;
-}
-.resize-handle-se {
-  right: -2px;
-  bottom: -2px;
-  width: 10px;
-  height: 10px;
-  cursor: se-resize;
-}
-.resize-handle-sw {
-  left: -2px;
-  bottom: -2px;
-  width: 10px;
-  height: 10px;
-  cursor: sw-resize;
 }
 </style>
