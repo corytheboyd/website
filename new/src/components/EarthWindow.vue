@@ -1,8 +1,6 @@
 <template>
-  <div
-    class="relative flex flex-col items-center justify-center overflow-hidden bg-gray-900 p-2"
-  >
-    <EarthAndFlyby class="z-10 w-38 sm:w-64 md:w-72 lg:w-96" />
+  <div class="h-full w-full">
+    <EarthAndFlyby class="h-full w-full" />
   </div>
 </template>
 
