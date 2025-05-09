@@ -14,6 +14,7 @@
     <div
       :class="['title-bar', { inactive: !isFocused }]"
       @mousedown="startDrag"
+      @touchstart="startTouchDrag"
     >
       <div class="title-bar-text">{{ title }}</div>
       <div class="title-bar-controls">
@@ -172,5 +173,53 @@ const handleMinimize = () => {
 
 const handleClose = () => {
   store.closeWindow(props.id);
+};
+
+const startTouchDrag = (e: TouchEvent) => {
+  if (
+    e.target instanceof HTMLElement &&
+    e.target.closest(".title-bar-controls")
+  ) {
+    return;
+  }
+  if (e.touches.length !== 1) return;
+  isDragging.value = true;
+  const touch = e.touches[0];
+  dragStart.value = {
+    x: touch.clientX - position.value.x - desktopBounds.value.left,
+    y: touch.clientY - position.value.y - desktopBounds.value.top,
+  };
+  document.addEventListener("touchmove", handleTouchMove, { passive: false });
+  document.addEventListener("touchend", stopTouchDrag);
+};
+
+const handleTouchMove = (e: TouchEvent) => {
+  if (!isDragging.value || e.touches.length !== 1) return;
+  e.preventDefault();
+  const touch = e.touches[0];
+  const newX = Math.max(
+    0,
+    Math.min(
+      touch.clientX - dragStart.value.x - desktopBounds.value.left,
+      desktopBounds.value.width - props.width,
+    ),
+  );
+  const newY = Math.max(
+    0,
+    Math.min(
+      touch.clientY - dragStart.value.y - desktopBounds.value.top,
+      desktopBounds.value.height - (minimized.value ? 0 : props.height),
+    ),
+  );
+  store.setWindowPosition(props.id, {
+    x: newX,
+    y: newY,
+  });
+};
+
+const stopTouchDrag = () => {
+  isDragging.value = false;
+  document.removeEventListener("touchmove", handleTouchMove);
+  document.removeEventListener("touchend", stopTouchDrag);
 };
 </script>
