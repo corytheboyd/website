@@ -12,9 +12,20 @@
 
     <!-- OPEN WINDOWS -->
     <div class="flex gap-1">
-      <button class="button focused flex items-center gap-1 px-2">
-        <img src="/win98icon/notepad-1.png" alt="Notepad" class="h-4 w-4" />
-        <span>Untitled - Notepad</span>
+      <button
+        v-for="windowId in taskbarOrder"
+        :key="windowId"
+        class="button flex items-center gap-1 px-2"
+        :class="{ active: windowId === focusedWindowId }"
+        @click="focusWindow(windowId)"
+      >
+        <img
+          v-if="getWindow(windowId)?.icon"
+          :src="getWindow(windowId)?.icon"
+          :alt="getWindow(windowId)?.name"
+          class="h-4 w-4"
+        />
+        <span>{{ getWindow(windowId)?.name }}</span>
       </button>
     </div>
 
@@ -31,6 +42,26 @@
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
+import { computed } from "vue";
+import { useWindowStore } from "@/state/store";
 import TaskbarDivider from "@/components/TaskbarDivider.vue";
+
+const store = useWindowStore();
+
+const taskbarOrder = computed(() => store.taskbarOrder);
+const focusedWindowId = computed(() => {
+  return store.focusedWindowId;
+});
+
+const getWindow = (id: string) => store.getWindow(id);
+
+const focusWindow = (id: string) => {
+  const window = getWindow(id);
+  if (window?.minimized) {
+    store.minimizeWindow(id); // Toggle minimized state to unminimize
+  }
+  store.setFocusedWindowId(id);
+};
 </script>

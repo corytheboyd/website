@@ -74,17 +74,9 @@ const minimized = computed(() => {
 
 const isFocused = computed(() => store.focusedWindowId === props.id);
 
-const windowIndex = computed(() => store.getWindowIndex(props.id));
+const windowIndex = computed(() => store.getDesktopIndex(props.id));
 
 onMounted(() => {
-  store.addWindow({
-    id: props.id,
-    name: props.title,
-    width: props.width,
-    height: props.height,
-    position: props.position,
-  });
-
   // Update bounds on window resize
   window.addEventListener("resize", updateBounds);
   updateBounds();
