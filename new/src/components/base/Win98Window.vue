@@ -13,15 +13,15 @@
   >
     <div
       class="title-bar"
-      @mousedown="startDrag"
-      @mousemove="onDrag"
-      @mouseup="stopDrag"
-      @mouseleave="stopDrag"
+      draggable="true"
+      @dragstart="startDrag"
+      @drag="onDrag"
+      @dragend="stopDrag"
     >
       <div class="title-bar-text">{{ title }}</div>
       <div class="title-bar-controls">
-        <button aria-label="Minimize" @click="handleMinimize">_</button>
-        <button aria-label="Close" @click="handleClose">×</button>
+        <button aria-label="Minimize" @click="handleMinimize"></button>
+        <button aria-label="Close" @click="handleClose"></button>
       </div>
     </div>
     <div class="window-body" :class="bodyClass" v-show="!minimized">
@@ -55,8 +55,8 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const store = useWindowStore();
-const isDragging = ref(false);
-const dragStart = ref({ x: 0, y: 0 });
+const dragStartPosition = ref({ x: 0, y: 0 });
+const dragStartMousePosition = ref({ x: 0, y: 0 });
 
 const position = computed(() => {
   const window = store.getWindow(props.id);
@@ -84,30 +84,40 @@ const handleFocus = () => {
   store.setFocusedWindowId(props.id);
 };
 
-const startDrag = (e: MouseEvent) => {
-  if (
-    e.target instanceof HTMLElement &&
-    e.target.closest(".title-bar-controls")
-  ) {
-    return;
-  }
-  isDragging.value = true;
-  dragStart.value = {
-    x: e.clientX - position.value.x,
-    y: e.clientY - position.value.y,
-  };
+const startDrag = (e: DragEvent) => {
+  if (!e.dataTransfer) return;
+
+  // Store initial positions
+  dragStartPosition.value = { ...position.value };
+  dragStartMousePosition.value = { x: e.clientX, y: e.clientY };
+
+  // Required for Firefox
+  e.dataTransfer.setData("text/plain", "");
+
+  // Use move cursor
+  e.dataTransfer.effectAllowed = "move";
+
+  // Create an invisible drag image (required for custom drag behavior)
+  const dragImage = new Image();
+  dragImage.src =
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+  e.dataTransfer.setDragImage(dragImage, 0, 0);
 };
 
-const onDrag = (e: MouseEvent) => {
-  if (!isDragging.value) return;
+const onDrag = (e: DragEvent) => {
+  if (!e.clientX && !e.clientY) return; // Ignore invalid drag events
+
+  const deltaX = e.clientX - dragStartMousePosition.value.x;
+  const deltaY = e.clientY - dragStartMousePosition.value.y;
+
   store.setWindowPosition(props.id, {
-    x: e.clientX - dragStart.value.x,
-    y: e.clientY - dragStart.value.y,
+    x: dragStartPosition.value.x + deltaX,
+    y: dragStartPosition.value.y + deltaY,
   });
 };
 
 const stopDrag = () => {
-  isDragging.value = false;
+  // No cleanup needed with the drag and drop API
 };
 
 const handleMinimize = () => {
