@@ -16,7 +16,10 @@
       @mousedown="startDrag"
       @touchstart="startTouchDrag"
     >
-      <div class="title-bar-text">{{ title }}</div>
+      <div class="title-bar-text flex">
+        <img v-if="windowIcon" :src="windowIcon" alt="" class="window-icon" />
+        <span>{{ title }}</span>
+      </div>
       <div class="title-bar-controls">
         <button aria-label="Minimize" @click="handleMinimize"></button>
         <button aria-label="Close" @click="handleClose"></button>
@@ -78,6 +81,8 @@ const minimized = computed(() => {
 const isFocused = computed(() => store.focusedWindowId === props.id);
 
 const windowIndex = computed(() => store.getDesktopIndex(props.id));
+
+const windowIcon = computed(() => store.getWindow(props.id)?.icon);
 
 onMounted(() => {
   // Update bounds on window resize
@@ -254,3 +259,12 @@ const stopTouchDrag = () => {
   document.removeEventListener("touchend", stopTouchDrag);
 };
 </script>
+
+<style scoped>
+.window-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+</style>
