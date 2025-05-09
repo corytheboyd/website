@@ -25,7 +25,14 @@
         <button aria-label="Close" @click="handleClose"></button>
       </div>
     </div>
-    <div class="window-body" :class="bodyClass" v-show="!minimized">
+    <div
+      class="window-body"
+      :class="bodyClass"
+      v-show="!minimized"
+      :style="{
+        margin: 0,
+      }"
+    >
       <slot></slot>
     </div>
     <!-- Resize handles -->
