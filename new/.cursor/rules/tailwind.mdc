@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+This project uses tailwindcss. Always use tailwindcss classes when possible, only reverting to vanilla CSS when absolutely necessary, or it is vastly simpler than the tailwindcss solution.
