@@ -11,13 +11,7 @@
     }"
     @mousedown="handleFocus"
   >
-    <div
-      class="title-bar"
-      draggable="true"
-      @dragstart="startDrag"
-      @drag="onDrag"
-      @dragend="stopDrag"
-    >
+    <div class="title-bar" @mousedown="startDrag">
       <div class="title-bar-text">{{ title }}</div>
       <div class="title-bar-controls">
         <button aria-label="Minimize" @click="handleMinimize"></button>
@@ -31,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useWindowStore } from "@/state/store";
 
 interface Props {
@@ -55,8 +49,13 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const store = useWindowStore();
-const dragStartPosition = ref({ x: 0, y: 0 });
-const dragStartMousePosition = ref({ x: 0, y: 0 });
+const isDragging = ref(false);
+const dragStart = ref({ x: 0, y: 0 });
+const desktopBounds = ref({
+  width: window.innerWidth,
+  height: window.innerHeight - 40,
+  taskbarHeight: 40,
+});
 
 const position = computed(() => {
   const window = store.getWindow(props.id);
@@ -78,46 +77,77 @@ onMounted(() => {
     height: props.height,
     position: props.position,
   });
+
+  // Update bounds on window resize
+  window.addEventListener("resize", updateBounds);
+  updateBounds();
 });
+
+onUnmounted(() => {
+  window.removeEventListener("resize", updateBounds);
+  document.removeEventListener("mousemove", handleMouseMove);
+  document.removeEventListener("mouseup", stopDrag);
+});
+
+const updateBounds = () => {
+  desktopBounds.value = {
+    width: window.innerWidth,
+    height: window.innerHeight - desktopBounds.value.taskbarHeight,
+    taskbarHeight: desktopBounds.value.taskbarHeight,
+  };
+};
 
 const handleFocus = () => {
   store.setFocusedWindowId(props.id);
 };
 
-const startDrag = (e: DragEvent) => {
-  if (!e.dataTransfer) return;
+const startDrag = (e: MouseEvent) => {
+  if (
+    e.target instanceof HTMLElement &&
+    e.target.closest(".title-bar-controls")
+  ) {
+    return;
+  }
+  isDragging.value = true;
+  dragStart.value = {
+    x: e.clientX - position.value.x,
+    y: e.clientY - position.value.y,
+  };
 
-  // Store initial positions
-  dragStartPosition.value = { ...position.value };
-  dragStartMousePosition.value = { x: e.clientX, y: e.clientY };
-
-  // Required for Firefox
-  e.dataTransfer.setData("text/plain", "");
-
-  // Use move cursor
-  e.dataTransfer.effectAllowed = "move";
-
-  // Create an invisible drag image (required for custom drag behavior)
-  const dragImage = new Image();
-  dragImage.src =
-    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-  e.dataTransfer.setDragImage(dragImage, 0, 0);
+  // Add document-level mouse handlers
+  document.addEventListener("mousemove", handleMouseMove);
+  document.addEventListener("mouseup", stopDrag);
 };
 
-const onDrag = (e: DragEvent) => {
-  if (!e.clientX && !e.clientY) return; // Ignore invalid drag events
+const handleMouseMove = (e: MouseEvent) => {
+  if (!isDragging.value) return;
 
-  const deltaX = e.clientX - dragStartMousePosition.value.x;
-  const deltaY = e.clientY - dragStartMousePosition.value.y;
+  // Calculate new position with bounds checking
+  const newX = Math.max(
+    0,
+    Math.min(
+      e.clientX - dragStart.value.x,
+      desktopBounds.value.width - props.width,
+    ),
+  );
+  const newY = Math.max(
+    0,
+    Math.min(
+      e.clientY - dragStart.value.y,
+      desktopBounds.value.height - (minimized.value ? 0 : props.height),
+    ),
+  );
 
   store.setWindowPosition(props.id, {
-    x: dragStartPosition.value.x + deltaX,
-    y: dragStartPosition.value.y + deltaY,
+    x: newX,
+    y: newY,
   });
 };
 
 const stopDrag = () => {
-  // No cleanup needed with the drag and drop API
+  isDragging.value = false;
+  document.removeEventListener("mousemove", handleMouseMove);
+  document.removeEventListener("mouseup", stopDrag);
 };
 
 const handleMinimize = () => {
