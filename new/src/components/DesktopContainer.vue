@@ -1,0 +1,29 @@
+<template>
+  <div class="fixed inset-0 z-20 flex items-center justify-center">
+    <main
+      :class="[
+        'background-windows-teal',
+        'relative',
+        // MOBILE VIEW: FULL SCREEN
+        'h-full w-full',
+        // DESKTOP VIEW: CENTERED 4:3 SCREEN
+        'md:mx-5 md:aspect-4/3 md:h-auto md:max-h-full md:max-w-screen-lg',
+      ]"
+    >
+      <WelcomeWindow />
+      <SocialLinksWindow />
+      <SocialDesktopIcons />
+      <EarthWindow />
+
+      <TaskbarFooter />
+    </main>
+  </div>
+</template>
+
+<script setup lang="ts">
+import TaskbarFooter from "./TaskbarFooter.vue";
+import EarthWindow from "./EarthWindow.vue";
+import WelcomeWindow from "./WelcomeWindow.vue";
+import SocialLinksWindow from "./SocialLinksWindow.vue";
+import SocialDesktopIcons from "./SocialDesktopIcons.vue";
+</script>

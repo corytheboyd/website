@@ -1,9 +1,9 @@
 <template>
-  <Background />
-  <Desktop />
+  <BackgroundContainer />
+  <DesktopContainer />
 </template>
 
 <script setup lang="ts">
-import Background from "./components/Background.vue";
-import Desktop from "./components/Desktop.vue";
+import BackgroundContainer from "./components/BackgroundContainer.vue";
+import DesktopContainer from "./components/DesktopContainer.vue";
 </script>
