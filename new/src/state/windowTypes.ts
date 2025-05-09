@@ -1,7 +1,7 @@
-export const desktopWindowComponentNames = [
-  "WelcomeWindow",
-  "EarthWindow",
-  "SocialLinksWindow",
+export const windowContentComponentNames = [
+  "WelcomeWindowContent",
+  "EarthWindowContent",
+  "SocialLinksWindowContent",
 ] as const;
 
-export type DesktopWindowComponent = typeof desktopWindowComponentNames[number]; 
+export type WindowContentComponent = typeof windowContentComponentNames[number]; 
