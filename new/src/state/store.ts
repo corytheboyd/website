@@ -91,16 +91,17 @@ export const useWindowStore = defineStore("windows", {
         ? (window as any).__desktopArea.value.getBoundingClientRect()
         : undefined;
       if (desktopRect !== undefined) {
+        const BORDER_BUFFER = 12;
         // Clamp width and x
         if (width > desktopRect.width) {
-          width = desktopRect.width;
+          width = desktopRect.width - BORDER_BUFFER;
           position.x = 0;
         } else {
           position.x = Math.max(0, Math.min(position.x, desktopRect.width - width));
         }
         // Clamp height and y
         if (height > desktopRect.height) {
-          height = desktopRect.height;
+          height = desktopRect.height - BORDER_BUFFER;
           position.y = 0;
         } else {
           position.y = Math.max(0, Math.min(position.y, desktopRect.height - height));

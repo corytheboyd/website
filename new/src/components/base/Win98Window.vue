@@ -85,17 +85,33 @@ onMounted(() => {
   updateBounds();
 
   // Clamp window position and size after mount (simulate drag correction)
-  // Only run after next tick to ensure DOM is ready
   setTimeout(() => {
     const windowObj = store.getWindow(props.id);
     if (!windowObj) return;
-    const maxX = desktopBounds.value.width - (windowObj.width ?? props.width);
-    const maxY =
-      desktopBounds.value.height - (windowObj.height ?? props.height);
-    let newX = Math.max(0, Math.min(windowObj.position.x, maxX));
-    let newY = Math.max(0, Math.min(windowObj.position.y, maxY));
-    if (windowObj.position.x !== newX || windowObj.position.y !== newY) {
-      store.setWindowPosition(props.id, { x: newX, y: newY });
+    let width = windowObj.width;
+    let height = windowObj.height;
+    let x = windowObj.position.x;
+    let y = windowObj.position.y;
+    const maxWidth = desktopBounds.value.width;
+    const maxHeight = desktopBounds.value.height;
+    if (width > maxWidth) {
+      width = maxWidth;
+      x = 0;
+    }
+    if (height > maxHeight) {
+      height = maxHeight;
+      y = 0;
+    }
+    const maxX = desktopBounds.value.width - width;
+    const maxY = desktopBounds.value.height - height;
+    x = Math.max(0, Math.min(x, maxX));
+    y = Math.max(0, Math.min(y, maxY));
+    if (windowObj.width !== width || windowObj.height !== height) {
+      windowObj.width = width;
+      windowObj.height = height;
+    }
+    if (windowObj.position.x !== x || windowObj.position.y !== y) {
+      store.setWindowPosition(props.id, { x, y });
     }
   }, 0);
 });
