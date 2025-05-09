@@ -25,7 +25,7 @@
           :alt="getWindow(windowId)?.name"
           class="h-4 w-4"
         />
-        <span>{{ getWindow(windowId)?.name }}</span>
+        <span class="truncate whitespace-nowrap max-w-[100px]">{{ getWindow(windowId)?.name }}</span>
       </button>
     </div>
 
