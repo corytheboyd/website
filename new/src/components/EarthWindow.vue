@@ -1,10 +1,10 @@
 <template>
   <section>
-    <win98-window title="Earth" class="mx-3 md:mx-24" body-class="p-0 m-0">
+    <win98-window title="Earth" body-class="p-0 m-0">
       <div
-        class="flex flex-col items-center justify-center p-2 bg-gray-900 relative overflow-hidden"
+        class="relative flex flex-col items-center justify-center overflow-hidden bg-gray-900 p-2"
       >
-        <EarthAndFlyby class="w-38 sm:w-64 md:w-72 lg:w-96 z-10" />
+        <EarthAndFlyby class="z-10 w-38 sm:w-64 md:w-72 lg:w-96" />
       </div>
     </win98-window>
   </section>
