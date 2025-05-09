@@ -30,6 +30,7 @@
 </template>
 
 <script setup lang="ts">
+import type { Component } from "vue";
 import { computed, onMounted, ref } from "vue";
 import { useWindowStore } from "@/state/store";
 import TaskbarFooter from "@/components/TaskbarFooter.vue";
@@ -38,7 +39,6 @@ import Win98Window from "@/components/base/Win98Window.vue";
 import WelcomeWindowContent from "@/components/WelcomeWindowContent.vue";
 import EarthWindowContent from "@/components/EarthWindowContent.vue";
 import SocialLinksWindowContent from "@/components/SocialLinksWindowContent.vue";
-import type { Component } from "vue";
 import type { WindowContentComponent } from "@/state/windowTypes";
 
 const contentComponentMap: Record<WindowContentComponent, Component> = {
@@ -71,7 +71,7 @@ onMounted(() => {
       width: 400,
       height: 255,
       position: { x: 150, y: 150 },
-      icon: "/win98icon/windows-4.png",
+      icon: "/win98icon/world-0.png",
       component: "EarthWindowContent",
     });
     store.addWindow({
@@ -79,7 +79,7 @@ onMounted(() => {
       width: 400,
       height: 300,
       position: { x: 250, y: 250 },
-      icon: "/win98icon/windows-4.png",
+      icon: "/win98icon/users-0.png",
       component: "SocialLinksWindowContent",
     });
   }
