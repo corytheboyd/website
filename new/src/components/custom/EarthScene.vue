@@ -1,5 +1,7 @@
 <template>
-  <div ref="container" class="h-full w-full bg-slate-900"></div>
+  <div ref="container" class="relative h-full w-full bg-slate-900">
+    <!-- The canvas will be injected here by Three.js -->
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -47,38 +49,24 @@ const FLYBY_MODELS = [
   },
 ];
 
-const getRectSize = () => {
-  if (!container.value) return { w: 0, h: 0 };
-  return { w: container.value.offsetWidth, h: container.value.offsetHeight };
+const getSquareSize = () => {
+  if (!container.value) return 0;
+  return Math.min(container.value.offsetWidth, container.value.offsetHeight);
 };
 
 function fitCameraToEarth() {
   if (!camera || !earth) return;
-  // Compute bounding sphere for earth
   const box = new THREE.Box3().setFromObject(earth);
   const sphere = box.getBoundingSphere(new THREE.Sphere());
   if (!sphere) return;
-  const margin = 0.15; // add a little margin
+  const margin = 0.15;
   const radius = sphere.radius + margin;
-  const { w, h } = getRectSize();
-  const aspect = w / h;
-
-  // Fit to the smaller dimension
-  let viewHeight, viewWidth;
-  if (aspect >= 1) {
-    // Window is wider than tall: fit to height
-    viewHeight = radius * 2;
-    viewWidth = viewHeight * aspect;
-  } else {
-    // Window is taller than wide: fit to width
-    viewWidth = radius * 2;
-    viewHeight = viewWidth / aspect;
-  }
-
-  camera.top = viewHeight / 2;
-  camera.bottom = -viewHeight / 2;
-  camera.right = viewWidth / 2;
-  camera.left = -viewWidth / 2;
+  // Camera frustum is always square
+  const viewSize = radius * 2;
+  camera.left = -viewSize / 2;
+  camera.right = viewSize / 2;
+  camera.top = viewSize / 2;
+  camera.bottom = -viewSize / 2;
   camera.near = -100;
   camera.far = 100;
   camera.position.set(0, 0, 10);
@@ -88,8 +76,14 @@ function fitCameraToEarth() {
 
 const handleResize = () => {
   if (!renderer || !container.value) return;
-  const { w, h } = getRectSize();
-  renderer.setSize(w, h, false);
+  const size = getSquareSize();
+  renderer.setSize(size, size, false);
+  renderer.domElement.style.position = "absolute";
+  renderer.domElement.style.left = "50%";
+  renderer.domElement.style.top = "50%";
+  renderer.domElement.style.transform = "translate(-50%, -50%)";
+  renderer.domElement.style.width = `${size}px`;
+  renderer.domElement.style.height = `${size}px`;
   fitCameraToEarth();
 };
 
