@@ -38,11 +38,23 @@ export const useWindowStore = defineStore('windows', {
   getters: {
     getWindow: (state) => (id: string): Window | undefined => 
       state.windows.find((w) => w.id === id),
+    
+    getWindowIndex: (state) => (id: string): number =>
+      state.windows.findIndex((w) => w.id === id),
   },
 
   actions: {
     setFocusedWindowId(id: string | null) {
       this.focusedWindowId = id;
+      if (id) {
+        // Move window to top of array
+        const windowIndex = this.getWindowIndex(id);
+        if (windowIndex !== -1) {
+          const window = this.windows[windowIndex];
+          this.windows.splice(windowIndex, 1);
+          this.windows.push(window);
+        }
+      }
     },
 
     addWindow(window: Omit<Window, "minimized"> & Partial<Pick<Window, "width" | "height" | "position">>) {
