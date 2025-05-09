@@ -36,9 +36,9 @@ import { useWindowStore } from "@/state/store";
 import TaskbarFooter from "@/components/TaskbarFooter.vue";
 import SocialDesktopIcons from "@/components/SocialDesktopIcons.vue";
 import Win98Window from "@/components/base/Win98Window.vue";
-import WelcomeWindowContent from "@/components/WelcomeWindowContent.vue";
-import EarthWindowContent from "@/components/EarthWindowContent.vue";
-import SocialLinksWindowContent from "@/components/SocialLinksWindowContent.vue";
+import WelcomeWindowContent from "@/components/window/WelcomeWindowContent.vue";
+import EarthWindowContent from "@/components/window/EarthWindowContent.vue";
+import SocialLinksWindowContent from "@/components/window/SocialLinksWindowContent.vue";
 import type { WindowContentComponent } from "@/state/windowTypes";
 
 const contentComponentMap: Record<WindowContentComponent, Component> = {
@@ -76,8 +76,8 @@ onMounted(() => {
     });
     store.addWindow({
       name: "Welcome",
-      width: 400,
-      height: 100,
+      width: 200,
+      height: 130,
       position: { x: 50, y: 50 },
       icon: "/win98icon/windows-4.png",
       component: "WelcomeWindowContent",
