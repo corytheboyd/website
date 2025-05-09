@@ -1,5 +1,9 @@
 <template>
-  <div class="window flex" :class="['absolute bottom-0 left-0 w-full']" style="z-index: 9999;">
+  <div
+    class="window flex"
+    :class="['absolute bottom-0 left-0 w-full']"
+    style="z-index: 9999"
+  >
     <!-- START BUTTON -->
     <button
       class="button mx-0 flex w-16 items-center justify-center gap-1 px-0"
@@ -15,7 +19,7 @@
       <button
         v-for="windowId in taskbarOrder"
         :key="windowId"
-        class="button flex items-center gap-1 px-2 min-w-[80px] max-w-[140px] w-auto"
+        class="button flex w-auto max-w-[140px] min-w-[80px] items-center gap-1 px-2"
         :class="{ active: windowId === focusedWindowId }"
         @click="focusWindow(windowId)"
       >
@@ -25,7 +29,9 @@
           :alt="getWindow(windowId)?.name"
           class="h-4 w-4"
         />
-        <span class="truncate whitespace-nowrap max-w-[100px]">{{ getWindow(windowId)?.name }}</span>
+        <span class="max-w-[100px] truncate whitespace-nowrap">{{
+          getWindow(windowId)?.name
+        }}</span>
       </button>
     </div>
 
@@ -42,6 +48,16 @@
     </div>
   </div>
 </template>
+
+<style>
+.active {
+  box-shadow:
+    inset -1px -1px #ffffff,
+    inset 1px 1px #0a0a0a,
+    inset -2px -2px #dfdfdf,
+    inset 2px 2px #808080;
+}
+</style>
 
 <script setup lang="ts">
 import { computed } from "vue";
