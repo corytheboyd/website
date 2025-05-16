@@ -9,7 +9,7 @@
       'md:aspect-4/3 md:h-auto md:max-h-full md:max-w-screen-lg',
     ]"
   >
-    <section class="background-windows-teal w-full flex-1">
+    <section class="win98-color-teal w-full flex-1">
       <Win98Window
         v-for="window in windows"
         :key="window.id"
