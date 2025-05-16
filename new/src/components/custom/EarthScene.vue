@@ -32,9 +32,6 @@ const FLYBY_MAX_SCALE_MULTIPLIER = 0.25;
 // Orbit speed multiplier (higher = faster orbit)
 const FLYBY_ORBIT_SPEED = 5;
 
-// Controls how much of the world is visible vertically (smaller = more zoomed in)
-const GLOBE_VIEW_HEIGHT = 1.75;
-
 const FLYBY_MODELS = [
   { name: "chicken.glb", scale: 0.005, rotateRate: 1, yOffset: 0 },
   { name: "shiba_inu.glb", scale: 0.3, rotateRate: 1, yOffset: -0.33 },
