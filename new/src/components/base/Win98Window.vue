@@ -37,34 +37,42 @@
     </div>
     <!-- Resize handles -->
     <div
+      v-if="resizable"
       class="absolute top-0 right-2 left-2 z-10 h-2 cursor-row-resize"
       @mousedown="startResize('n', $event)"
     />
     <div
+      v-if="resizable"
       class="absolute top-2 right-0 bottom-2 z-10 w-2 cursor-col-resize"
       @mousedown="startResize('e', $event)"
     />
     <div
+      v-if="resizable"
       class="absolute right-2 bottom-0 left-2 z-10 h-2 cursor-row-resize"
       @mousedown="startResize('s', $event)"
     />
     <div
+      v-if="resizable"
       class="absolute top-2 bottom-2 left-0 z-10 w-2 cursor-col-resize"
       @mousedown="startResize('w', $event)"
     />
     <div
+      v-if="resizable"
       class="absolute top-0 left-0 z-10 h-3 w-3 cursor-nwse-resize"
       @mousedown="startResize('nw', $event)"
     />
     <div
+      v-if="resizable"
       class="absolute top-0 right-0 z-10 h-3 w-3 cursor-nesw-resize"
       @mousedown="startResize('ne', $event)"
     />
     <div
+      v-if="resizable"
       class="absolute right-0 bottom-0 z-10 h-3 w-3 cursor-nwse-resize"
       @mousedown="startResize('se', $event)"
     />
     <div
+      v-if="resizable"
       class="absolute bottom-0 left-0 z-10 h-3 w-3 cursor-nesw-resize"
       @mousedown="startResize('sw', $event)"
     />
@@ -88,6 +96,9 @@ interface Props {
   width?: number;
   height?: number;
   position?: { x: number; y: number };
+  minWidth?: number;
+  minHeight?: number;
+  resizable?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -97,6 +108,9 @@ const props = withDefaults(defineProps<Props>(), {
   width: 800,
   height: 600,
   position: () => ({ x: 100, y: 100 }),
+  minWidth: MIN_WIDTH,
+  minHeight: MIN_HEIGHT,
+  resizable: true,
 });
 
 const store = useWindowStore();
@@ -304,6 +318,7 @@ const stopTouchDrag = () => {
 };
 
 const startResize = (direction: string, e: MouseEvent) => {
+  if (!props.resizable) return;
   e.stopPropagation();
   e.preventDefault();
   isResizing.value = true;
@@ -333,19 +348,19 @@ const handleResizeMove = (e: MouseEvent) => {
   // Edge/corner logic
   if (resizeDirection.value.includes("e")) {
     newWidth = Math.max(
-      MIN_WIDTH,
+      props.minWidth,
       Math.min(resizeStart.value.width + dx, bounds.width - newLeft),
     );
   }
   if (resizeDirection.value.includes("s")) {
     newHeight = Math.max(
-      MIN_HEIGHT,
+      props.minHeight,
       Math.min(resizeStart.value.height + dy, bounds.height - newTop),
     );
   }
   if (resizeDirection.value.includes("w")) {
     newWidth = Math.max(
-      MIN_WIDTH,
+      props.minWidth,
       Math.min(
         resizeStart.value.width - dx,
         resizeStart.value.width + resizeStart.value.left,
@@ -353,13 +368,13 @@ const handleResizeMove = (e: MouseEvent) => {
     );
     newLeft = Math.min(
       resizeStart.value.left + dx,
-      resizeStart.value.left + resizeStart.value.width - MIN_WIDTH,
+      resizeStart.value.left + resizeStart.value.width - props.minWidth,
     );
     newLeft = Math.max(
       0,
       Math.min(
         newLeft,
-        resizeStart.value.left + resizeStart.value.width - MIN_WIDTH,
+        resizeStart.value.left + resizeStart.value.width - props.minWidth,
       ),
     );
     if (newLeft + newWidth > bounds.width) {
@@ -368,7 +383,7 @@ const handleResizeMove = (e: MouseEvent) => {
   }
   if (resizeDirection.value.includes("n")) {
     newHeight = Math.max(
-      MIN_HEIGHT,
+      props.minHeight,
       Math.min(
         resizeStart.value.height - dy,
         resizeStart.value.height + resizeStart.value.top,
@@ -376,13 +391,13 @@ const handleResizeMove = (e: MouseEvent) => {
     );
     newTop = Math.min(
       resizeStart.value.top + dy,
-      resizeStart.value.top + resizeStart.value.height - MIN_HEIGHT,
+      resizeStart.value.top + resizeStart.value.height - props.minHeight,
     );
     newTop = Math.max(
       0,
       Math.min(
         newTop,
-        resizeStart.value.top + resizeStart.value.height - MIN_HEIGHT,
+        resizeStart.value.top + resizeStart.value.height - props.minHeight,
       ),
     );
     if (newTop + newHeight > bounds.height) {

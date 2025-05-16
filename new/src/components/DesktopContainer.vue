@@ -19,6 +19,9 @@
         :width="window.width"
         :height="window.height"
         :position="window.position"
+        :minWidth="window.minWidth"
+        :minHeight="window.minHeight"
+        :resizable="window.resizable"
       >
         <component :is="contentComponentMap[window.component]" />
       </Win98Window>
@@ -62,6 +65,8 @@ onMounted(() => {
       name: "Earth",
       width: 400,
       height: 255,
+      minHeight: 175,
+      minWidth: 200,
       position: { x: 150, y: 150 },
       icon: "/win98icon/world-0.png",
       component: "EarthWindowContent",
@@ -70,14 +75,16 @@ onMounted(() => {
       name: "Social Links",
       width: 275,
       height: 110,
+      resizable: false,
       position: { x: 250, y: 250 },
       icon: "/win98icon/users-0.png",
       component: "SocialLinksWindowContent",
     });
     store.addWindow({
       name: "Welcome",
-      width: 200,
-      height: 130,
+      width: 300,
+      height: 115,
+      resizable: false,
       position: { x: 50, y: 50 },
       icon: "/win98icon/windows-4.png",
       component: "WelcomeWindowContent",

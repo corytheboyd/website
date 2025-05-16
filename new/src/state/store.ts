@@ -16,6 +16,9 @@ type Window = {
   position: Position;
   icon?: string;
   component: WindowContentComponent;
+  minWidth?: number;
+  minHeight?: number;
+  resizable?: boolean;
 };
 
 interface WindowState {
@@ -30,9 +33,18 @@ const DEFAULT_WINDOW_SIZE = {
   height: 600,
 };
 
+const DEFAULT_WINDOW_MIN_SIZE = {
+  minWidth: 200,
+  minHeight: 100,
+};
+
 const DEFAULT_WINDOW_POSITION = {
   x: 100,
   y: 100,
+};
+
+const DEFAULT_WINDOW_OPTIONS = {
+  resizable: true,
 };
 
 export const useWindowStore = defineStore("windows", {
@@ -80,12 +92,15 @@ export const useWindowStore = defineStore("windows", {
 
     addWindow(
       window: Omit<Window, "minimized" | "id"> &
-        Partial<Pick<Window, "width" | "height" | "position" | "icon">>,
+        Partial<Pick<Window, "width" | "height" | "position" | "icon" | "minWidth" | "minHeight" | "resizable">>,
     ) {
       const id = uuidv4();
       let width = window.width ?? DEFAULT_WINDOW_SIZE.width;
       let height = window.height ?? DEFAULT_WINDOW_SIZE.height;
       let position = window.position ?? DEFAULT_WINDOW_POSITION;
+      let minWidth = window.minWidth ?? DEFAULT_WINDOW_MIN_SIZE.minWidth;
+      let minHeight = window.minHeight ?? DEFAULT_WINDOW_MIN_SIZE.minHeight;
+      let resizable = window.resizable ?? DEFAULT_WINDOW_OPTIONS.resizable;
       // Try to get desktop width and height from DOM
       let desktopRect = typeof window !== 'undefined' && (window as any).__desktopArea?.value
         ? (window as any).__desktopArea.value.getBoundingClientRect()
@@ -115,6 +130,9 @@ export const useWindowStore = defineStore("windows", {
         height,
         position,
         icon: window.icon,
+        minWidth,
+        minHeight,
+        resizable,
       });
 
       // Add to end of taskbar
