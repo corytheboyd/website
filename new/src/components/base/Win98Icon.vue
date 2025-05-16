@@ -7,21 +7,20 @@
       @dblclick="handleDoubleClick"
       @click="handleClick"
       @focus="handleFocus"
-      @blur="handleBlur"
+      tabindex="0"
     >
       <div class="relative">
         <img
           :src="icon"
           :alt="name"
           class="h-8 w-8"
-          :class="{ 'icon-focused': isContainerFocused }"
+          :class="{ 'icon-focused': props.isFocused }"
         />
       </div>
       <div
         class="win98-font flex items-center justify-center px-1 text-center text-sm text-white"
         :class="{
-          'outline-[1px] -outline-offset-[1px] outline-dotted':
-            isContainerFocused,
+          'outline-[1px] -outline-offset-[1px] outline-dotted': props.isFocused,
         }"
       >
         {{ name }}
@@ -33,29 +32,25 @@
 <script setup lang="ts">
 import { useWindowStore } from "@/state/store";
 import type { WindowContentComponent } from "@/state/windowTypes";
-import { ref, onMounted, onUnmounted } from "vue";
 
 interface Props {
   id: string;
   name: string;
   icon: string;
   component: WindowContentComponent;
+  isFocused?: boolean;
 }
 
 const props = defineProps<Props>();
+const emit = defineEmits(["focus"]);
 const store = useWindowStore();
-const isContainerFocused = ref(false);
 
 const handleClick = () => {
-  isContainerFocused.value = true;
+  emit("focus", props.id);
 };
 
 const handleFocus = () => {
-  isContainerFocused.value = true;
-};
-
-const handleBlur = () => {
-  isContainerFocused.value = false;
+  emit("focus", props.id);
 };
 
 const handleDoubleClick = () => {
@@ -68,22 +63,8 @@ const handleDoubleClick = () => {
     position: { x: 150, y: 150 },
     component: props.component,
   });
+  emit("focus", props.id);
 };
-
-const handleClickOutside = (event: MouseEvent) => {
-  const target = event.target as HTMLElement;
-  if (!target.closest(".win98-icon")) {
-    isContainerFocused.value = false;
-  }
-};
-
-onMounted(() => {
-  document.addEventListener("click", handleClickOutside);
-});
-
-onUnmounted(() => {
-  document.removeEventListener("click", handleClickOutside);
-});
 </script>
 
 <style>

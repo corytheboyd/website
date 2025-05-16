@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
-import type { WindowContentComponent } from './windowTypes';
+import type { WindowContentComponent } from "./windowTypes";
 
 type Position = {
   x: number;
@@ -34,6 +34,7 @@ interface WindowState {
   taskbarOrder: string[]; // Array of window IDs in taskbar order
   desktopOrder: string[]; // Array of window IDs in z-index order
   desktopIcons: DesktopIcon[]; // Array of desktop icons
+  focusedIconId: string | null;
 }
 
 const DEFAULT_WINDOW_SIZE = {
@@ -62,6 +63,7 @@ export const useWindowStore = defineStore("windows", {
     taskbarOrder: [],
     desktopOrder: [],
     desktopIcons: [],
+    focusedIconId: null,
   }),
 
   getters: {
@@ -99,9 +101,24 @@ export const useWindowStore = defineStore("windows", {
       }
     },
 
+    setFocusedIconId(id: string | null) {
+      this.focusedIconId = id;
+    },
+
     addWindow(
       window: Omit<Window, "minimized" | "id"> &
-        Partial<Pick<Window, "width" | "height" | "position" | "icon" | "minWidth" | "minHeight" | "resizable">>,
+        Partial<
+          Pick<
+            Window,
+            | "width"
+            | "height"
+            | "position"
+            | "icon"
+            | "minWidth"
+            | "minHeight"
+            | "resizable"
+          >
+        >,
     ) {
       const id = uuidv4();
       let width = window.width ?? DEFAULT_WINDOW_SIZE.width;
@@ -111,9 +128,10 @@ export const useWindowStore = defineStore("windows", {
       let minHeight = window.minHeight ?? DEFAULT_WINDOW_MIN_SIZE.minHeight;
       let resizable = window.resizable ?? DEFAULT_WINDOW_OPTIONS.resizable;
       // Try to get desktop width and height from DOM
-      let desktopRect = typeof window !== 'undefined' && (window as any).__desktopArea?.value
-        ? (window as any).__desktopArea.value.getBoundingClientRect()
-        : undefined;
+      let desktopRect =
+        typeof window !== "undefined" && (window as any).__desktopArea?.value
+          ? (window as any).__desktopArea.value.getBoundingClientRect()
+          : undefined;
       if (desktopRect !== undefined) {
         const BORDER_BUFFER = 12;
         // Clamp width and x
@@ -121,14 +139,20 @@ export const useWindowStore = defineStore("windows", {
           width = desktopRect.width - BORDER_BUFFER;
           position.x = 0;
         } else {
-          position.x = Math.max(0, Math.min(position.x, desktopRect.width - width));
+          position.x = Math.max(
+            0,
+            Math.min(position.x, desktopRect.width - width),
+          );
         }
         // Clamp height and y
         if (height > desktopRect.height) {
           height = desktopRect.height - BORDER_BUFFER;
           position.y = 0;
         } else {
-          position.y = Math.max(0, Math.min(position.y, desktopRect.height - height));
+          position.y = Math.max(
+            0,
+            Math.min(position.y, desktopRect.height - height),
+          );
         }
       }
       this.windows.push({
@@ -209,12 +233,18 @@ export const useWindowStore = defineStore("windows", {
 
     clampAllWindowsToDesktop(desktopRect?: DOMRect) {
       // Try to get desktop width and height from DOM if not provided
-      if (!desktopRect && typeof window !== 'undefined' && (window as any).__desktopArea?.value) {
-        desktopRect = (window as any).__desktopArea.value.getBoundingClientRect();
+      if (
+        !desktopRect &&
+        typeof window !== "undefined" &&
+        (window as any).__desktopArea?.value
+      ) {
+        desktopRect = (
+          window as any
+        ).__desktopArea.value.getBoundingClientRect();
       }
       if (!desktopRect) return;
       const BORDER_BUFFER = 12;
-      this.windows.forEach(win => {
+      this.windows.forEach((win) => {
         let width = win.width;
         let height = win.height;
         let position = { ...win.position };
@@ -223,14 +253,20 @@ export const useWindowStore = defineStore("windows", {
           width = desktopRect.width - BORDER_BUFFER;
           position.x = 0;
         } else {
-          position.x = Math.max(0, Math.min(position.x, desktopRect.width - width));
+          position.x = Math.max(
+            0,
+            Math.min(position.x, desktopRect.width - width),
+          );
         }
         // Clamp height and y
         if (height > desktopRect.height) {
           height = desktopRect.height - BORDER_BUFFER;
           position.y = 0;
         } else {
-          position.y = Math.max(0, Math.min(position.y, desktopRect.height - height));
+          position.y = Math.max(
+            0,
+            Math.min(position.y, desktopRect.height - height),
+          );
         }
         win.width = width;
         win.height = height;
@@ -238,9 +274,7 @@ export const useWindowStore = defineStore("windows", {
       });
     },
 
-    addDesktopIcon(
-      icon: Omit<DesktopIcon, "id">
-    ) {
+    addDesktopIcon(icon: Omit<DesktopIcon, "id">) {
       const id = uuidv4();
 
       this.desktopIcons.push({

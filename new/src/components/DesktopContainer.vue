@@ -33,6 +33,8 @@
           :name="icon.name"
           :icon="icon.icon"
           :component="icon.component"
+          :isFocused="store.focusedIconId === icon.id"
+          @focus="store.setFocusedIconId"
         />
       </Win98IconContainer>
     </section>
@@ -67,6 +69,13 @@ const windows = computed(() => store.windows.filter((w) => !w.minimized));
 
 const desktopArea = ref<HTMLElement | null>(null);
 
+function handleDesktopClick(e: MouseEvent) {
+  // Only clear focus if the click is not on an icon
+  if (!(e.target as HTMLElement).closest(".win98-icon")) {
+    store.setFocusedIconId(null);
+  }
+}
+
 onMounted(() => {
   // Expose desktopArea globally for window bounds checking
   window.__desktopArea = desktopArea;
@@ -83,9 +92,17 @@ onMounted(() => {
   // Optionally, clamp once on mount
   handleResize();
 
+  // Add click listener for desktop focus clearing
+  if (desktopArea.value) {
+    desktopArea.value.addEventListener("click", handleDesktopClick);
+  }
+
   // Clean up
   onBeforeUnmount(() => {
     window.removeEventListener("resize", handleResize);
+    if (desktopArea.value) {
+      desktopArea.value.removeEventListener("click", handleDesktopClick);
+    }
   });
 });
 </script>
