@@ -38,7 +38,7 @@
     </section>
 
     <section class="w-full">
-      <ToolbarFooter />
+      <ToolbarContainer />
     </section>
   </main>
 </template>
@@ -47,7 +47,7 @@
 import type { Component } from "vue";
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useWindowStore } from "@/state/store";
-import ToolbarFooter from "@/components/ToolbarFooter.vue";
+import ToolbarContainer from "@/components/ToolbarContainer.vue";
 import Win98Window from "@/components/base/Win98Window.vue";
 import Win98Icon from "@/components/base/Win98Icon.vue";
 import Win98IconContainer from "@/components/base/Win98IconContainer.vue";
