@@ -5,11 +5,11 @@
       <ul class="space-y-1.5">
         <li>
           <a
-            href="https://mastodon.social/@corytheboyd"
+            href="https://ruby.social/@corytheboyd"
             target="_blank"
             class="text-blue-600 hover:underline"
           >
-            https://mastodon.social/@corytheboyd
+            https://ruby.social/@corytheboyd
           </a>
         </li>
         <li>
