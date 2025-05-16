@@ -76,7 +76,7 @@ onMounted(() => {
       width: 275,
       height: 110,
       resizable: false,
-      position: { x: 250, y: 250 },
+      position: { x: 250, y: 350 },
       icon: "/win98icon/users-0.png",
       component: "SocialLinksWindowContent",
     });
