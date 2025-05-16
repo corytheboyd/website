@@ -11,7 +11,7 @@ app.mount("#app");
 
 const store = useWindowStore();
 
-for (let i = 0; i < 30; i++) {
+for (let i = 0; i < 20; i++) {
   store.addWindow({
     name: "Hello World",
     width: 300,
