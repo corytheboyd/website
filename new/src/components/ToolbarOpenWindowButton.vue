@@ -1,6 +1,6 @@
 <template>
   <button
-    class="button flex max-w-40 items-center"
+    class="button flex min-w-2 flex-1 items-center"
     :class="{ active: props.windowId === focusedWindowId }"
     :style="{ padding: '0 4px' }"
     @click="focusWindow(windowId)"
@@ -11,7 +11,7 @@
       :alt="getWindow(windowId)?.name"
       class="w-3.5"
     />
-    <span class="truncate pl-1 whitespace-nowrap">{{
+    <span class="truncate pl-1 overflow-ellipsis whitespace-nowrap">{{
       getWindow(windowId)?.name
     }}</span>
   </button>
