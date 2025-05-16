@@ -1,6 +1,6 @@
 <template>
   <button
-    class="button flex max-w-32 flex-grow items-center"
+    class="button flex max-w-32 min-w-20 flex-grow items-center"
     :class="{ active: props.windowId === focusedWindowId }"
     :style="{ padding: '0 4px' }"
     @click="focusWindow(windowId)"
