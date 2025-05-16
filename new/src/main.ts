@@ -11,17 +11,15 @@ app.mount("#app");
 
 const store = useWindowStore();
 
-for (let i = 0; i < 1; i++) {
-  store.addWindow({
-    name: "Hello World",
-    width: 300,
-    height: 115,
-    resizable: false,
-    position: { x: 10 + i * 10, y: 10 + i * 10 },
-    icon: "/win98icon/file_windows-1.png",
-    component: "WelcomeWindowContent",
-  });
-}
+store.addWindow({
+  name: "Hello World",
+  width: 300,
+  height: 115,
+  resizable: false,
+  position: { x: 10, y: 10 },
+  icon: "/win98icon/file_windows-1.png",
+  component: "WelcomeWindowContent",
+});
 
 store.addDesktopIcon({
   name: "Hello World",

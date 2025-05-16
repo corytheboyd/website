@@ -6,6 +6,7 @@
       class="relative flex flex-col items-center justify-center gap-2"
       @dblclick="handleDoubleClick"
       @click="handleClick"
+      @touchstart="handleTouchStart"
       @focus="handleFocus"
       tabindex="0"
     >
@@ -49,11 +50,15 @@ const handleClick = () => {
   emit("focus", props.id);
 };
 
+const handleTouchStart = () => {
+  openWindow();
+};
+
 const handleFocus = () => {
   emit("focus", props.id);
 };
 
-const handleDoubleClick = () => {
+const openWindow = () => {
   store.addWindow({
     name: props.name,
     width: 400,
@@ -63,7 +68,11 @@ const handleDoubleClick = () => {
     position: { x: 150, y: 150 },
     component: props.component,
   });
-  emit("focus", props.id);
+  // emit("focus", props.id);
+};
+
+const handleDoubleClick = () => {
+  openWindow();
 };
 </script>
 
