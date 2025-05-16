@@ -38,7 +38,7 @@
     </section>
 
     <section class="w-full">
-      <TaskbarFooter />
+      <ToolbarFooter />
     </section>
   </main>
 </template>
@@ -47,7 +47,7 @@
 import type { Component } from "vue";
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useWindowStore } from "@/state/store";
-import TaskbarFooter from "@/components/TaskbarFooter.vue";
+import ToolbarFooter from "@/components/ToolbarFooter.vue";
 import Win98Window from "@/components/base/Win98Window.vue";
 import Win98Icon from "@/components/base/Win98Icon.vue";
 import Win98IconContainer from "@/components/base/Win98IconContainer.vue";
@@ -70,25 +70,6 @@ const desktopArea = ref<HTMLElement | null>(null);
 onMounted(() => {
   // Expose desktopArea globally for window bounds checking
   window.__desktopArea = desktopArea;
-
-  // Add default icons if none exist
-  if (store.desktopIcons.length === 0) {
-    store.addDesktopIcon({
-      name: "Earth",
-      icon: "/win98icon/world-0.png",
-      component: "EarthWindowContent",
-    });
-    store.addDesktopIcon({
-      name: "Social Links",
-      icon: "/win98icon/users-0.png",
-      component: "SocialLinksWindowContent",
-    });
-    store.addDesktopIcon({
-      name: "Welcome",
-      icon: "/win98icon/windows-4.png",
-      component: "WelcomeWindowContent",
-    });
-  }
 
   // Clamp windows on resize
   const handleResize = () => {
