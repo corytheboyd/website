@@ -9,9 +9,15 @@ body {
 
 #app {
   @apply bg-gray-950;
-  @apply h-full w-full m-auto flex flex-col items-center;
+  @apply m-auto flex h-full w-full flex-col items-center;
 }
 
-.background-windows-teal {
+.win98-color-teal {
   background-color: #008080;
+}
+
+.win98-font {
+  -webkit-font-smoothing: none;
+  font-family: "Pixelated MS Sans Serif", serif;
+  font-size: 11px;
 }
