@@ -2,22 +2,23 @@
   <div class="window flex" style="z-index: 9999">
     <!-- START BUTTON -->
     <button
-      class="button mx-0 flex w-16 items-center justify-center gap-1 px-0"
+      class="button flex w-34 items-center justify-center gap-1"
+      :style="{ margin: 0, padding: '0 8px', minWidth: 0 }"
     >
       <img src="/win98icon/windows-4.png" alt="Nyan Cat" class="h-4 w-4" />
-      <span class="font-bold">Wow</span>
+      <span class="font-bold">Start</span>
     </button>
 
-    <TaskbarDivider />
+    <ToolbarDivider />
 
     <!-- OPEN WINDOWS -->
-    <div class="flex gap-[2px]">
+    <div class="flex flex-wrap gap-[2px] bg-red-300">
       <button
         v-for="windowId in taskbarOrder"
-        class="button flex w-4 items-center"
+        class="button flex max-w-40 items-center"
         :key="windowId"
         :class="{ active: windowId === focusedWindowId }"
-        :style="{ padding: '0 5px' }"
+        :style="{ padding: '0 4px' }"
         @click="focusWindow(windowId)"
       >
         <img
@@ -35,7 +36,7 @@
     <!-- SPACER -->
     <div class="flex-1"></div>
 
-    <TaskbarDivider />
+    <ToolbarDivider />
 
     <!-- STATUS INFO -->
     <div class="status-bar">
@@ -48,6 +49,7 @@
 
 <style>
 .active {
+  background: #dfdfdf;
   box-shadow:
     inset -1px -1px #ffffff,
     inset 1px 1px #0a0a0a,
@@ -59,7 +61,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useWindowStore } from "@/state/store";
-import TaskbarDivider from "@/components/TaskbarDivider.vue";
+import ToolbarDivider from "@/components/ToolbarDivider.vue";
 
 const store = useWindowStore();
 

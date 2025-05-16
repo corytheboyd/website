@@ -1,6 +1,6 @@
 <template>
   <div
-    class="pointer-events-auto flex h-18 w-18 items-center justify-center bg-gray-800"
+    class="pointer-events-auto flex h-18 w-18 items-center justify-center bg-gray-800/10"
     @click="handleClick"
     @dblclick="handleDoubleClick"
   >
