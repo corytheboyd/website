@@ -1,9 +1,9 @@
 <template>
   <div
-    class="win98-icon flex h-20 w-20 flex-col items-center justify-center gap-2 bg-gray-800/10"
+    class="win98-icon flex h-20 w-20 flex-col items-center justify-center gap-2"
   >
     <div
-      class="relative flex flex-col items-center justify-center gap-2 bg-gray-200/10"
+      class="relative flex flex-col items-center justify-center gap-2"
       @dblclick="handleDoubleClick"
       @click="handleClick"
       @focus="handleFocus"
