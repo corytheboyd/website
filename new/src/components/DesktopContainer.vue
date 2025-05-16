@@ -1,16 +1,15 @@
 <template>
-  <div class="fixed inset-0 z-20 flex items-center justify-center">
-    <main
-      ref="desktopArea"
-      :class="[
-        'background-windows-teal',
-        'relative',
-        // MOBILE VIEW: FULL SCREEN
-        'h-full w-full',
-        // DESKTOP VIEW: CENTERED 4:3 SCREEN
-        'md:mx-5 md:aspect-4/3 md:h-auto md:max-h-full md:max-w-screen-lg',
-      ]"
-    >
+  <main
+    ref="desktopArea"
+    class="fixed z-20 m-auto flex w-full flex-col items-center justify-center select-none"
+    :class="[
+      // MOBILE VIEW: FULL SCREEN
+      'h-full w-full',
+      // DESKTOP VIEW: CENTERED 4:3 SCREEN
+      'md:aspect-4/3 md:h-auto md:max-h-full md:max-w-screen-lg',
+    ]"
+  >
+    <section class="background-windows-teal w-full flex-1">
       <Win98Window
         v-for="window in windows"
         :key="window.id"
@@ -36,15 +35,17 @@
           :component="icon.component"
         />
       </Win98IconContainer>
+    </section>
 
+    <section class="w-full">
       <TaskbarFooter />
-    </main>
-  </div>
+    </section>
+  </main>
 </template>
 
 <script setup lang="ts">
 import type { Component } from "vue";
-import { computed, onMounted, ref, onBeforeUnmount } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useWindowStore } from "@/state/store";
 import TaskbarFooter from "@/components/TaskbarFooter.vue";
 import Win98Window from "@/components/base/Win98Window.vue";

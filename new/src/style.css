@@ -3,7 +3,13 @@
 
 body {
   overscroll-behavior-y: none;
+  @apply h-screen w-screen;
   @apply overflow-hidden;
+}
+
+#app {
+  @apply bg-gray-950;
+  @apply h-full w-full m-auto flex flex-col items-center;
 }
 
 .background-windows-teal {
