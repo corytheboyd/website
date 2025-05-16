@@ -7,6 +7,13 @@ type Position = {
   y: number;
 };
 
+type DesktopIcon = {
+  id: string;
+  name: string;
+  icon: string;
+  component: WindowContentComponent;
+};
+
 type Window = {
   id: string;
   name: string;
@@ -26,6 +33,7 @@ interface WindowState {
   windows: Window[];
   taskbarOrder: string[]; // Array of window IDs in taskbar order
   desktopOrder: string[]; // Array of window IDs in z-index order
+  desktopIcons: DesktopIcon[]; // Array of desktop icons
 }
 
 const DEFAULT_WINDOW_SIZE = {
@@ -53,6 +61,7 @@ export const useWindowStore = defineStore("windows", {
     windows: [],
     taskbarOrder: [],
     desktopOrder: [],
+    desktopIcons: [],
   }),
 
   getters: {
@@ -227,6 +236,22 @@ export const useWindowStore = defineStore("windows", {
         win.height = height;
         win.position = position;
       });
+    },
+
+    addDesktopIcon(
+      icon: Omit<DesktopIcon, "id">
+    ) {
+      const id = uuidv4();
+
+      this.desktopIcons.push({
+        ...icon,
+        id,
+      });
+      return id;
+    },
+
+    removeDesktopIcon(id: string) {
+      this.desktopIcons = this.desktopIcons.filter((icon) => icon.id !== id);
     },
   },
 });

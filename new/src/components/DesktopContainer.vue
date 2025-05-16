@@ -26,7 +26,17 @@
         <component :is="contentComponentMap[window.component]" />
       </Win98Window>
 
-      <SocialDesktopIcons />
+      <Win98IconContainer>
+        <Win98Icon
+          v-for="icon in store.desktopIcons"
+          :key="icon.id"
+          :id="icon.id"
+          :name="icon.name"
+          :icon="icon.icon"
+          :component="icon.component"
+        />
+      </Win98IconContainer>
+
       <TaskbarFooter />
     </main>
   </div>
@@ -37,8 +47,9 @@ import type { Component } from "vue";
 import { computed, onMounted, ref, onBeforeUnmount } from "vue";
 import { useWindowStore } from "@/state/store";
 import TaskbarFooter from "@/components/TaskbarFooter.vue";
-import SocialDesktopIcons from "@/components/SocialDesktopIcons.vue";
 import Win98Window from "@/components/base/Win98Window.vue";
+import Win98Icon from "@/components/base/Win98Icon.vue";
+import Win98IconContainer from "@/components/base/Win98IconContainer.vue";
 import WelcomeWindowContent from "@/components/window/WelcomeWindowContent.vue";
 import EarthWindowContent from "@/components/window/EarthWindowContent.vue";
 import SocialLinksWindowContent from "@/components/window/SocialLinksWindowContent.vue";
@@ -59,33 +70,20 @@ onMounted(() => {
   // Expose desktopArea globally for window bounds checking
   window.__desktopArea = desktopArea;
 
-  // Add default windows if none exist
-  if (store.windows.length === 0) {
-    store.addWindow({
+  // Add default icons if none exist
+  if (store.desktopIcons.length === 0) {
+    store.addDesktopIcon({
       name: "Earth",
-      width: 400,
-      height: 255,
-      minHeight: 175,
-      minWidth: 200,
-      position: { x: 150, y: 150 },
       icon: "/win98icon/world-0.png",
       component: "EarthWindowContent",
     });
-    store.addWindow({
+    store.addDesktopIcon({
       name: "Social Links",
-      width: 275,
-      height: 110,
-      resizable: false,
-      position: { x: 250, y: 350 },
       icon: "/win98icon/users-0.png",
       component: "SocialLinksWindowContent",
     });
-    store.addWindow({
+    store.addDesktopIcon({
       name: "Welcome",
-      width: 300,
-      height: 115,
-      resizable: false,
-      position: { x: 50, y: 50 },
       icon: "/win98icon/windows-4.png",
       component: "WelcomeWindowContent",
     });
