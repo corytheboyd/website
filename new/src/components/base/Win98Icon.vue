@@ -1,15 +1,22 @@
 <template>
   <div
-    class="flex h-20 w-20 flex-col items-center justify-center gap-2 bg-gray-800/10"
+    class="win98-icon flex h-20 w-20 flex-col items-center justify-center gap-2 bg-gray-800/10"
   >
     <div
-      class="flex flex-col items-center justify-center gap-2 bg-gray-200/10"
+      class="relative flex flex-col items-center justify-center gap-2 bg-gray-200/10"
       @dblclick="handleDoubleClick"
       @click="handleClick"
       @focus="handleFocus"
       @blur="handleBlur"
     >
-      <img :src="icon" :alt="name" class="h-8 w-8" />
+      <div class="relative">
+        <img
+          :src="icon"
+          :alt="name"
+          class="h-8 w-8"
+          :class="{ 'icon-focused': isContainerFocused }"
+        />
+      </div>
       <div
         class="win98-font flex items-center justify-center px-1 text-center text-sm text-white"
         :class="{
@@ -26,7 +33,7 @@
 <script setup lang="ts">
 import { useWindowStore } from "@/state/store";
 import type { WindowContentComponent } from "@/state/windowTypes";
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 
 interface Props {
   id: string;
@@ -62,12 +69,26 @@ const handleDoubleClick = () => {
     component: props.component,
   });
 };
+
+const handleClickOutside = (event: MouseEvent) => {
+  const target = event.target as HTMLElement;
+  if (!target.closest(".win98-icon")) {
+    isContainerFocused.value = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("click", handleClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("click", handleClickOutside);
+});
 </script>
 
 <style>
-.focused-text {
-  -webkit-box-shadow: inset 0px 0px 0px 10px #f00;
-  -moz-box-shadow: inset 0px 0px 0px 10px #f00;
-  box-shadow: inset 0px 0px 0px 1px #f00;
+.icon-focused {
+  filter: invert(9%) sepia(100%) saturate(7217%) hue-rotate(193deg)
+    brightness(87%) contrast(145%);
 }
 </style>
