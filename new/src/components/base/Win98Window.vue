@@ -209,39 +209,33 @@ const handleFocus = () => {
   store.setFocusedWindowId(props.id);
 };
 
-const startDrag = (e: MouseEvent) => {
-  if (
-    e.target instanceof HTMLElement &&
-    e.target.closest(".title-bar-controls")
-  ) {
-    return;
+const startDragCommon = (clientX: number, clientY: number) => {
+  if (!isFocused.value) {
+    store.setFocusedWindowId(props.id);
   }
+
   isDragging.value = true;
   dragStart.value = {
-    x: e.clientX - position.value.x - desktopBounds.value.left,
-    y: e.clientY - position.value.y - desktopBounds.value.top,
+    x: clientX - position.value.x - desktopBounds.value.left,
+    y: clientY - position.value.y - desktopBounds.value.top,
   };
-
-  // Add document-level mouse handlers
-  document.addEventListener("mousemove", handleMouseMove);
-  document.addEventListener("mouseup", stopDrag);
 };
 
-const handleMouseMove = (e: MouseEvent) => {
+const handleDragMove = (clientX: number, clientY: number) => {
   if (!isDragging.value) return;
 
   // Calculate new position with bounds checking
   const newX = Math.max(
     0,
     Math.min(
-      e.clientX - dragStart.value.x - desktopBounds.value.left,
+      clientX - dragStart.value.x - desktopBounds.value.left,
       desktopBounds.value.width - props.width,
     ),
   );
   const newY = Math.max(
     0,
     Math.min(
-      e.clientY - dragStart.value.y - desktopBounds.value.top,
+      clientY - dragStart.value.y - desktopBounds.value.top,
       desktopBounds.value.height - (minimized.value ? 0 : props.height),
     ),
   );
@@ -250,6 +244,24 @@ const handleMouseMove = (e: MouseEvent) => {
     x: newX,
     y: newY,
   });
+};
+
+const startDrag = (e: MouseEvent) => {
+  if (
+    e.target instanceof HTMLElement &&
+    e.target.closest(".title-bar-controls")
+  ) {
+    return;
+  }
+  startDragCommon(e.clientX, e.clientY);
+
+  // Add document-level mouse handlers
+  document.addEventListener("mousemove", handleMouseMove);
+  document.addEventListener("mouseup", stopDrag);
+};
+
+const handleMouseMove = (e: MouseEvent) => {
+  handleDragMove(e.clientX, e.clientY);
 };
 
 const stopDrag = () => {
@@ -274,12 +286,7 @@ const startTouchDrag = (e: TouchEvent) => {
     return;
   }
   if (e.touches.length !== 1) return;
-  isDragging.value = true;
-  const touch = e.touches[0];
-  dragStart.value = {
-    x: touch.clientX - position.value.x - desktopBounds.value.left,
-    y: touch.clientY - position.value.y - desktopBounds.value.top,
-  };
+  startDragCommon(e.touches[0].clientX, e.touches[0].clientY);
   document.addEventListener("touchmove", handleTouchMove, { passive: false });
   document.addEventListener("touchend", stopTouchDrag);
 };
@@ -287,25 +294,7 @@ const startTouchDrag = (e: TouchEvent) => {
 const handleTouchMove = (e: TouchEvent) => {
   if (!isDragging.value || e.touches.length !== 1) return;
   e.preventDefault();
-  const touch = e.touches[0];
-  const newX = Math.max(
-    0,
-    Math.min(
-      touch.clientX - dragStart.value.x - desktopBounds.value.left,
-      desktopBounds.value.width - props.width,
-    ),
-  );
-  const newY = Math.max(
-    0,
-    Math.min(
-      touch.clientY - dragStart.value.y - desktopBounds.value.top,
-      desktopBounds.value.height - (minimized.value ? 0 : props.height),
-    ),
-  );
-  store.setWindowPosition(props.id, {
-    x: newX,
-    y: newY,
-  });
+  handleDragMove(e.touches[0].clientX, e.touches[0].clientY);
 };
 
 const stopTouchDrag = () => {
