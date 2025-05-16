@@ -15,21 +15,22 @@
     <TaskbarDivider />
 
     <!-- OPEN WINDOWS -->
-    <div class="flex gap-1">
+    <div class="flex gap-[2px]">
       <button
         v-for="windowId in taskbarOrder"
+        class="button flex w-4 items-center"
         :key="windowId"
-        class="button flex w-auto max-w-[140px] min-w-[80px] items-center gap-1 px-2"
         :class="{ active: windowId === focusedWindowId }"
+        :style="{ padding: '0 5px' }"
         @click="focusWindow(windowId)"
       >
         <img
           v-if="getWindow(windowId)?.icon"
           :src="getWindow(windowId)?.icon"
           :alt="getWindow(windowId)?.name"
-          class="h-4 w-4"
+          class="w-3.5"
         />
-        <span class="max-w-[100px] truncate whitespace-nowrap">{{
+        <span class="truncate pl-1 whitespace-nowrap">{{
           getWindow(windowId)?.name
         }}</span>
       </button>
