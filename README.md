@@ -1,23 +1,74 @@
-# Website
+# Cory Boyd's Personal Website
 
-https://corytheboyd.com
-
-My personal website. Built with [Gulp](https://gulpjs.com/), [PostHTML](https://posthtml.org/), [PostCSS](https://postcss.org/), and [TailwindCSS](https://tailwindcss.com/).
-
-## Why not Hugo/Jekyll/etc.
-
-* I don't change my website frequently enough to warrant billions of features I will forget how to use anyway
-* TailwindCSS is more than enough on its own to make a great looking website, and it's very well documented
-* PostHTML and it's plugin ecosystem offers just enough templating features to avoid document duplication, and that's it
-
-The goal was to make something insanely easy to make very infrequent edits to, and I think I delivered on that. Time will tell, I suppose :)
+A Windows 98-themed personal website built with Vite, Tailwind CSS, and Three.js.
 
 ## Development
 
-Run the development server:
+1. Install dependencies:
 
-```
-npm start
+```bash
+npm install
 ```
 
-View the development website at http://localhost:8080.
+2. Start the development server:
+
+```bash
+npm run dev
+```
+
+3. Build for production:
+
+```bash
+npm run build
+```
+
+4. Preview the production build:
+
+```bash
+npm run preview
+```
+
+## Project Structure
+
+- `src/` - Source files
+  - `components/` - Web components
+  - `style.css` - Main styles
+  - `main.js` - Entry point
+- `public/` - Static assets
+  - `earth_low_poly.glb` - Earth 3D model
+  - `me_dither.png` - Profile picture
+  - `win98icon/` - Windows 98 icons
+  - Other 3D models for the satellite flyby
+
+## Technologies Used
+
+- [Vite](https://vitejs.dev/) - Build tool
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [98.css](https://github.com/jdan/98.css) - Windows 98 CSS framework
+- [Three.js](https://threejs.org/) - 3D graphics library
+
+earth_low_poly:
+
+Earth by Zoe XR [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/3U-XAIY031u)
+
+win98icon:
+
+https://win98icons.alexmeub.com/
+
+sattelite:
+
+https://poly.pizza/m/1C3zb8Q9USk
+
+Satellite by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/1C3zb8Q9USk)
+
+98.css https://jdan.github.io/98.css/#window
+
+Dumpster by KolosStudios [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/ASkP8wjEGs)
+
+Shiba Inu by Quaternius (https://poly.pizza/m/y4wdQpg767)
+
+Supreme Pizza by Jarlan Perez [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/efHt8L0V77z)
+
+Hen by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/8Unya0rw9tR)
+
+https://codepen.io/willwharton/pen/DRBOmX

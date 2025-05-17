@@ -1,4 +1,10 @@
+// tailwind.config.js
 module.exports = {
-  content: ["./src/**/*.html"],
-  plugins: [require("@tailwindcss/typography")],
+  theme: {
+    extend: {
+      screens: {
+        short: { raw: "(max-height: 700px)" },
+      },
+    },
+  },
 };
