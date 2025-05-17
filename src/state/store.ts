@@ -233,6 +233,15 @@ export const useWindowStore = defineStore("windows", {
 
     clampAllWindowsToDesktop(desktopRect?: DOMRect) {
       // Try to get desktop width and height from DOM if not provided
+      let toolbarHeight = 0;
+      if (
+        typeof window !== "undefined" &&
+        (window as any).__toolbarArea?.value
+      ) {
+        toolbarHeight = (
+          window as any
+        ).__toolbarArea.value.getBoundingClientRect().height;
+      }
       if (
         !desktopRect &&
         typeof window !== "undefined" &&
@@ -258,14 +267,15 @@ export const useWindowStore = defineStore("windows", {
             Math.min(position.x, desktopRect.width - width),
           );
         }
-        // Clamp height and y
-        if (height > desktopRect.height) {
-          height = desktopRect.height - BORDER_BUFFER;
+        // Clamp height and y (subtract toolbar height)
+        const availableHeight = desktopRect.height - toolbarHeight;
+        if (height > availableHeight) {
+          height = availableHeight - BORDER_BUFFER;
           position.y = 0;
         } else {
           position.y = Math.max(
             0,
-            Math.min(position.y, desktopRect.height - height),
+            Math.min(position.y, availableHeight - height),
           );
         }
         win.width = width;

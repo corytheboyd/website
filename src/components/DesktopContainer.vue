@@ -39,7 +39,7 @@
       </Win98IconContainer>
     </section>
 
-    <section class="w-full">
+    <section class="w-full" ref="toolbarArea">
       <ToolbarContainer />
     </section>
   </main>
@@ -68,6 +68,7 @@ const store = useWindowStore();
 const windows = computed(() => store.windows.filter((w) => !w.minimized));
 
 const desktopArea = ref<HTMLElement | null>(null);
+const toolbarArea = ref<HTMLElement | null>(null);
 
 function handleDesktopClick(e: MouseEvent) {
   // Only clear focus if the click is not on an icon
@@ -77,8 +78,9 @@ function handleDesktopClick(e: MouseEvent) {
 }
 
 onMounted(() => {
-  // Expose desktopArea globally for window bounds checking
+  // Expose desktopArea and toolbarArea globally for window bounds checking
   window.__desktopArea = desktopArea;
+  window.__toolbarArea = toolbarArea;
 
   // Clamp windows on resize
   const handleResize = () => {

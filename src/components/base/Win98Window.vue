@@ -118,10 +118,9 @@ const isDragging = ref(false);
 const dragStart = ref({ x: 0, y: 0 });
 const desktopBounds = ref({
   width: window.innerWidth,
-  height: window.innerHeight - 40,
+  height: window.innerHeight,
   left: 0,
   top: 0,
-  taskbarHeight: 40,
 });
 
 const position = computed(() => {
@@ -199,22 +198,25 @@ onUnmounted(() => {
 const updateBounds = () => {
   // Use the actual desktop area if available
   const desktopArea = window.__desktopArea?.value;
+  const toolbarArea = window.__toolbarArea?.value;
+  let toolbarHeight = 0;
+  if (toolbarArea) {
+    toolbarHeight = toolbarArea.getBoundingClientRect().height;
+  }
   if (desktopArea) {
     const rect = desktopArea.getBoundingClientRect();
     desktopBounds.value = {
       width: rect.width,
-      height: rect.height,
+      height: rect.height - toolbarHeight,
       left: rect.left,
       top: rect.top,
-      taskbarHeight: desktopBounds.value.taskbarHeight,
     };
   } else {
     desktopBounds.value = {
       width: window.innerWidth,
-      height: window.innerHeight - desktopBounds.value.taskbarHeight,
+      height: window.innerHeight - toolbarHeight,
       left: 0,
       top: 0,
-      taskbarHeight: desktopBounds.value.taskbarHeight,
     };
   }
 };
