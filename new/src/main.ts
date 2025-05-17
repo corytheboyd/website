@@ -14,9 +14,8 @@ const store = useWindowStore();
 store.addWindow({
   name: "Earth",
   width: 300,
-  height: 200,
-  resizable: false,
-  position: { x: 30, y: 150 },
+  height: 300,
+  position: { x: 40, y: 150 },
   icon: "/win98icon/world-0.png",
   component: "EarthWindowContent",
 });
@@ -29,7 +28,7 @@ store.addWindow({
   icon: "/win98icon/users-0.png",
   component: "SocialLinksWindowContent",
 });
-for (let i = 0; i < 2; i++) {
+for (let i = 0; i < 1; i++) {
   store.addWindow({
     name: "Hello World",
     width: 300,
