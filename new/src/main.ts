@@ -12,6 +12,24 @@ app.mount("#app");
 const store = useWindowStore();
 
 store.addWindow({
+  name: "Earth",
+  width: 300,
+  height: 200,
+  resizable: false,
+  position: { x: 30, y: 150 },
+  icon: "/win98icon/world-0.png",
+  component: "EarthWindowContent",
+});
+store.addWindow({
+  name: "Social Links",
+  width: 300,
+  height: 115,
+  resizable: false,
+  position: { x: 70, y: 300 },
+  icon: "/win98icon/users-0.png",
+  component: "SocialLinksWindowContent",
+});
+store.addWindow({
   name: "Hello World",
   width: 300,
   height: 115,
