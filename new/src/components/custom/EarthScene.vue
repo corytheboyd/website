@@ -1,5 +1,8 @@
 <template>
-  <div ref="container" class="relative h-full w-full bg-slate-900">
+  <div
+    ref="container"
+    class="relative h-full w-full overflow-hidden bg-slate-900"
+  >
     <!-- The canvas will be injected here by Three.js -->
   </div>
 </template>
