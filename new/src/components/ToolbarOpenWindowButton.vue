@@ -1,11 +1,11 @@
 <template>
   <button
-    class="button flex max-w-32 min-w-20 flex-grow items-center"
+    class="button flex max-w-32 flex-1 flex-grow items-center"
     :class="{
       active:
         props.windowId === focusedWindowId && !getWindow(windowId)?.minimized,
     }"
-    :style="{ padding: '0 4px' }"
+    :style="{ padding: '0 4px', 'min-width': '40px' }"
     @click="focusWindow(windowId)"
   >
     <img
@@ -14,7 +14,7 @@
       :alt="getWindow(windowId)?.name"
       class="w-3.5"
     />
-    <span class="truncate pl-1 overflow-ellipsis whitespace-nowrap">{{
+    <span class="min-w-4 truncate pl-1 overflow-ellipsis whitespace-nowrap">{{
       getWindow(windowId)?.name
     }}</span>
   </button>
