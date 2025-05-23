@@ -1,7 +1,7 @@
 <template>
   <div
     ref="menuRef"
-    class="window absolute left-0 z-50 flex"
+    class="window absolute left-0 z-50 flex w-48"
     :style="{ bottom: `${toolbarHeight}px`, marginLeft: '2px' }"
   >
     <!-- BLUE BAR -->
@@ -14,7 +14,7 @@
     </div>
 
     <!-- MENU ITEMS -->
-    <div class="flex w-56 flex-1 flex-col">
+    <div class="flex flex-1 flex-col">
       <template v-for="(item, i) in menuItems" :key="i">
         <DividerHorizontal v-if="item.type === 'divider'" class="py-1" />
         <ToolbarStartMenuListItem
@@ -93,7 +93,6 @@ const menuItems: MenuItem[] = [
         icon: "/win98icon/directory_open_file_mydocs-0.png",
         label: "My Pictures",
       },
-      { type: "divider" },
       {
         icon: "/win98icon/directory_open_file_mydocs-0.png",
         label: "My Music",
@@ -107,11 +106,12 @@ const menuItems: MenuItem[] = [
       {
         icon: "/win98icon/directory_open_file_mydocs-0.png",
         label: "Recent Documents",
-      },
-      { type: "divider" },
-      {
-        icon: "/win98icon/directory_open_file_mydocs-0.png",
-        label: "My Documents",
+        submenu: [
+          {
+            icon: "/win98icon/directory_open_file_mydocs-0.png",
+            label: "My Documents",
+          },
+        ],
       },
     ],
   },
@@ -121,7 +121,6 @@ const menuItems: MenuItem[] = [
     submenu: [
       { icon: "/win98icon/settings_gear-0.png", label: "Control Panel" },
       { icon: "/win98icon/settings_gear-0.png", label: "Printers" },
-      { type: "divider" },
       { icon: "/win98icon/settings_gear-0.png", label: "Taskbar & Start Menu" },
     ],
   },
@@ -133,7 +132,6 @@ const menuItems: MenuItem[] = [
     action: openRunWindow,
   },
   { type: "divider" },
-  { icon: "/win98icon/key_win-0.png", label: "Log Off..." },
   { icon: "/win98icon/shut_down_normal-0.png", label: "Shut Down..." },
 ];
 </script>

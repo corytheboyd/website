@@ -4,8 +4,8 @@
     :class="{ 'cursor-pointer': action }"
     @mousedown="action && action()"
   >
-    <img :src="icon" class="h-8 w-8" :alt="label" />
-    <span class="flex-1">{{ label }}</span>
+    <img :src="icon" class="h-7 w-7" :alt="label" />
+    <span class="flex-1 text-[13px] font-medium">{{ label }}</span>
     <span v-if="submenu" class="text-[8px] text-black group-hover:text-white"
       >▶</span
     >
