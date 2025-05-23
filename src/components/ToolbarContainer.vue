@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watchEffect } from "vue";
+import { ref, onMounted, onBeforeUnmount, watchEffect, watch } from "vue";
 import { computed } from "vue";
 import { useWindowStore } from "@/state/store.ts";
 import DividerVertical from "@/components/DividerVertical.vue";
@@ -43,6 +43,8 @@ const openWindowIds = computed(() => store.taskbarOrder);
 const toolbarRef = ref<HTMLElement | null>(null);
 const toolbarHeight = ref(40);
 
+let resizeObserver: ResizeObserver | null = null;
+
 function updateToolbarHeight() {
   if (toolbarRef.value) {
     toolbarHeight.value = toolbarRef.value.offsetHeight;
@@ -52,9 +54,27 @@ function updateToolbarHeight() {
 onMounted(() => {
   updateToolbarHeight();
   window.addEventListener("resize", updateToolbarHeight);
+
+  // Use ResizeObserver for dynamic toolbar height changes
+  if (toolbarRef.value) {
+    resizeObserver = new ResizeObserver(updateToolbarHeight);
+    resizeObserver.observe(toolbarRef.value);
+  }
 });
 onBeforeUnmount(() => {
   window.removeEventListener("resize", updateToolbarHeight);
+  if (resizeObserver && toolbarRef.value) {
+    resizeObserver.unobserve(toolbarRef.value);
+  }
 });
 watchEffect(updateToolbarHeight);
+
+watch(
+  () => store.startMenuOpen,
+  (open) => {
+    if (open) {
+      setTimeout(updateToolbarHeight, 0);
+    }
+  },
+);
 </script>

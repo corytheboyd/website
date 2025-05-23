@@ -1,0 +1,12 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+Do not add pointless niceities in your responses. Only tell me exactly what I need to know, vastly preferring brevity.
+
+Do not conclude messages with nicities either, like:
+
+> If you have any more edge cases or want further polish, let me know!
+
+I just don't care. It wastes my time.
