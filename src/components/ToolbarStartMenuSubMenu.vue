@@ -5,23 +5,13 @@
     <div class="flex flex-col">
       <template v-for="(item, i) in items" :key="i">
         <DividerHorizontal v-if="item.type === 'divider'" class="py-1" />
-        <div
+        <ToolbarStartMenuListItem
           v-else
-          class="group relative flex cursor-pointer items-center gap-2 px-3 py-1.5 text-black hover:bg-[var(--win98-blue-dark)] hover:text-white"
-        >
-          <img :src="item.icon" class="h-5 w-5" :alt="item.label" />
-          <span class="flex-1">{{ item.label }}</span>
-          <span
-            v-if="item.submenu"
-            class="text-[10px] text-black group-hover:text-white"
-            >▶</span
-          >
-          <ToolbarStartMenuSubMenu
-            v-if="item.submenu"
-            :items="item.submenu"
-            class="hidden group-hover:block"
-          />
-        </div>
+          :icon="item.icon"
+          :label="item.label"
+          :submenu="item.submenu"
+          :action="item.action"
+        />
       </template>
     </div>
   </div>
@@ -29,12 +19,14 @@
 
 <script setup lang="ts">
 import DividerHorizontal from "@/components/DividerHorizontal.vue";
+import ToolbarStartMenuListItem from "./ToolbarStartMenuListItem.vue";
 
 interface MenuItem {
   icon?: string;
   label?: string;
   type?: "divider";
   submenu?: MenuItem[];
+  action?: () => void;
 }
 
 defineProps<{

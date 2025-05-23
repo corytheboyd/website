@@ -14,27 +14,16 @@
     </div>
 
     <!-- MENU ITEMS -->
-    <div class="flex w-46 flex-1 flex-col">
+    <div class="flex w-56 flex-1 flex-col">
       <template v-for="(item, i) in menuItems" :key="i">
         <DividerHorizontal v-if="item.type === 'divider'" class="py-1" />
-        <div
+        <ToolbarStartMenuListItem
           v-else
-          class="group relative flex items-center gap-2 py-1.5 pr-0.5 pl-3 hover:bg-[var(--win98-blue-dark)] hover:text-white"
-          @mousedown="item.action && item.action()"
-        >
-          <img :src="item.icon" class="h-5 w-5" :alt="item.label" />
-          <span class="flex-1">{{ item.label }}</span>
-          <span
-            v-if="item.submenu"
-            class="text-[8px] text-black group-hover:text-white"
-            >▶</span
-          >
-          <ToolbarStartMenuSubMenu
-            v-if="item.submenu"
-            :items="item.submenu"
-            class="hidden group-hover:block"
-          />
-        </div>
+          :icon="item.icon"
+          :label="item.label"
+          :submenu="item.submenu"
+          :action="item.action"
+        />
       </template>
     </div>
   </div>
@@ -43,7 +32,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import DividerHorizontal from "@/components/DividerHorizontal.vue";
-import ToolbarStartMenuSubMenu from "./ToolbarStartMenuSubMenu.vue";
+import ToolbarStartMenuListItem from "./ToolbarStartMenuListItem.vue";
 import { useWindowStore } from "@/state/store.ts";
 
 defineProps<{ toolbarHeight: number }>();
@@ -145,6 +134,7 @@ const menuItems: MenuItem[] = [
   },
   { type: "divider" },
   { icon: "/win98icon/key_win-0.png", label: "Log Off..." },
+  { icon: "/win98icon/shut_down_normal-0.png", label: "Shut Down..." },
 ];
 </script>
 
