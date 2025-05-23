@@ -56,12 +56,14 @@ import Win98IconContainer from "@/components/base/Win98IconContainer.vue";
 import WelcomeWindowContent from "@/components/window/WelcomeWindowContent.vue";
 import EarthWindowContent from "@/components/window/EarthWindowContent.vue";
 import SocialLinksWindowContent from "@/components/window/SocialLinksWindowContent.vue";
+import RunWindowContent from "@/components/window/RunWindowContent.vue";
 import type { WindowContentComponent } from "@/state/windowTypes.ts";
 
 const contentComponentMap: Record<WindowContentComponent, Component> = {
   WelcomeWindowContent,
   EarthWindowContent,
   SocialLinksWindowContent,
+  RunWindowContent,
 };
 
 const store = useWindowStore();
