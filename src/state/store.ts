@@ -311,5 +311,10 @@ export const useWindowStore = defineStore("windows", {
     closeStartMenu() {
       this.startMenuOpen = false;
     },
+
+    runCommand(command: string, windowId: string) {
+      // Placeholder: just log for now
+      console.log("runCommand:", command, "from window", windowId);
+    },
   },
 });
