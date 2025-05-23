@@ -80,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, provide } from "vue";
 import { useWindowStore } from "@/state/store.ts";
 
 const Z_INDEX_OFFSET = 100;
@@ -187,6 +187,8 @@ onMounted(() => {
       store.setWindowPosition(props.id, { x, y });
     }
   }, 0);
+
+  provide("windowId", props.id);
 });
 
 onUnmounted(() => {

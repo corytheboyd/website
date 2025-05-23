@@ -22,7 +22,10 @@
         :minHeight="window.minHeight"
         :resizable="window.resizable"
       >
-        <component :is="contentComponentMap[window.component]" />
+        <component
+          :is="contentComponentMap[window.component]"
+          :window-id="window.id"
+        />
       </Win98Window>
 
       <Win98IconContainer>

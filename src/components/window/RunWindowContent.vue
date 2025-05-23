@@ -20,7 +20,20 @@
 
     <section class="mt-2 flex flex-row justify-end gap-2">
       <button type="submit" class="button min-w-16">OK</button>
-      <button type="button" class="button min-w-16">Cancel</button>
+      <button type="button" class="button min-w-16" @click="handleCancel">
+        Cancel
+      </button>
     </section>
   </form>
 </template>
+
+<script setup lang="ts">
+import { useWindowStore } from "@/state/store.ts";
+
+const props = defineProps<{ windowId: string }>();
+const store = useWindowStore();
+
+function handleCancel() {
+  store.closeWindow(props.windowId);
+}
+</script>
