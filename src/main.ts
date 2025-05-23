@@ -22,15 +22,11 @@ store.addWindow({
 });
 
 store.addDesktopIcon({
-  name: "Hello World",
-  icon: "/win98icon/file_windows-0.png",
-  component: "WelcomeWindowContent",
-});
-store.addDesktopIcon({
-  name: "Earth",
+  name: "Earth Spin (final)",
   icon: "/win98icon/world-0.png",
   component: "EarthWindowContent",
 });
+
 store.addDesktopIcon({
   name: "Social Links",
   icon: "/win98icon/users-0.png",
