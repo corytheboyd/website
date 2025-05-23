@@ -20,6 +20,7 @@
         <div
           v-else
           class="group relative flex items-center gap-2 py-1.5 pr-0.5 pl-3 hover:bg-[var(--win98-blue-dark)] hover:text-white"
+          @mousedown="item.action && item.action()"
         >
           <img :src="item.icon" class="h-5 w-5" :alt="item.label" />
           <span class="flex-1">{{ item.label }}</span>
@@ -43,6 +44,7 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import DividerHorizontal from "@/components/DividerHorizontal.vue";
 import ToolbarStartMenuSubMenu from "./ToolbarStartMenuSubMenu.vue";
+import { useWindowStore } from "@/state/store.ts";
 
 defineProps<{ toolbarHeight: number }>();
 const emit = defineEmits(["close"]);
@@ -70,6 +72,23 @@ interface MenuItem {
   label?: string;
   type?: "divider";
   submenu?: MenuItem[];
+  action?: () => void;
+}
+
+const store = useWindowStore();
+
+function openRunWindow() {
+  console.log("openRunWindow");
+  store.addWindow({
+    name: "Run",
+    width: 370,
+    height: 160,
+    resizable: false,
+    position: { x: 40, y: 40 },
+    icon: "/win98icon/application_hourglass-0.png",
+    component: "RunWindowContent",
+  });
+  emit("close");
 }
 
 const menuItems: MenuItem[] = [
@@ -119,7 +138,11 @@ const menuItems: MenuItem[] = [
   },
   { type: "divider" },
   { icon: "/win98icon/help_book_cool-4.png", label: "Help" },
-  { icon: "/win98icon/application_hourglass-0.png", label: "Run..." },
+  {
+    icon: "/win98icon/application_hourglass-0.png",
+    label: "Run...",
+    action: openRunWindow,
+  },
   { type: "divider" },
   { icon: "/win98icon/key_win-0.png", label: "Log Off..." },
 ];
@@ -129,6 +152,5 @@ const menuItems: MenuItem[] = [
 :root {
   --win98-blue: #0000ff;
   --win98-blue-dark: #00007b;
-  --win98-gray: #c0c0c0;
 }
 </style>

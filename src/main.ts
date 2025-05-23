@@ -32,12 +32,3 @@ store.addDesktopIcon({
   icon: "/win98icon/users-0.png",
   component: "SocialLinksWindowContent",
 });
-
-store.addWindow({
-  name: "Run",
-  width: 370,
-  height: 160,
-  resizable: false,
-  position: { x: 40, y: 40 },
-  component: "RunWindowContent",
-});
