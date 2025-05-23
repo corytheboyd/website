@@ -1,6 +1,7 @@
 <template>
   <div ref="toolbarRef" class="window flex" style="z-index: 9999">
     <ToolbarStartButton
+      ref="startButtonRef"
       :depressed="store.startMenuOpen"
       @click="store.toggleStartMenu()"
     />
@@ -21,8 +22,8 @@
 
     <ToolbarStartMenu
       v-if="store.startMenuOpen"
+      ref="menuRef"
       :toolbarHeight="toolbarHeight"
-      @click.outside="store.closeStartMenu()"
     />
   </div>
 </template>
@@ -42,12 +43,25 @@ const openWindowIds = computed(() => store.taskbarOrder);
 
 const toolbarRef = ref<HTMLElement | null>(null);
 const toolbarHeight = ref(40);
+const menuRef = ref<HTMLElement | null>(null);
+const startButtonRef = ref<HTMLElement | null>(null);
 
 let resizeObserver: ResizeObserver | null = null;
 
 function updateToolbarHeight() {
   if (toolbarRef.value) {
     toolbarHeight.value = toolbarRef.value.offsetHeight;
+  }
+}
+
+function handleGlobalClick(e: MouseEvent | TouchEvent) {
+  const path = (e as any).composedPath?.() || [];
+  if (
+    store.startMenuOpen &&
+    !path.includes(menuRef.value) &&
+    !path.includes(startButtonRef.value)
+  ) {
+    store.closeStartMenu();
   }
 }
 
@@ -60,12 +74,16 @@ onMounted(() => {
     resizeObserver = new ResizeObserver(updateToolbarHeight);
     resizeObserver.observe(toolbarRef.value);
   }
+  document.addEventListener("mousedown", handleGlobalClick, true);
+  document.addEventListener("touchstart", handleGlobalClick, true);
 });
 onBeforeUnmount(() => {
   window.removeEventListener("resize", updateToolbarHeight);
   if (resizeObserver && toolbarRef.value) {
     resizeObserver.unobserve(toolbarRef.value);
   }
+  document.removeEventListener("mousedown", handleGlobalClick, true);
+  document.removeEventListener("touchstart", handleGlobalClick, true);
 });
 watchEffect(updateToolbarHeight);
 

@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="menuRef"
     class="window absolute left-0 z-50 flex"
     :style="{ bottom: `${toolbarHeight}px`, marginLeft: '2px' }"
   >
@@ -39,10 +40,30 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import DividerHorizontal from "@/components/DividerHorizontal.vue";
 import ToolbarStartMenuSubMenu from "./ToolbarStartMenuSubMenu.vue";
 
 defineProps<{ toolbarHeight: number }>();
+const emit = defineEmits(["close"]);
+
+const menuRef = ref<HTMLElement | null>(null);
+
+function handleDocumentClick(e: MouseEvent | TouchEvent) {
+  const path = (e as any).composedPath?.() || [];
+  if (menuRef.value && !path.includes(menuRef.value)) {
+    emit("close");
+  }
+}
+
+onMounted(() => {
+  document.addEventListener("mousedown", handleDocumentClick, true);
+  document.addEventListener("touchstart", handleDocumentClick, true);
+});
+onBeforeUnmount(() => {
+  document.removeEventListener("mousedown", handleDocumentClick, true);
+  document.removeEventListener("touchstart", handleDocumentClick, true);
+});
 
 interface MenuItem {
   icon?: string;
