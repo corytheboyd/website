@@ -78,7 +78,6 @@ const handleDoubleClick = () => {
 
 <style>
 .icon-focused {
-  filter: invert(9%) sepia(100%) saturate(7217%) hue-rotate(193deg)
-    brightness(87%) contrast(145%);
+  filter: brightness(0.35) sepia(100%) hue-rotate(148deg) saturate(10);
 }
 </style>
