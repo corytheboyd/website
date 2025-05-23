@@ -35,6 +35,7 @@ interface WindowState {
   desktopOrder: string[]; // Array of window IDs in z-index order
   desktopIcons: DesktopIcon[]; // Array of desktop icons
   focusedIconId: string | null;
+  startMenuOpen: boolean; // Whether the start menu is open
 }
 
 const DEFAULT_WINDOW_SIZE = {
@@ -64,6 +65,7 @@ export const useWindowStore = defineStore("windows", {
     desktopOrder: [],
     desktopIcons: [],
     focusedIconId: null,
+    startMenuOpen: false,
   }),
 
   getters: {
@@ -296,6 +298,18 @@ export const useWindowStore = defineStore("windows", {
 
     removeDesktopIcon(id: string) {
       this.desktopIcons = this.desktopIcons.filter((icon) => icon.id !== id);
+    },
+
+    setStartMenuOpen(open: boolean) {
+      this.startMenuOpen = open;
+    },
+
+    toggleStartMenu() {
+      this.startMenuOpen = !this.startMenuOpen;
+    },
+
+    closeStartMenu() {
+      this.startMenuOpen = false;
     },
   },
 });

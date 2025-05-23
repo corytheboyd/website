@@ -22,7 +22,7 @@ store.addWindow({
 });
 
 store.addDesktopIcon({
-  name: "Earth Spin (final)",
+  name: "Earth Spin",
   icon: "/win98icon/world-0.png",
   component: "EarthWindowContent",
 });

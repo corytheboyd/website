@@ -47,6 +47,8 @@ npm run preview
 - [98.css](https://github.com/jdan/98.css) - Windows 98 CSS framework
 - [Three.js](https://threejs.org/) - 3D graphics library
 
+## Attributes
+
 earth_low_poly:
 
 Earth by Zoe XR [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/3U-XAIY031u)
@@ -72,3 +74,7 @@ Supreme Pizza by Jarlan Perez [CC-BY] (https://creativecommons.org/licenses/by/3
 Hen by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/8Unya0rw9tR)
 
 https://codepen.io/willwharton/pen/DRBOmX
+
+## Guides Used
+
+https://codepen.io/DavidJAldred/pen/pVbQBJ
