@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useWindowStore } from "@/state/store.ts";
 
 const props = defineProps<{ windowId: string }>();
@@ -46,4 +46,28 @@ function handleSubmit() {
   command.value = "";
   store.closeWindow(props.windowId);
 }
+
+function focusInput() {
+  const input = document.getElementById("run-input");
+  if (input) {
+    input.focus();
+  }
+}
+
+// Focus input when component mounts
+onMounted(() => {
+  // Focus the input element after a short delay to ensure the window is fully rendered
+  setTimeout(focusInput, 100);
+});
+
+// Watch for window focus changes
+watch(
+  () => store.focusedWindowId,
+  (newFocusedId) => {
+    if (newFocusedId === props.windowId) {
+      // Focus input when this window gains focus
+      setTimeout(focusInput, 0);
+    }
+  },
+);
 </script>
