@@ -1,42 +1,31 @@
 <template>
   <div
-    class="flex h-full w-full flex-col bg-black p-4 font-mono text-green-400"
+    ref="outputArea"
+    class="h-full w-full flex-col overflow-y-scroll bg-black p-1 font-mono text-white"
   >
-    <div class="mb-2 select-none">
-      Microsoft(R) Windows 98<br />
-      (C)Copyright Microsoft Corp 1981-1998.<br />
-      <br />
-    </div>
-    <div class="flex-1 overflow-y-auto" ref="outputArea">
-      <div v-for="(entry, i) in history" :key="i" class="whitespace-pre-wrap">
-        <template v-if="entry.type === 'input'">
-          <span>C:\WINDOWS\Desktop&gt;{{ entry.value }}</span>
-        </template>
-        <template v-else>
-          <span>{{ entry.value }}</span>
-        </template>
+    <div class="flex-1">
+      <div v-for="(line, i) in buffer" :key="i" class="whitespace-pre">
+        {{ line }}
       </div>
-    </div>
-    <form class="mt-2 flex items-center" @submit.prevent="handleSubmit">
-      <span class="select-none">C:\WINDOWS\Desktop&gt;</span>
-      <span class="relative ml-1 flex-1">
+      <div
+        class="flex items-center whitespace-pre select-text"
+        @click="focusInput"
+      >
+        <span>{{ PROMPT }}{{ input }}</span>
+        <span v-if="isFocused" class="animate-blink">_</span>
         <input
           ref="inputRef"
           v-model="input"
-          class="w-full border-0 bg-black pr-2 font-mono text-green-400 caret-transparent outline-none"
+          class="absolute m-0 h-0 w-0 border-0 p-0 caret-transparent opacity-0 outline-none"
           autocomplete="off"
           spellcheck="false"
           @keydown.up.prevent="recallPrev"
           @keydown.down.prevent="recallNext"
+          @keydown.enter.prevent="handleSubmit"
+          tabindex="0"
         />
-        <span
-          v-if="isFocused"
-          class="animate-blink pointer-events-none absolute top-0 left-0 flex h-full items-center"
-          :style="{ left: `calc(${inputWidth}px + 2px)` }"
-          >_</span
-        >
-      </span>
-    </form>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -44,60 +33,53 @@
 import { ref, nextTick, onMounted, watch, computed } from "vue";
 import { useWindowStore } from "@/state/store.ts";
 
+const MAX_REPL_LINES = 200;
+
 const props = defineProps<{ windowId: string }>();
 const store = useWindowStore();
 
-interface Entry {
-  type: "input" | "output";
-  value: string;
-}
+const PROMPT = "C:\\WINDOWS\\Desktop>";
+const INTRO_LINES = [
+  "Microsoft(R) Windows 98",
+  "(C)Copyright Microsoft Corp 1981-1998.",
+  "\n",
+];
 
-const history = ref<Entry[]>([]);
+const buffer = ref<string[]>([]); // Only output lines
 const input = ref("");
 const inputRef = ref<HTMLInputElement | null>(null);
 const outputArea = ref<HTMLElement | null>(null);
 let historyIndex = ref<number | null>(null);
-const inputWidth = ref(0);
 
 const isFocused = computed(() => store.focusedWindowId === props.windowId);
 
-function updateInputWidth() {
-  // Create a dummy span to measure the input text width
-  if (!inputRef.value) return;
-  const span = document.createElement("span");
-  span.style.visibility = "hidden";
-  span.style.position = "absolute";
-  span.style.whiteSpace = "pre";
-  span.style.font = getComputedStyle(inputRef.value).font;
-  span.textContent = input.value || "";
-  document.body.appendChild(span);
-  inputWidth.value = span.offsetWidth;
-  document.body.removeChild(span);
+function trimBuffer() {
+  if (buffer.value.length > MAX_REPL_LINES) {
+    buffer.value.splice(0, buffer.value.length - MAX_REPL_LINES);
+  }
 }
 
-watch(input, updateInputWidth);
-
 function handleSubmit() {
-  const cmd = input.value.trim();
+  const cmd = input.value;
   if (!cmd) return;
-  history.value.push({ type: "input", value: cmd });
-  // For now, just echo the command as output
-  history.value.push({ type: "output", value: cmd });
+  buffer.value.push(PROMPT + cmd);
+  buffer.value.push(cmd);
+  buffer.value.push("\n"); // blank line for spacing
+  trimBuffer();
   input.value = "";
   historyIndex.value = null;
   nextTick(() => {
     if (outputArea.value) {
       outputArea.value.scrollTop = outputArea.value.scrollHeight;
     }
-    inputRef.value?.focus();
-    updateInputWidth();
+    focusInput();
   });
 }
 
 function recallPrev() {
-  const inputs = history.value
-    .filter((e) => e.type === "input")
-    .map((e) => e.value);
+  const inputs = buffer.value
+    .filter((line) => line.startsWith(PROMPT))
+    .map((line) => line.slice(PROMPT.length));
   if (!inputs.length) return;
   if (historyIndex.value === null) {
     historyIndex.value = inputs.length - 1;
@@ -108,9 +90,9 @@ function recallPrev() {
 }
 
 function recallNext() {
-  const inputs = history.value
-    .filter((e) => e.type === "input")
-    .map((e) => e.value);
+  const inputs = buffer.value
+    .filter((line) => line.startsWith(PROMPT))
+    .map((line) => line.slice(PROMPT.length));
   if (!inputs.length || historyIndex.value === null) return;
   if (historyIndex.value < inputs.length - 1) {
     historyIndex.value++;
@@ -121,10 +103,27 @@ function recallNext() {
   }
 }
 
+function focusInput() {
+  if (inputRef.value instanceof HTMLInputElement) inputRef.value.focus();
+}
+
 onMounted(() => {
+  buffer.value.push(...INTRO_LINES);
   nextTick(() => {
-    inputRef.value?.focus();
-    updateInputWidth();
+    trimBuffer();
+    focusInput();
+  });
+});
+
+watch(isFocused, (val) => {
+  if (val) nextTick(focusInput);
+});
+
+watch(buffer, () => {
+  nextTick(() => {
+    if (outputArea.value) {
+      outputArea.value.scrollTop = outputArea.value.scrollHeight;
+    }
   });
 });
 </script>
