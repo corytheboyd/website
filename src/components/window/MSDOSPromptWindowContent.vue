@@ -4,14 +4,14 @@
     class="h-full w-full flex-col overflow-y-scroll bg-black p-1 font-mono text-white"
   >
     <div class="flex-1">
-      <div v-for="(line, i) in buffer" :key="i" class="whitespace-pre">
+      <div v-for="(line, i) in buffer" :key="i" class="whitespace-pre-wrap">
         {{ line }}
       </div>
       <div
-        class="flex items-center whitespace-pre select-text"
+        class="flex items-center whitespace-pre-wrap select-text"
         @click="focusInput"
       >
-        <span>{{ PROMPT }}{{ input }}</span>
+        <span>{{ getPrompt() }}{{ input }}</span>
         <span v-if="isFocused" class="animate-blink">_</span>
         <input
           ref="inputRef"
@@ -38,12 +38,149 @@ const MAX_REPL_LINES = 200;
 const props = defineProps<{ windowId: string }>();
 const store = useWindowStore();
 
-const PROMPT = "C:\\WINDOWS\\Desktop>";
-const INTRO_LINES = [
-  "Microsoft(R) Windows 98",
-  "(C)Copyright Microsoft Corp 1981-1998.",
-  "\n",
-];
+// Hierarchical in-memory file system
+interface FileEntry {
+  name: string;
+  size: number;
+  date: string;
+  time: string;
+}
+interface DirNode {
+  name: string;
+  label: string;
+  serial: string;
+  files: FileEntry[];
+  dirs: DirNode[];
+  free: number;
+  date: string;
+  time: string;
+}
+
+const fileSystemRoot: DirNode = {
+  name: "C:",
+  label: "C",
+  serial: "1337-42069",
+  files: [],
+  dirs: [
+    {
+      name: "Users",
+      label: "C",
+      serial: "1337-42069",
+      files: [],
+      dirs: [
+        {
+          name: "CORY",
+          label: "C",
+          serial: "1337-42069",
+          files: [
+            {
+              name: "nickleback.exe",
+              size: 882737,
+              date: "07-17-2001",
+              time: "03:43",
+            },
+          ],
+          dirs: [],
+          free: 80085,
+          date: "06-02-2023",
+          time: "15:34",
+        },
+      ],
+      free: 80085,
+      date: "06-02-2023",
+      time: "15:34",
+    },
+  ],
+  free: 80085,
+  date: "01-01-2000",
+  time: "00:00",
+};
+
+const currentDir = ref<DirNode[]>([
+  fileSystemRoot,
+  fileSystemRoot.dirs[0],
+  fileSystemRoot.dirs[0].dirs[0],
+]);
+
+function resolveDir(path: string[]): DirNode[] | null {
+  let node = fileSystemRoot;
+  const result: DirNode[] = [node];
+  for (let i = 1; i < path.length; ++i) {
+    const seg = path[i];
+    const found = node.dirs.find(
+      (d) => d.name.toLowerCase() === seg.toLowerCase(),
+    );
+    if (!found) return null;
+    node = found;
+    result.push(node);
+  }
+  return result;
+}
+
+function getCurrentDirNode() {
+  return currentDir.value[currentDir.value.length - 1];
+}
+
+function getPrompt() {
+  // C:\Users\CORY>
+  return (
+    currentDir.value
+      .map((d, i) => (i === 0 ? d.name : "\\" + d.name))
+      .join("") + ">"
+  );
+}
+
+function formatDirOutput() {
+  const dir = getCurrentDirNode();
+  const lines: string[] = [];
+  lines.push(` Directory of ${getPrompt().slice(0, -1)}`);
+  lines.push("");
+  for (const d of dir.dirs) {
+    lines.push(`${d.date}  ${d.time}    <DIR>          ${d.name}`);
+  }
+  for (const f of dir.files) {
+    lines.push(
+      `${f.date}  ${f.time} ${f.size.toString().padStart(10, " ")} ${f.name}`,
+    );
+  }
+  lines.push(
+    `           ${dir.files.length} File(s) ${dir.files.reduce((a: number, b) => a + b.size, 0).toLocaleString()} bytes`,
+  );
+  lines.push(
+    `           ${dir.dirs.length} Dir(s)  ${dir.free.toLocaleString()} bytes free`,
+  );
+  return lines;
+}
+
+function resolvePath(arg: string): DirNode[] | null {
+  let parts = arg.replace(/\\+/g, "\\").split("\\").filter(Boolean);
+  let base: DirNode[] = [];
+  if (arg.startsWith("C:")) {
+    // Absolute path
+    base = [fileSystemRoot];
+    parts = parts.slice(1);
+  } else if (arg.startsWith("\\")) {
+    // Absolute from root
+    base = [fileSystemRoot];
+  } else {
+    // Relative
+    base = [...currentDir.value];
+  }
+  let resolved: DirNode[] = [...base];
+  for (const seg of parts) {
+    if (seg === "..") {
+      if (resolved.length > 1) resolved.pop();
+    } else {
+      const node = resolved[resolved.length - 1];
+      const found = node.dirs.find(
+        (d) => d.name.toLowerCase() === seg.toLowerCase(),
+      );
+      if (!found) return null;
+      resolved.push(found);
+    }
+  }
+  return resolved;
+}
 
 const buffer = ref<string[]>([]); // Only output lines
 const input = ref("");
@@ -60,10 +197,43 @@ function trimBuffer() {
 }
 
 function handleSubmit() {
-  const cmd = input.value;
+  const cmd = input.value.trim();
   if (!cmd) return;
-  buffer.value.push(PROMPT + cmd);
-  buffer.value.push(cmd);
+  const [cmdName, ...cmdArgs] = cmd.split(/\s+/);
+  const argStr = cmdArgs.join(" ");
+  // Command registry
+  const commands: Record<string, (arg?: string) => void> = {
+    cls: () => buffer.value.splice(0, buffer.value.length),
+    clrscr: () => buffer.value.splice(0, buffer.value.length),
+    dir: () => {
+      for (const line of formatDirOutput()) buffer.value.push(line);
+    },
+    cd: (arg?: string) => {
+      if (!arg) return;
+      let target = arg.trim();
+      if (target === "..") {
+        if (currentDir.value.length > 1) currentDir.value.pop();
+      } else {
+        const resolved = resolvePath(target);
+        if (resolved) {
+          currentDir.value = resolved;
+        } else {
+          buffer.value.push(`The system cannot find the path specified.`);
+        }
+      }
+    },
+    chdir: (arg?: string) => {
+      commands.cd?.(arg);
+    },
+  };
+  buffer.value.push(getPrompt() + cmd);
+  if (commands[cmdName.toLowerCase()]) {
+    commands[cmdName.toLowerCase()](argStr);
+  } else {
+    buffer.value.push(
+      `'${cmdName}' is not recognized as an internal or external command, operable program or batch file.`,
+    );
+  }
   buffer.value.push("\n"); // blank line for spacing
   trimBuffer();
   input.value = "";
@@ -78,8 +248,8 @@ function handleSubmit() {
 
 function recallPrev() {
   const inputs = buffer.value
-    .filter((line) => line.startsWith(PROMPT))
-    .map((line) => line.slice(PROMPT.length));
+    .filter((line) => line.startsWith(getPrompt()))
+    .map((line) => line.slice(getPrompt().length));
   if (!inputs.length) return;
   if (historyIndex.value === null) {
     historyIndex.value = inputs.length - 1;
@@ -91,8 +261,8 @@ function recallPrev() {
 
 function recallNext() {
   const inputs = buffer.value
-    .filter((line) => line.startsWith(PROMPT))
-    .map((line) => line.slice(PROMPT.length));
+    .filter((line) => line.startsWith(getPrompt()))
+    .map((line) => line.slice(getPrompt().length));
   if (!inputs.length || historyIndex.value === null) return;
   if (historyIndex.value < inputs.length - 1) {
     historyIndex.value++;
@@ -108,7 +278,9 @@ function focusInput() {
 }
 
 onMounted(() => {
-  buffer.value.push(...INTRO_LINES);
+  buffer.value.push("Microsoft(R) Windows 98");
+  buffer.value.push("(C)Copyright Microsoft Corp 1981-1998.");
+  buffer.value.push("\n");
   nextTick(() => {
     trimBuffer();
     focusInput();
