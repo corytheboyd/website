@@ -67,14 +67,12 @@ interface MenuItem {
 const store = useWindowStore();
 
 function openRunWindow() {
-  console.log("openRunWindow");
   store.addWindow({
     name: "Run",
     width: 370,
     height: 160,
     resizable: false,
     position: { x: 40, y: 40 },
-    icon: "/win98icon/application_hourglass-0.png",
     component: "RunWindowContent",
   });
   emit("close");
