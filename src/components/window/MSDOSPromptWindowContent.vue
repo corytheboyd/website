@@ -22,6 +22,7 @@
           @keydown.up.prevent="recallPrev"
           @keydown.down.prevent="recallNext"
           @keydown.enter.prevent="handleSubmit"
+          @keydown.tab.prevent="handleTabComplete"
           tabindex="0"
         />
       </div>
@@ -190,6 +191,8 @@ let historyIndex = ref<number | null>(null);
 
 const isFocused = computed(() => store.focusedWindowId === props.windowId);
 
+const COMMANDS = ["cls", "clrscr", "dir", "cd", "chdir"];
+
 function trimBuffer() {
   if (buffer.value.length > MAX_REPL_LINES) {
     buffer.value.splice(0, buffer.value.length - MAX_REPL_LINES);
@@ -275,6 +278,95 @@ function recallNext() {
 
 function focusInput() {
   if (inputRef.value instanceof HTMLInputElement) inputRef.value.focus();
+}
+
+function handleTabComplete() {
+  const val = input.value.trim();
+  if (!val) return;
+  const parts = val.split(/\s+/);
+  if (parts.length === 1) {
+    // Try command completion first
+    const matches = COMMANDS.filter((c) => c.startsWith(val.toLowerCase()));
+    if (matches.length === 1) {
+      input.value = matches[0] + " ";
+      return;
+    }
+    // If not a command, try file/dir completion in current dir
+    const baseDir = getCurrentDirNode();
+    const fileMatches = baseDir.files.filter((f) =>
+      f.name.toLowerCase().startsWith(val.toLowerCase()),
+    );
+    const dirMatches = baseDir.dirs.filter((d) =>
+      d.name.toLowerCase().startsWith(val.toLowerCase()),
+    );
+    const allMatches = [
+      ...dirMatches.map((d) => d.name),
+      ...fileMatches.map((f) => f.name),
+    ];
+    if (allMatches.length === 1) {
+      input.value = allMatches[0];
+    }
+    return;
+  }
+  const [cmd, ...args] = parts;
+  // Path completion for cd/chdir
+  if (cmd.toLowerCase() === "cd" || cmd.toLowerCase() === "chdir") {
+    const partial = args.join(" ").trim();
+    let baseDir = getCurrentDirNode();
+    let partialSeg = partial;
+    if (partial.includes("\\")) {
+      const segs = partial.split("\\");
+      partialSeg = segs.pop() || "";
+      for (const seg of segs) {
+        const found = baseDir.dirs.find(
+          (d) => d.name.toLowerCase() === seg.toLowerCase(),
+        );
+        if (found) baseDir = found;
+        else return;
+      }
+    }
+    const matches = baseDir.dirs.filter((d) =>
+      d.name.toLowerCase().startsWith(partialSeg.toLowerCase()),
+    );
+    if (matches.length === 1) {
+      let prefix = "";
+      if (partial.includes("\\"))
+        prefix = partial.slice(0, partial.lastIndexOf("\\") + 1);
+      input.value = cmd + " " + prefix + matches[0].name;
+    }
+    return;
+  }
+  // For other commands, complete files and directories in current dir
+  const partial = args.join(" ").trim();
+  let baseDir = getCurrentDirNode();
+  let partialSeg = partial;
+  if (partial.includes("\\")) {
+    const segs = partial.split("\\");
+    partialSeg = segs.pop() || "";
+    for (const seg of segs) {
+      const found = baseDir.dirs.find(
+        (d) => d.name.toLowerCase() === seg.toLowerCase(),
+      );
+      if (found) baseDir = found;
+      else return;
+    }
+  }
+  const fileMatches = baseDir.files.filter((f) =>
+    f.name.toLowerCase().startsWith(partialSeg.toLowerCase()),
+  );
+  const dirMatches = baseDir.dirs.filter((d) =>
+    d.name.toLowerCase().startsWith(partialSeg.toLowerCase()),
+  );
+  const matches = [
+    ...dirMatches.map((d) => d.name),
+    ...fileMatches.map((f) => f.name),
+  ];
+  if (matches.length === 1) {
+    let prefix = "";
+    if (partial.includes("\\"))
+      prefix = partial.slice(0, partial.lastIndexOf("\\") + 1);
+    input.value = cmd + " " + prefix + matches[0];
+  }
 }
 
 onMounted(() => {

@@ -110,12 +110,47 @@ onMounted(() => {
     desktopArea.value.addEventListener("click", handleDesktopClick);
   }
 
+  // Global keyboard shortcuts
+  const handleGlobalKey = (e: KeyboardEvent) => {
+    if (e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) return;
+    const active = document.activeElement;
+    if (
+      active &&
+      (active.tagName === "INPUT" ||
+        active.tagName === "TEXTAREA" ||
+        (active as HTMLElement).isContentEditable)
+    )
+      return;
+    if (e.key === "s") {
+      store.setStartMenuOpen(true);
+      e.preventDefault();
+    } else if (e.key === "r" && store.startMenuOpen) {
+      // Open Run window
+      store.addWindow({
+        name: "Run",
+        width: 370,
+        height: 160,
+        resizable: false,
+        position: { x: 40, y: 40 },
+        icon: "/win98icon/application_hourglass-0.png",
+        component: "RunWindowContent",
+      });
+      store.setStartMenuOpen(false);
+      e.preventDefault();
+    } else if (e.key === "Escape" && store.startMenuOpen) {
+      store.setStartMenuOpen(false);
+      e.preventDefault();
+    }
+  };
+  window.addEventListener("keydown", handleGlobalKey);
+
   // Clean up
   onBeforeUnmount(() => {
     window.removeEventListener("resize", handleResize);
     if (desktopArea.value) {
       desktopArea.value.removeEventListener("click", handleDesktopClick);
     }
+    window.removeEventListener("keydown", handleGlobalKey);
   });
 });
 </script>
