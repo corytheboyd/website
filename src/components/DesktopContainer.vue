@@ -60,6 +60,7 @@ import WelcomeWindowContent from "@/components/window/WelcomeWindowContent.vue";
 import EarthWindowContent from "@/components/window/EarthWindowContent.vue";
 import SocialLinksWindowContent from "@/components/window/SocialLinksWindowContent.vue";
 import RunWindowContent from "@/components/window/RunWindowContent.vue";
+import MSDOSPromptWindowContent from "@/components/window/MSDOSPromptWindowContent.vue";
 import type { WindowContentComponent } from "@/state/windowTypes.ts";
 
 const contentComponentMap: Record<WindowContentComponent, Component> = {
@@ -67,6 +68,7 @@ const contentComponentMap: Record<WindowContentComponent, Component> = {
   EarthWindowContent,
   SocialLinksWindowContent,
   RunWindowContent,
+  MSDOSPromptWindowContent,
 };
 
 const store = useWindowStore();
@@ -76,9 +78,13 @@ const desktopArea = ref<HTMLElement | null>(null);
 const toolbarArea = ref<HTMLElement | null>(null);
 
 function handleDesktopClick(e: MouseEvent) {
-  // Only clear focus if the click is not on an icon
-  if (!(e.target as HTMLElement).closest(".win98-icon")) {
+  // Only clear focus if the click is not on an icon or window
+  if (
+    !(e.target as HTMLElement).closest(".win98-icon") &&
+    !(e.target as HTMLElement).closest(".window")
+  ) {
     store.setFocusedIconId(null);
+    store.setFocusedWindowId(null);
   }
 }
 

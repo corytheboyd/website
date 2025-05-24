@@ -313,8 +313,33 @@ export const useWindowStore = defineStore("windows", {
     },
 
     runCommand(command: string, windowId: string) {
-      // Placeholder: just log for now
-      console.log("runCommand:", command, "from window", windowId);
+      // Command registry: keys are arrays of aliases, value is a function to run
+      const commandRegistry: { aliases: string[]; action: () => void }[] = [
+        {
+          aliases: ["command", "cmd.exe"],
+          action: () => {
+            this.addWindow({
+              name: "MS-DOS Prompt",
+              width: 500,
+              height: 320,
+              resizable: true,
+              position: { x: 60, y: 60 },
+              icon: "/win98icon/windows-0.png", // fallback icon
+              component: "MSDOSPromptWindowContent",
+            });
+          },
+        },
+      ];
+      const input = command.trim().toLowerCase();
+      const found = commandRegistry.find((entry) =>
+        entry.aliases.includes(input),
+      );
+      if (found) {
+        found.action();
+      } else {
+        // Optionally: show error or do nothing
+        // alert('Unknown command: ' + command);
+      }
     },
   },
 });
