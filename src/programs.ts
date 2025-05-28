@@ -28,6 +28,10 @@ export interface ProgramConfig {
   };
   showInToolbar: boolean;
   focusOnOpen: boolean;
+  programArguments?: {
+    src: string;
+    title: string;
+  };
 }
 
 export const programs: ProgramConfig[] = [
@@ -128,7 +132,7 @@ export const programs: ProgramConfig[] = [
     name: "Image Viewer",
     component: "ImageViewerWindowContent",
     window: {
-      icon: "/win98icon/directory_open_file_mydocs-0.png",
+      icon: "/win98icon/image_old_gif-0.png",
       width: 400,
       height: 400,
       resizable: true,
@@ -136,5 +140,31 @@ export const programs: ProgramConfig[] = [
     },
     showInToolbar: true,
     focusOnOpen: true,
+  },
+];
+
+// Central registry for program shortcuts
+export interface ProgramShortcut {
+  id: string;
+  name: string;
+  icon: string;
+  targetProgramId: ProgramId;
+  programArguments?: any;
+  windowArguments?: any;
+}
+
+export const programShortcuts: ProgramShortcut[] = [
+  {
+    id: "four-byte-burger.png",
+    name: "four-byte-burger.png",
+    icon: "/win98icon/image_old_gif-0.png",
+    targetProgramId: "image-viewer",
+    programArguments: {
+      src: "/four-byte-burger.png",
+      title: "four-byte-burger.png",
+    },
+    windowArguments: {
+      title: "four-byte-burger.png",
+    },
   },
 ];

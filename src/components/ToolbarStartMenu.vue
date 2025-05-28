@@ -34,6 +34,7 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 import DividerHorizontal from "@/components/DividerHorizontal.vue";
 import ToolbarStartMenuListItem from "./ToolbarStartMenuListItem.vue";
 import { useWindowStore } from "@/state/store.ts";
+import { programShortcuts } from "@/programs";
 
 defineProps<{ toolbarHeight: number }>();
 const emit = defineEmits(["close"]);
@@ -71,15 +72,17 @@ function openRunWindow() {
   emit("close");
 }
 
+const fourByteBurgerShortcut = programShortcuts.find(
+  (s) => s.id === "four-byte-burger.png",
+);
+const fourByteBurgerProgram = fourByteBurgerShortcut
+  ? store.getProgramById(fourByteBurgerShortcut.targetProgramId)
+  : undefined;
 function openFourByteBurger() {
-  store.openProgram("image-viewer", {
-    programArguments: {
-      src: "/four-byte-burger.png",
-      title: "four-byte-burger.png",
-    },
-    windowArguments: {
-      title: "four-byte-burger.png",
-    },
+  if (!fourByteBurgerShortcut) return;
+  store.openProgram(fourByteBurgerShortcut.targetProgramId, {
+    programArguments: fourByteBurgerShortcut.programArguments,
+    windowArguments: fourByteBurgerShortcut.windowArguments,
   });
   emit("close");
 }
@@ -108,8 +111,8 @@ const menuItems: MenuItem[] = [
     label: "Documents",
     submenu: [
       {
-        icon: "/win98icon/image_old_gif-0.png",
-        label: "four-byte-burger.png",
+        icon: fourByteBurgerProgram?.window?.icon,
+        label: fourByteBurgerShortcut?.name,
         action: openFourByteBurger,
       },
     ],
