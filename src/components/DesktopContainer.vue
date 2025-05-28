@@ -61,6 +61,7 @@ import EarthWindowContent from "@/components/window/EarthWindowContent.vue";
 import SocialLinksWindowContent from "@/components/window/SocialLinksWindowContent.vue";
 import RunWindowContent from "@/components/window/RunWindowContent.vue";
 import MSDOSPromptWindowContent from "@/components/window/MSDOSPromptWindowContent.vue";
+import VirusPopUpContent from "@/components/window/VirusPopUpContent.vue";
 import type { WindowContentComponent } from "@/state/windowTypes.ts";
 
 const contentComponentMap: Record<WindowContentComponent, Component> = {
@@ -69,6 +70,7 @@ const contentComponentMap: Record<WindowContentComponent, Component> = {
   SocialLinksWindowContent,
   RunWindowContent,
   MSDOSPromptWindowContent,
+  VirusPopUpContent,
 };
 
 const store = useWindowStore();

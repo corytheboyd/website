@@ -103,21 +103,6 @@ const currentDir = ref<DirNode[]>([
   fileSystemRoot.dirs[0].dirs[0],
 ]);
 
-function resolveDir(path: string[]): DirNode[] | null {
-  let node = fileSystemRoot;
-  const result: DirNode[] = [node];
-  for (let i = 1; i < path.length; ++i) {
-    const seg = path[i];
-    const found = node.dirs.find(
-      (d) => d.name.toLowerCase() === seg.toLowerCase(),
-    );
-    if (!found) return null;
-    node = found;
-    result.push(node);
-  }
-  return result;
-}
-
 function getCurrentDirNode() {
   return currentDir.value[currentDir.value.length - 1];
 }
@@ -227,6 +212,25 @@ function handleSubmit() {
     },
     chdir: (arg?: string) => {
       commands.cd?.(arg);
+    },
+    "nickleback.exe": () => {
+      const numWindows = 300;
+      for (let i = 0; i < numWindows; ++i) {
+        setTimeout(() => {
+          store.addWindow({
+            name: "VIRUS",
+            width: 220,
+            height: 120,
+            resizable: false,
+            position: {
+              x: Math.floor(Math.random() * 900),
+              y: Math.floor(Math.random() * 600),
+            },
+            icon: "/win98icon/windows-0.png",
+            component: "VirusPopUpContent",
+          });
+        }, i * 5);
+      }
     },
   };
   buffer.value.push(getPrompt() + cmd);
