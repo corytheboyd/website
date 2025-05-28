@@ -1,24 +1,23 @@
 <template>
   <div
-    class="flex h-full w-full flex-col items-center justify-center overflow-hidden bg-pink-200 p-1 text-center"
+    class="flex h-full w-full flex-col items-center justify-center overflow-hidden"
   >
-    <div
-      class="w-full animate-bounce truncate text-base leading-tight font-extrabold text-red-600"
-    >
-      VIRUS ALERT!
-    </div>
-    <div class="mt-1 w-full truncate text-xs leading-tight text-purple-800">
-      Infected by the power of Nickelback!
-    </div>
-    <div class="mt-1 w-full text-xs leading-tight break-words text-yellow-700">
-      Every second you spend here,<br />another window will open.
-    </div>
-    <div class="mt-1 w-full truncate text-[10px] text-gray-500">
-      (This is not a real virus. Or is it?)
-    </div>
+    <img
+      :src="selectedImage"
+      alt="Has Science Gone Too Far?"
+      class="h-full w-full"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-// No logic yet
+import { ref } from "vue";
+
+const images = [
+  "/has-science-gone-too-far-1.png",
+  "/has-science-gone-too-far-2.jpg",
+  "/has-science-gone-too-far-3.png",
+];
+
+const selectedImage = ref(images[Math.floor(Math.random() * images.length)]);
 </script>

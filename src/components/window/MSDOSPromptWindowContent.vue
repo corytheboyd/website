@@ -214,13 +214,13 @@ function handleSubmit() {
       commands.cd?.(arg);
     },
     "nickleback.exe": () => {
-      const numWindows = 300;
+      const numWindows = 30;
       for (let i = 0; i < numWindows; ++i) {
         setTimeout(() => {
           store.addWindow({
             name: "VIRUS",
             width: 220,
-            height: 120,
+            height: 220,
             resizable: false,
             position: {
               x: Math.floor(Math.random() * 900),
@@ -229,7 +229,7 @@ function handleSubmit() {
             icon: "/win98icon/windows-0.png",
             component: "VirusPopUpContent",
           });
-        }, i * 5);
+        }, i * 50);
       }
     },
   };
