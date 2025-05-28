@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
 import { useWindowStore } from "./state/store.ts";
+import { programs } from "./programs";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -11,30 +12,13 @@ app.mount("#app");
 
 const store = useWindowStore();
 
-store.addWindow({
-  name: "Hello World",
-  width: 300,
-  height: 115,
-  resizable: false,
-  position: { x: 10, y: 10 },
-  icon: "/win98icon/file_windows-1.png",
-  component: "WelcomeWindowContent",
+// Initialize desktop icons from program registry
+programs.forEach((program) => {
+  if (program.desktopIcon) {
+    store.addDesktopIcon(program.id);
+  }
 });
 
-store.addDesktopIcon({
-  name: "nickleback.mp3",
-  icon: "/win98icon/wm_file-2.png",
-  component: "WindowsMediaPlayerWindowContent",
-});
-
-store.addDesktopIcon({
-  name: "Earth Spin",
-  icon: "/win98icon/world-0.png",
-  component: "EarthWindowContent",
-});
-
-store.addDesktopIcon({
-  name: "Social Links",
-  icon: "/win98icon/users-0.png",
-  component: "SocialLinksWindowContent",
-});
+// Open specific windows on page load
+store.openProgram("welcome");
+store.openProgram("social-links");

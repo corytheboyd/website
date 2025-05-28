@@ -14,16 +14,17 @@
         v-for="window in windows"
         :key="window.id"
         :id="window.id"
-        :title="window.name"
-        :width="window.width"
-        :height="window.height"
+        :title="getProgramById(window.programId)?.name"
+        :icon="getProgramById(window.programId)?.window?.icon"
+        :width="getProgramById(window.programId)?.window?.width"
+        :height="getProgramById(window.programId)?.window?.height"
         :position="window.position"
         :minWidth="window.minWidth"
         :minHeight="window.minHeight"
         :resizable="window.resizable"
       >
         <component
-          :is="contentComponentMap[window.component]"
+          :is="contentComponentMap[getProgramById(window.programId)?.component]"
           :window-id="window.id"
           v-bind="window.props"
         />
@@ -34,10 +35,11 @@
           v-for="icon in store.desktopIcons"
           :key="icon.id"
           :id="icon.id"
-          :name="icon.name"
-          :icon="icon.icon"
-          :component="icon.component"
+          :name="getProgramById(icon.programId)?.name"
+          :icon="getProgramById(icon.programId)?.desktopIcon?.icon"
+          :component="getProgramById(icon.programId)?.component"
           :isFocused="store.focusedIconId === icon.id"
+          :programId="icon.programId"
           @focus="store.setFocusedIconId"
         />
       </Win98IconContainer>
@@ -64,6 +66,7 @@ import RunWindowContent from "@/components/window/RunWindowContent.vue";
 import VirusPopUpContent from "@/components/window/VirusPopUpContent.vue";
 import WindowsMediaPlayerWindowContent from "@/components/window/WindowsMediaPlayerWindowContent.vue";
 import type { WindowContentComponent } from "@/state/windowTypes.ts";
+import { programs } from "@/programs";
 
 const contentComponentMap: Record<WindowContentComponent, Component> = {
   WelcomeWindowContent,
@@ -73,6 +76,8 @@ const contentComponentMap: Record<WindowContentComponent, Component> = {
   VirusPopUpContent,
   WindowsMediaPlayerWindowContent,
 };
+
+const getProgramById = (id: string) => programs.find((p) => p.id === id);
 
 const store = useWindowStore();
 const windows = computed(() => store.windows.filter((w) => !w.minimized));
@@ -129,15 +134,7 @@ onMounted(() => {
       e.preventDefault();
     } else if (e.key === "r" && store.startMenuOpen) {
       // Open Run window
-      store.addWindow({
-        name: "Run",
-        width: 370,
-        height: 160,
-        resizable: false,
-        position: { x: 40, y: 40 },
-        icon: "/win98icon/application_hourglass-0.png",
-        component: "RunWindowContent",
-      });
+      store.openProgram("run");
       store.setStartMenuOpen(false);
       e.preventDefault();
     } else if (e.key === "Escape" && store.startMenuOpen) {

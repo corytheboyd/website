@@ -1,6 +1,14 @@
 <template>
   <section
-    :class="['window', containerClass, { minimized }]"
+    :class="[
+      'window',
+      containerClass,
+      { minimized },
+      'max-w-full',
+      'max-h-full',
+      'md:max-w-[90vw]',
+      'md:max-h-[90vh]',
+    ]"
     :style="{
       position: 'absolute',
       left: `${position.x}px`,
@@ -32,7 +40,7 @@
       </div>
     </div>
     <div
-      class="window-body h-full"
+      class="window-body h-full overflow-auto"
       :class="bodyClass"
       v-show="!minimized"
       :style="{

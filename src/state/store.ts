@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import type { WindowContentComponent } from "./windowTypes.ts";
+import type { ProgramConfig, ProgramId } from "../programs";
+import { programs } from "../programs";
 
 type Position = {
   x: number;
@@ -9,20 +11,14 @@ type Position = {
 
 type DesktopIcon = {
   id: string;
-  name: string;
-  icon: string;
-  component: WindowContentComponent;
+  programId: ProgramId;
 };
 
 type Window = {
   id: string;
-  name: string;
+  programId: ProgramId;
   minimized: boolean;
-  width: number;
-  height: number;
   position: Position;
-  icon?: string;
-  component: WindowContentComponent;
   minWidth?: number;
   minHeight?: number;
   resizable?: boolean;
@@ -41,11 +37,6 @@ interface WindowState {
   focusedIconId: string | null;
   startMenuOpen: boolean; // Whether the start menu is open
 }
-
-const DEFAULT_WINDOW_SIZE = {
-  width: 800,
-  height: 600,
-};
 
 const DEFAULT_WINDOW_MIN_SIZE = {
   minWidth: 200,
@@ -95,6 +86,12 @@ export const useWindowStore = defineStore("windows", {
       (state) =>
       (id: string): number =>
         state.desktopOrder.indexOf(id),
+
+    getProgramById:
+      () =>
+      (programId: ProgramId): ProgramConfig | undefined => {
+        return programs.find((p) => p.id === programId);
+      },
   },
 
   actions: {
@@ -114,38 +111,20 @@ export const useWindowStore = defineStore("windows", {
       this.focusedIconId = id;
     },
 
-    addWindow(
-      window: Omit<Window, "minimized" | "id"> &
-        Partial<
-          Pick<
-            Window,
-            | "width"
-            | "height"
-            | "position"
-            | "icon"
-            | "minWidth"
-            | "minHeight"
-            | "resizable"
-            | "showInToolbar"
-            | "minimizable"
-            | "focusOnOpen"
-            | "props"
-          >
-        >,
-    ) {
+    openProgram(programId: ProgramId, props?: Record<string, any>) {
+      const program = this.getProgramById(programId);
+      if (!program?.window) return null;
+
       const id = uuidv4();
-      let width = window.width ?? DEFAULT_WINDOW_SIZE.width;
-      let height = window.height ?? DEFAULT_WINDOW_SIZE.height;
-      let position = window.position ?? DEFAULT_WINDOW_POSITION;
-      let minWidth = window.minWidth ?? DEFAULT_WINDOW_MIN_SIZE.minWidth;
-      let minHeight = window.minHeight ?? DEFAULT_WINDOW_MIN_SIZE.minHeight;
+      const window = program.window;
+      let position = window.defaultPosition ?? DEFAULT_WINDOW_POSITION;
+      let minWidth = DEFAULT_WINDOW_MIN_SIZE.minWidth;
+      let minHeight = DEFAULT_WINDOW_MIN_SIZE.minHeight;
       let resizable = window.resizable ?? DEFAULT_WINDOW_OPTIONS.resizable;
-      let showInToolbar =
-        window.showInToolbar ?? DEFAULT_WINDOW_OPTIONS.showInToolbar;
-      let minimizable =
-        window.minimizable ?? DEFAULT_WINDOW_OPTIONS.minimizable;
-      let focusOnOpen =
-        window.focusOnOpen ?? DEFAULT_WINDOW_OPTIONS.focusOnOpen;
+      let showInToolbar = DEFAULT_WINDOW_OPTIONS.showInToolbar;
+      let minimizable = DEFAULT_WINDOW_OPTIONS.minimizable;
+      let focusOnOpen = DEFAULT_WINDOW_OPTIONS.focusOnOpen;
+
       // Try to get desktop width and height from DOM
       let desktopRect =
         typeof window !== "undefined" && (window as any).__desktopArea?.value
@@ -154,41 +133,39 @@ export const useWindowStore = defineStore("windows", {
       if (desktopRect !== undefined) {
         const BORDER_BUFFER = 12;
         // Clamp width and x
-        if (width > desktopRect.width) {
-          width = desktopRect.width - BORDER_BUFFER;
+        if (window.width > desktopRect.width) {
+          window.width = desktopRect.width - BORDER_BUFFER;
           position.x = 0;
         } else {
           position.x = Math.max(
             0,
-            Math.min(position.x, desktopRect.width - width),
+            Math.min(position.x, desktopRect.width - window.width),
           );
         }
         // Clamp height and y
-        if (height > desktopRect.height) {
-          height = desktopRect.height - BORDER_BUFFER;
+        if (window.height > desktopRect.height) {
+          window.height = desktopRect.height - BORDER_BUFFER;
           position.y = 0;
         } else {
           position.y = Math.max(
             0,
-            Math.min(position.y, desktopRect.height - height),
+            Math.min(position.y, desktopRect.height - window.height),
           );
         }
       }
+
       this.windows.push({
-        ...window,
         id,
+        programId,
         minimized: false,
-        width,
-        height,
         position,
-        icon: window.icon,
         minWidth,
         minHeight,
         resizable,
         showInToolbar,
         minimizable,
         focusOnOpen,
-        props: window.props,
+        props,
       });
 
       // Add to end of taskbar only if showInToolbar is true
@@ -201,7 +178,7 @@ export const useWindowStore = defineStore("windows", {
       if (focusOnOpen) {
         this.setFocusedWindowId(id);
       }
-      return id; // Return the generated ID
+      return id;
     },
 
     minimizeWindow(id: string) {
@@ -240,14 +217,6 @@ export const useWindowStore = defineStore("windows", {
       }
     },
 
-    setWindowSize(id: string, size: { width: number; height: number }) {
-      const window = this.getWindow(id);
-      if (window) {
-        window.width = size.width;
-        window.height = size.height;
-      }
-    },
-
     moveWindow(id: string, delta: Position) {
       const window = this.getWindow(id);
       if (window) {
@@ -281,8 +250,11 @@ export const useWindowStore = defineStore("windows", {
       if (!desktopRect) return;
       const BORDER_BUFFER = 12;
       this.windows.forEach((win) => {
-        let width = win.width;
-        let height = win.height;
+        const program = this.getProgramById(win.programId);
+        if (!program?.window) return;
+
+        let width = program.window.width;
+        let height = program.window.height;
         let position = { ...win.position };
         // Clamp width and x
         if (width > desktopRect.width) {
@@ -305,18 +277,18 @@ export const useWindowStore = defineStore("windows", {
             Math.min(position.y, availableHeight - height),
           );
         }
-        win.width = width;
-        win.height = height;
         win.position = position;
       });
     },
 
-    addDesktopIcon(icon: Omit<DesktopIcon, "id">) {
-      const id = uuidv4();
+    addDesktopIcon(programId: ProgramId) {
+      const program = this.getProgramById(programId);
+      if (!program?.desktopIcon) return null;
 
+      const id = uuidv4();
       this.desktopIcons.push({
-        ...icon,
         id,
+        programId,
       });
       return id;
     },
@@ -347,21 +319,8 @@ export const useWindowStore = defineStore("windows", {
           const numWindows = 20;
           for (let i = 0; i < numWindows; ++i) {
             setTimeout(() => {
-              this.addWindow({
-                name: "VIRUS",
-                width: 220,
-                height: 220,
-                resizable: false,
-                minimizable: false,
-                showInToolbar: false,
-                position: {
-                  x: Math.floor(Math.random() * 900),
-                  y: Math.floor(Math.random() * 600),
-                },
-                icon: "/win98icon/windows-0.png",
-                component: "VirusPopUpContent",
+              this.openProgram("virus", {
                 // No props: let the component randomize the image
-                focusOnOpen: false,
               });
             }, i * 50);
           }
@@ -370,9 +329,6 @@ export const useWindowStore = defineStore("windows", {
       const [prog, ...args] = command.trim().split(/\s+/);
       if (programs[prog.toLowerCase()]) {
         programs[prog.toLowerCase()](args.join(" "));
-      } else {
-        // Optionally: show error or do nothing
-        // alert('Unknown command: ' + command);
       }
     },
   },

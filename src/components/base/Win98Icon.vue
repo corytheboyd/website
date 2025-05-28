@@ -40,6 +40,7 @@ interface Props {
   icon: string;
   component: WindowContentComponent;
   isFocused?: boolean;
+  programId?: string;
 }
 
 const props = defineProps<Props>();
@@ -59,16 +60,9 @@ const handleFocus = () => {
 };
 
 const openWindow = () => {
-  store.addWindow({
-    name: props.name,
-    width: 400,
-    height: 255,
-    minHeight: 175,
-    minWidth: 200,
-    position: { x: 150, y: 150 },
-    component: props.component,
-  });
-  // emit("focus", props.id);
+  if (props.programId) {
+    store.openProgram(props.programId);
+  }
 };
 
 const handleDoubleClick = () => {
