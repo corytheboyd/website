@@ -15,7 +15,10 @@
       class="w-3.5"
     />
     <span class="min-w-4 truncate pl-1 overflow-ellipsis whitespace-nowrap">
-      {{ getProgramById(getWindow(windowId)?.programId)?.name }}
+      {{
+        getWindow(windowId)?.props?.windowArguments?.title ||
+        getProgramById(getWindow(windowId)?.programId)?.name
+      }}
     </span>
   </button>
 </template>

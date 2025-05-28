@@ -14,6 +14,7 @@ declare module 'vue' {
     DividerVertical: typeof import('./src/components/DividerVertical.vue')['default']
     EarthScene: typeof import('./src/components/custom/EarthScene.vue')['default']
     EarthWindowContent: typeof import('./src/components/window/EarthWindowContent.vue')['default']
+    ImageViewerWindowContent: typeof import('./src/components/window/ImageViewerWindowContent.vue')['default']
     'ITablerBrand-': typeof import('~icons/tabler/brand-')['default']
     ITablerBrandBluesky: typeof import('~icons/tabler/brand-bluesky')['default']
     ITablerBrandGithub: typeof import('~icons/tabler/brand-github')['default']

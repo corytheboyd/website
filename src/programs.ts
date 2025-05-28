@@ -7,6 +7,7 @@ export const PROGRAM_IDS = [
   "social-links",
   "virus",
   "run",
+  "image-viewer",
 ] as const;
 
 export type ProgramId = (typeof PROGRAM_IDS)[number];
@@ -121,5 +122,19 @@ export const programs: ProgramConfig[] = [
     },
     showInToolbar: true,
     focusOnOpen: false,
+  },
+  {
+    id: "image-viewer",
+    name: "Image Viewer",
+    component: "ImageViewerWindowContent",
+    window: {
+      icon: "/win98icon/directory_open_file_mydocs-0.png",
+      width: 400,
+      height: 400,
+      resizable: true,
+      defaultPosition: { x: 60, y: 60 },
+    },
+    showInToolbar: true,
+    focusOnOpen: true,
   },
 ];

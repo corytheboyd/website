@@ -14,7 +14,10 @@
         v-for="window in windows"
         :key="window.id"
         :id="window.id"
-        :title="getProgramById(window.programId)?.name"
+        :title="
+          window.props?.windowArguments?.title ||
+          getProgramById(window.programId)?.name
+        "
         :icon="getProgramById(window.programId)?.window?.icon"
       >
         <component
@@ -59,6 +62,7 @@ import SocialLinksWindowContent from "@/components/window/SocialLinksWindowConte
 import RunWindowContent from "@/components/window/RunWindowContent.vue";
 import VirusPopUpContent from "@/components/window/VirusPopUpContent.vue";
 import WindowsMediaPlayerWindowContent from "@/components/window/WindowsMediaPlayerWindowContent.vue";
+import ImageViewerWindowContent from "@/components/window/ImageViewerWindowContent.vue";
 import type { WindowContentComponent } from "@/state/windowTypes.ts";
 import { programs } from "@/programs";
 
@@ -69,6 +73,7 @@ const contentComponentMap: Record<WindowContentComponent, Component> = {
   RunWindowContent,
   VirusPopUpContent,
   WindowsMediaPlayerWindowContent,
+  ImageViewerWindowContent,
 };
 
 const getProgramById = (id: string) => programs.find((p) => p.id === id);

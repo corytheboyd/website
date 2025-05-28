@@ -71,6 +71,19 @@ function openRunWindow() {
   emit("close");
 }
 
+function openFourByteBurger() {
+  store.openProgram("image-viewer", {
+    programArguments: {
+      src: "/four-byte-burger.png",
+      title: "four-byte-burger.png",
+    },
+    windowArguments: {
+      title: "four-byte-burger.png",
+    },
+  });
+  emit("close");
+}
+
 const menuItems: MenuItem[] = [
   {
     icon: "/win98icon/directory_favorites-0.png",
@@ -95,14 +108,9 @@ const menuItems: MenuItem[] = [
     label: "Documents",
     submenu: [
       {
-        icon: "/win98icon/directory_open_file_mydocs-0.png",
-        label: "Recent Documents",
-        submenu: [
-          {
-            icon: "/win98icon/directory_open_file_mydocs-0.png",
-            label: "My Documents",
-          },
-        ],
+        icon: "/win98icon/image_old_gif-0.png",
+        label: "four-byte-burger.png",
+        action: openFourByteBurger,
       },
     ],
   },

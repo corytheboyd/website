@@ -14,6 +14,18 @@ type DesktopIcon = {
   programId: ProgramId;
 };
 
+// Define argument types for each program
+export interface ImageViewerProgramArguments {
+  src: string;
+  title: string;
+}
+
+export type ProgramArgumentsMap = {
+  "image-viewer": ImageViewerProgramArguments;
+  // Add other program argument types here as needed
+  [key: string]: any;
+};
+
 type Window = {
   id: string;
   programId: ProgramId;
@@ -21,7 +33,11 @@ type Window = {
   position: Position;
   width: number;
   height: number;
-  props?: Record<string, any>;
+  props?: {
+    programArguments?: ProgramArgumentsMap[ProgramId];
+    windowArguments?: Partial<ProgramConfig["window"]> & { title?: string };
+    [key: string]: any;
+  };
 };
 
 interface WindowState {
@@ -102,14 +118,22 @@ export const useWindowStore = defineStore("windows", {
       this.focusedIconId = id;
     },
 
-    openProgram(programId: ProgramId, props?: Record<string, any>) {
+    openProgram<T extends ProgramId>(
+      programId: T,
+      options?: {
+        programArguments?: ProgramArgumentsMap[T];
+        windowArguments?: Partial<ProgramConfig["window"]> & { title?: string };
+        position?: Position;
+        [key: string]: any;
+      },
+    ) {
       const program = this.getProgramById(programId);
       if (!program?.window) return null;
 
       const id = uuidv4();
       const window = program.window;
       let position =
-        props?.position ?? window.defaultPosition ?? DEFAULT_WINDOW_POSITION;
+        options?.position ?? window.defaultPosition ?? DEFAULT_WINDOW_POSITION;
       let width = window.width;
       let height = window.height;
 
@@ -149,7 +173,7 @@ export const useWindowStore = defineStore("windows", {
         position,
         width,
         height,
-        props,
+        props: options,
       });
 
       // Add to end of taskbar only if showInToolbar is true
