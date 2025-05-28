@@ -9,20 +9,21 @@
     @click="focusWindow(windowId)"
   >
     <img
-      v-if="getWindow(windowId)?.icon"
-      :src="getWindow(windowId)?.icon"
-      :alt="getWindow(windowId)?.name"
+      v-if="getProgramById(getWindow(windowId)?.programId)?.window?.icon"
+      :src="getProgramById(getWindow(windowId)?.programId)?.window?.icon"
+      :alt="getProgramById(getWindow(windowId)?.programId)?.name"
       class="w-3.5"
     />
-    <span class="min-w-4 truncate pl-1 overflow-ellipsis whitespace-nowrap">{{
-      getWindow(windowId)?.name
-    }}</span>
+    <span class="min-w-4 truncate pl-1 overflow-ellipsis whitespace-nowrap">
+      {{ getProgramById(getWindow(windowId)?.programId)?.name }}
+    </span>
   </button>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
 import { useWindowStore } from "@/state/store.ts";
+import { programs } from "@/programs";
 
 const props = defineProps<{
   windowId: string;
@@ -35,6 +36,9 @@ const focusedWindowId = computed(() => {
 });
 
 const getWindow = (id: string) => store.getWindow(id);
+
+const getProgramById = (programId: string) =>
+  programs.find((p) => p.id === programId);
 
 const focusWindow = (id: string) => {
   const window = getWindow(id);
