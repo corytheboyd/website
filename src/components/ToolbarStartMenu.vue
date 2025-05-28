@@ -67,14 +67,7 @@ interface MenuItem {
 const store = useWindowStore();
 
 function openRunWindow() {
-  store.addWindow({
-    name: "Run",
-    width: 370,
-    height: 160,
-    resizable: false,
-    position: { x: 40, y: 40 },
-    component: "RunWindowContent",
-  });
+  store.openProgram("run");
   emit("close");
 }
 

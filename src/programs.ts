@@ -6,6 +6,7 @@ export const PROGRAM_IDS = [
   "earth",
   "social-links",
   "virus",
+  "run",
 ] as const;
 
 export type ProgramId = (typeof PROGRAM_IDS)[number];
@@ -79,6 +80,18 @@ export const programs: ProgramConfig[] = [
     },
     desktopIcon: {
       icon: "/win98icon/users-0.png",
+    },
+  },
+  {
+    id: "run",
+    name: "Run",
+    component: "RunWindowContent",
+    window: {
+      icon: "/win98icon/application_hourglass-0.png",
+      width: 370,
+      height: 160,
+      resizable: false,
+      defaultPosition: { x: 40, y: 40 },
     },
   },
 ];
