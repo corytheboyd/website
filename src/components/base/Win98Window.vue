@@ -264,20 +264,21 @@ const startDragCommon = (clientX: number, clientY: number) => {
 const handleDragMove = (clientX: number, clientY: number) => {
   if (!isDragging.value) return;
 
+  // Use current window size from store
+  const win = store.getWindow(props.id);
+  const winWidth = win?.width ?? props.width;
+  const winHeight = win?.height ?? props.height;
+
   // Calculate new position with bounds checking
+  const maxX = desktopBounds.value.width - winWidth;
+  const maxY = desktopBounds.value.height - winHeight;
   const newX = Math.max(
     0,
-    Math.min(
-      clientX - dragStart.value.x - desktopBounds.value.left,
-      desktopBounds.value.width - props.width,
-    ),
+    Math.min(clientX - dragStart.value.x - desktopBounds.value.left, maxX),
   );
   const newY = Math.max(
     0,
-    Math.min(
-      clientY - dragStart.value.y - desktopBounds.value.top,
-      desktopBounds.value.height - (minimized.value ? 0 : props.height),
-    ),
+    Math.min(clientY - dragStart.value.y - desktopBounds.value.top, maxY),
   );
 
   store.setWindowPosition(props.id, {

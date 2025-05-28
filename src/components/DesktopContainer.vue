@@ -16,12 +16,6 @@
         :id="window.id"
         :title="getProgramById(window.programId)?.name"
         :icon="getProgramById(window.programId)?.window?.icon"
-        :width="getProgramById(window.programId)?.window?.width"
-        :height="getProgramById(window.programId)?.window?.height"
-        :position="window.position"
-        :minWidth="window.minWidth"
-        :minHeight="window.minHeight"
-        :resizable="window.resizable"
       >
         <component
           :is="contentComponentMap[getProgramById(window.programId)?.component]"

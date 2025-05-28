@@ -25,6 +25,8 @@ type Window = {
   showInToolbar?: boolean;
   minimizable?: boolean;
   focusOnOpen?: boolean;
+  width: number;
+  height: number;
   props?: Record<string, any>;
 };
 
@@ -124,6 +126,8 @@ export const useWindowStore = defineStore("windows", {
       let showInToolbar = DEFAULT_WINDOW_OPTIONS.showInToolbar;
       let minimizable = DEFAULT_WINDOW_OPTIONS.minimizable;
       let focusOnOpen = DEFAULT_WINDOW_OPTIONS.focusOnOpen;
+      let width = window.width;
+      let height = window.height;
 
       // Try to get desktop width and height from DOM
       let desktopRect =
@@ -133,23 +137,23 @@ export const useWindowStore = defineStore("windows", {
       if (desktopRect !== undefined) {
         const BORDER_BUFFER = 12;
         // Clamp width and x
-        if (window.width > desktopRect.width) {
-          window.width = desktopRect.width - BORDER_BUFFER;
+        if (width > desktopRect.width) {
+          width = desktopRect.width - BORDER_BUFFER;
           position.x = 0;
         } else {
           position.x = Math.max(
             0,
-            Math.min(position.x, desktopRect.width - window.width),
+            Math.min(position.x, desktopRect.width - width),
           );
         }
         // Clamp height and y
-        if (window.height > desktopRect.height) {
-          window.height = desktopRect.height - BORDER_BUFFER;
+        if (height > desktopRect.height) {
+          height = desktopRect.height - BORDER_BUFFER;
           position.y = 0;
         } else {
           position.y = Math.max(
             0,
-            Math.min(position.y, desktopRect.height - window.height),
+            Math.min(position.y, desktopRect.height - height),
           );
         }
       }
@@ -165,6 +169,8 @@ export const useWindowStore = defineStore("windows", {
         showInToolbar,
         minimizable,
         focusOnOpen,
+        width,
+        height,
         props,
       });
 
