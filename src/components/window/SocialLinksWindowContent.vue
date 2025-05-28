@@ -14,9 +14,9 @@
           <a
             href="https://ruby.social/@corytheboyd"
             target="_blank"
-            class="flex items-center gap-1 rounded-tl-xl rounded-bl-xl bg-gradient-to-r from-red-300 from-10% via-red-200 via-50% to-red-300/0 to-100% p-2 text-right transition hover:underline"
+            class="social-link from-red-300 via-red-200 to-red-300/0"
           >
-            <i-tabler-brand-mastodon class="h-5 w-5 text-red-800" />
+            <i-tabler-brand-mastodon class="social-link-icon text-red-800" />
             <span>https://ruby.social/@corytheboyd</span>
           </a>
         </li>
@@ -25,10 +25,23 @@
           <a
             href="https://bsky.app/profile/corytheboyd.com"
             target="_blank"
-            class="flex items-center gap-1 rounded-tl-xl rounded-bl-xl bg-gradient-to-r from-blue-300 from-10% via-blue-200 via-50% to-blue-300/0 to-100% p-2 text-right transition hover:underline"
+            class="social-link from-blue-300 via-blue-200 to-blue-300/0"
           >
-            <i-tabler-brand-bluesky class="h-5 w-5 text-blue-800" />
+            <i-tabler-brand-bluesky class="social-link-icon text-blue-800" />
             <span>https://bsky.app/profile/corytheboyd.com</span>
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="https://soundcloud.com/corytheboyd"
+            target="_blank"
+            class="social-link from-orange-300 via-orange-200 to-orange-300/0"
+          >
+            <i-tabler-brand-soundcloud
+              class="social-link-icon text-orange-800"
+            />
+            <span>https://soundcloud.com/corytheboyd</span>
           </a>
         </li>
       </ul>
@@ -38,11 +51,13 @@
 
 <style>
 @reference "tailwindcss";
-.link-item {
-  @apply flex h-8 items-center justify-center gap-1 rounded-full shadow;
+
+.social-link {
+  @apply flex items-center gap-1 rounded-tl-xl rounded-bl-xl bg-gradient-to-r p-2 text-right transition hover:underline;
 }
 
-.link-item-icon {
+.social-link-icon {
+  @apply h-5 w-5;
 }
 </style>
 <script setup lang="ts"></script>

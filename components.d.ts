@@ -17,6 +17,7 @@ declare module 'vue' {
     'ITablerBrand-': typeof import('~icons/tabler/brand-')['default']
     ITablerBrandBluesky: typeof import('~icons/tabler/brand-bluesky')['default']
     ITablerBrandMastodon: typeof import('~icons/tabler/brand-mastodon')['default']
+    ITablerBrandSoundcloud: typeof import('~icons/tabler/brand-soundcloud')['default']
     ITablerLink: typeof import('~icons/tabler/link')['default']
     ITablerPlayerPauseFilled: typeof import('~icons/tabler/player-pause-filled')['default']
     ITablerPlayerPlayFilled: typeof import('~icons/tabler/player-play-filled')['default']
