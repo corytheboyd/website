@@ -25,6 +25,8 @@ export interface ProgramConfig {
   desktopIcon?: {
     icon: string;
   };
+  showInToolbar: boolean;
+  focusOnOpen: boolean;
 }
 
 export const programs: ProgramConfig[] = [
@@ -39,6 +41,8 @@ export const programs: ProgramConfig[] = [
       resizable: false,
       defaultPosition: { x: 10, y: 10 },
     },
+    showInToolbar: true,
+    focusOnOpen: true,
   },
   {
     id: "media-player",
@@ -54,6 +58,8 @@ export const programs: ProgramConfig[] = [
     desktopIcon: {
       icon: "/win98icon/wm_file-2.png",
     },
+    showInToolbar: true,
+    focusOnOpen: true,
   },
   {
     id: "earth",
@@ -69,6 +75,8 @@ export const programs: ProgramConfig[] = [
     desktopIcon: {
       icon: "/win98icon/world-0.png",
     },
+    showInToolbar: true,
+    focusOnOpen: true,
   },
   {
     id: "social-links",
@@ -84,6 +92,8 @@ export const programs: ProgramConfig[] = [
     desktopIcon: {
       icon: "/win98icon/users-0.png",
     },
+    showInToolbar: true,
+    focusOnOpen: true,
   },
   {
     id: "run",
@@ -96,5 +106,20 @@ export const programs: ProgramConfig[] = [
       resizable: false,
       defaultPosition: { x: 40, y: 40 },
     },
+    showInToolbar: true,
+    focusOnOpen: true,
+  },
+  {
+    id: "virus",
+    name: "Has Science Gone Too Far?",
+    component: "VirusPopUpContent",
+    window: {
+      icon: "/win98icon/application_hourglass-0.png",
+      width: 400,
+      height: 300,
+      resizable: true,
+    },
+    showInToolbar: true,
+    focusOnOpen: false,
   },
 ];

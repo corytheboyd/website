@@ -4,7 +4,7 @@
       <img src="/win98icon/users-2.png" />
       <p>
         These are links to various external profiles of mine. I didn't build
-        these myself, so don't expect them to be very good.
+        these websites myself, so don't expect them to be very good.
       </p>
     </section>
 

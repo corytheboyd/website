@@ -108,7 +108,8 @@ export const useWindowStore = defineStore("windows", {
 
       const id = uuidv4();
       const window = program.window;
-      let position = window.defaultPosition ?? DEFAULT_WINDOW_POSITION;
+      let position =
+        props?.position ?? window.defaultPosition ?? DEFAULT_WINDOW_POSITION;
       let width = window.width;
       let height = window.height;
 
@@ -157,8 +158,8 @@ export const useWindowStore = defineStore("windows", {
       }
       // Add to end of desktop order
       this.desktopOrder.push(id);
-      // Set focus to the new window only if focusOnOpen is true
-      if (program.focusOnOpen) {
+      // Set focus to the new window unless focusOnOpen is explicitly false
+      if (program.focusOnOpen !== false) {
         this.setFocusedWindowId(id);
       }
       return id;
@@ -302,8 +303,23 @@ export const useWindowStore = defineStore("windows", {
           const numWindows = 20;
           for (let i = 0; i < numWindows; ++i) {
             setTimeout(() => {
+              // Get desktop bounds for random positioning
+              const desktopRect =
+                typeof window !== "undefined" &&
+                (window as any).__desktopArea?.value
+                  ? (window as any).__desktopArea.value.getBoundingClientRect()
+                  : undefined;
+
+              // Generate random position within desktop bounds
+              const position = desktopRect
+                ? {
+                    x: Math.floor(Math.random() * (desktopRect.width - 400)), // Subtract window width
+                    y: Math.floor(Math.random() * (desktopRect.height - 300)), // Subtract window height
+                  }
+                : { x: 0, y: 0 };
+
               this.openProgram("virus", {
-                // No props: let the component randomize the image
+                position, // Pass the random position as a prop
               });
             }, i * 50);
           }
