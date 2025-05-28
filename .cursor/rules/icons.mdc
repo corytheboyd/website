@@ -1,0 +1,12 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+Do not custom build icons with SVG. Use icons from tabler: https://tabler.io/icons
+
+When using an icon, do not add imports, instead, use markup per this format:
+
+```jsx
+<i-tabler-{name}>
+```

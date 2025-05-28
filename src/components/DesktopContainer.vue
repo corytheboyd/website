@@ -62,6 +62,7 @@ import SocialLinksWindowContent from "@/components/window/SocialLinksWindowConte
 import RunWindowContent from "@/components/window/RunWindowContent.vue";
 import MSDOSPromptWindowContent from "@/components/window/MSDOSPromptWindowContent.vue";
 import VirusPopUpContent from "@/components/window/VirusPopUpContent.vue";
+import WindowsMediaPlayerWindowContent from "@/components/window/WindowsMediaPlayerWindowContent.vue";
 import type { WindowContentComponent } from "@/state/windowTypes.ts";
 
 const contentComponentMap: Record<WindowContentComponent, Component> = {
@@ -71,6 +72,7 @@ const contentComponentMap: Record<WindowContentComponent, Component> = {
   RunWindowContent,
   MSDOSPromptWindowContent,
   VirusPopUpContent,
+  WindowsMediaPlayerWindowContent,
 };
 
 const store = useWindowStore();

@@ -22,6 +22,12 @@ store.addWindow({
 });
 
 store.addDesktopIcon({
+  name: "nickleback.mp3",
+  icon: "/win98icon/wm_file-2.png",
+  component: "WindowsMediaPlayerWindowContent",
+});
+
+store.addDesktopIcon({
   name: "Earth Spin",
   icon: "/win98icon/world-0.png",
   component: "EarthWindowContent",

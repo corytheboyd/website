@@ -5,6 +5,7 @@ export const windowContentComponentNames = [
   "RunWindowContent",
   "MSDOSPromptWindowContent",
   "VirusPopUpContent",
+  "WindowsMediaPlayerWindowContent",
 ] as const;
 
 export type WindowContentComponent =

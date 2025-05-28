@@ -34,7 +34,7 @@ import { useWindowStore } from "@/state/store.ts";
 
 const props = defineProps<{ windowId: string }>();
 const store = useWindowStore();
-const command = ref("");
+const command = ref("command");
 
 function handleCancel() {
   store.closeWindow(props.windowId);

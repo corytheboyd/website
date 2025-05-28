@@ -26,6 +26,9 @@ type Window = {
   minWidth?: number;
   minHeight?: number;
   resizable?: boolean;
+  showInToolbar?: boolean;
+  minimizable?: boolean;
+  focusOnOpen?: boolean;
 };
 
 interface WindowState {
@@ -55,6 +58,9 @@ const DEFAULT_WINDOW_POSITION = {
 
 const DEFAULT_WINDOW_OPTIONS = {
   resizable: true,
+  showInToolbar: true,
+  minimizable: true,
+  focusOnOpen: true,
 };
 
 export const useWindowStore = defineStore("windows", {
@@ -119,6 +125,9 @@ export const useWindowStore = defineStore("windows", {
             | "minWidth"
             | "minHeight"
             | "resizable"
+            | "showInToolbar"
+            | "minimizable"
+            | "focusOnOpen"
           >
         >,
     ) {
@@ -129,6 +138,12 @@ export const useWindowStore = defineStore("windows", {
       let minWidth = window.minWidth ?? DEFAULT_WINDOW_MIN_SIZE.minWidth;
       let minHeight = window.minHeight ?? DEFAULT_WINDOW_MIN_SIZE.minHeight;
       let resizable = window.resizable ?? DEFAULT_WINDOW_OPTIONS.resizable;
+      let showInToolbar =
+        window.showInToolbar ?? DEFAULT_WINDOW_OPTIONS.showInToolbar;
+      let minimizable =
+        window.minimizable ?? DEFAULT_WINDOW_OPTIONS.minimizable;
+      let focusOnOpen =
+        window.focusOnOpen ?? DEFAULT_WINDOW_OPTIONS.focusOnOpen;
       // Try to get desktop width and height from DOM
       let desktopRect =
         typeof window !== "undefined" && (window as any).__desktopArea?.value
@@ -168,14 +183,21 @@ export const useWindowStore = defineStore("windows", {
         minWidth,
         minHeight,
         resizable,
+        showInToolbar,
+        minimizable,
+        focusOnOpen,
       });
 
-      // Add to end of taskbar
-      this.taskbarOrder.push(id);
+      // Add to end of taskbar only if showInToolbar is true
+      if (showInToolbar) {
+        this.taskbarOrder.push(id);
+      }
       // Add to end of desktop order
       this.desktopOrder.push(id);
-      // Set focus to the new window
-      this.setFocusedWindowId(id);
+      // Set focus to the new window only if focusOnOpen is true
+      if (focusOnOpen) {
+        this.setFocusedWindowId(id);
+      }
       return id; // Return the generated ID
     },
 
@@ -327,6 +349,12 @@ export const useWindowStore = defineStore("windows", {
               icon: "/win98icon/windows-0.png", // fallback icon
               component: "MSDOSPromptWindowContent",
             });
+          },
+        },
+        {
+          aliases: ["exit"],
+          action: () => {
+            this.closeWindow(windowId);
           },
         },
       ];

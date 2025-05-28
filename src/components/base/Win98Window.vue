@@ -7,7 +7,9 @@
       top: `${position.y}px`,
       width: `${width}px`,
       height: minimized ? 'auto' : `${height}px`,
-      zIndex: windowIndex + Z_INDEX_OFFSET,
+      zIndex: isFocused
+        ? FOCUSED_Z_INDEX_OFFSET + windowIndex
+        : windowIndex + Z_INDEX_OFFSET,
     }"
     @mousedown="handleFocus"
   >
@@ -21,7 +23,11 @@
         <span>{{ title }}</span>
       </div>
       <div class="title-bar-controls">
-        <button aria-label="Minimize" @click="handleMinimize"></button>
+        <button
+          v-if="isMinimizable"
+          aria-label="Minimize"
+          @click="handleMinimize"
+        ></button>
         <button aria-label="Close" @click="handleClose"></button>
       </div>
     </div>
@@ -84,6 +90,7 @@ import { computed, onMounted, onUnmounted, ref, provide } from "vue";
 import { useWindowStore } from "@/state/store.ts";
 
 const Z_INDEX_OFFSET = 100;
+const FOCUSED_Z_INDEX_OFFSET = 1000; // Higher offset for focused windows
 const MIN_WIDTH = 200;
 const MIN_HEIGHT = 100;
 
@@ -99,6 +106,7 @@ interface Props {
   minWidth?: number;
   minHeight?: number;
   resizable?: boolean;
+  minimizable?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -111,6 +119,7 @@ const props = withDefaults(defineProps<Props>(), {
   minWidth: MIN_WIDTH,
   minHeight: MIN_HEIGHT,
   resizable: true,
+  minimizable: true,
 });
 
 const store = useWindowStore();
@@ -150,6 +159,11 @@ const width = computed(() => {
 const height = computed(() => {
   const window = store.getWindow(props.id);
   return window?.height ?? props.height;
+});
+
+const isMinimizable = computed(() => {
+  const window = store.getWindow(props.id);
+  return window?.minimizable ?? props.minimizable;
 });
 
 onMounted(() => {

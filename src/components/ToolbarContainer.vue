@@ -39,7 +39,12 @@ import ToolbarInfo from "@/components/ToolbarInfo.vue";
 import ToolbarStartMenu from "@/components/ToolbarStartMenu.vue";
 
 const store = useWindowStore();
-const openWindowIds = computed(() => store.taskbarOrder);
+const openWindowIds = computed(() =>
+  store.taskbarOrder.filter((id) => {
+    const window = store.getWindow(id);
+    return window?.showInToolbar !== false;
+  }),
+);
 
 const toolbarRef = ref<HTMLElement | null>(null);
 const toolbarHeight = ref(40);

@@ -176,7 +176,7 @@ let historyIndex = ref<number | null>(null);
 
 const isFocused = computed(() => store.focusedWindowId === props.windowId);
 
-const COMMANDS = ["cls", "clrscr", "dir", "cd", "chdir"];
+const COMMANDS = ["cls", "clrscr", "dir", "cd", "chdir", "exit"];
 
 function trimBuffer() {
   if (buffer.value.length > MAX_REPL_LINES) {
@@ -213,6 +213,9 @@ function handleSubmit() {
     chdir: (arg?: string) => {
       commands.cd?.(arg);
     },
+    exit: () => {
+      store.closeWindow(props.windowId);
+    },
     "nickleback.exe": () => {
       const numWindows = 30;
       for (let i = 0; i < numWindows; ++i) {
@@ -228,6 +231,9 @@ function handleSubmit() {
             },
             icon: "/win98icon/windows-0.png",
             component: "VirusPopUpContent",
+            showInToolbar: false,
+            minimizable: false,
+            focusOnOpen: false,
           });
         }, i * 50);
       }
