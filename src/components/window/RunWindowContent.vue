@@ -2,7 +2,7 @@
   <form class="flex flex-col gap-3 p-3" @submit.prevent="handleSubmit">
     <section class="flex space-x-4">
       <img src="/win98icon/application_hourglass-0.png" />
-      <p class="mb-1 text-xs">
+      <p class="mb-1">
         Type the name of a program, folder, document, or Internet resource, and
         Windows will open it for you.
       </p>

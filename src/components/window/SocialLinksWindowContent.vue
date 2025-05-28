@@ -14,11 +14,11 @@
         </li>
         <li>
           <a
-            href="https://bsky.app/profile/corytheboyd.bsky.social"
+            href="https://bsky.app/profile/corytheboyd.com"
             target="_blank"
             class="text-blue-600 hover:underline"
           >
-            https://bsky.app/profile/corytheboyd.bsky.social
+            https://bsky.app/profile/corytheboyd.com
           </a>
         </li>
       </ul>

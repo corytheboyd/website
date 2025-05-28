@@ -123,7 +123,6 @@ const menuItems: MenuItem[] = [
     ],
   },
   { type: "divider" },
-  { icon: "/win98icon/help_book_cool-4.png", label: "Help" },
   {
     icon: "/win98icon/application_hourglass-0.png",
     label: "Run...",
