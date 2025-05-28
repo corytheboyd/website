@@ -1,7 +1,7 @@
 <template>
   <div
     ref="menuRef"
-    class="window absolute left-0 z-50 flex w-48"
+    class="window absolute left-0 z-[10001] flex w-48"
     :style="{ bottom: `${toolbarHeight}px`, marginLeft: '2px' }"
   >
     <!-- BLUE BAR -->

@@ -3,7 +3,6 @@ export const windowContentComponentNames = [
   "EarthWindowContent",
   "SocialLinksWindowContent",
   "RunWindowContent",
-  "MSDOSPromptWindowContent",
   "VirusPopUpContent",
   "WindowsMediaPlayerWindowContent",
 ] as const;

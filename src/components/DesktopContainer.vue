@@ -25,6 +25,7 @@
         <component
           :is="contentComponentMap[window.component]"
           :window-id="window.id"
+          v-bind="window.props"
         />
       </Win98Window>
 
@@ -60,7 +61,6 @@ import WelcomeWindowContent from "@/components/window/WelcomeWindowContent.vue";
 import EarthWindowContent from "@/components/window/EarthWindowContent.vue";
 import SocialLinksWindowContent from "@/components/window/SocialLinksWindowContent.vue";
 import RunWindowContent from "@/components/window/RunWindowContent.vue";
-import MSDOSPromptWindowContent from "@/components/window/MSDOSPromptWindowContent.vue";
 import VirusPopUpContent from "@/components/window/VirusPopUpContent.vue";
 import WindowsMediaPlayerWindowContent from "@/components/window/WindowsMediaPlayerWindowContent.vue";
 import type { WindowContentComponent } from "@/state/windowTypes.ts";
@@ -70,7 +70,6 @@ const contentComponentMap: Record<WindowContentComponent, Component> = {
   EarthWindowContent,
   SocialLinksWindowContent,
   RunWindowContent,
-  MSDOSPromptWindowContent,
   VirusPopUpContent,
   WindowsMediaPlayerWindowContent,
 };

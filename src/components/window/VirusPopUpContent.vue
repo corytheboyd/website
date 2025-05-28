@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 const images = [
   "/has-science-gone-too-far-1.png",
@@ -19,5 +19,8 @@ const images = [
   "/has-science-gone-too-far-3.png",
 ];
 
-const selectedImage = ref(images[Math.floor(Math.random() * images.length)]);
+const props = defineProps<{ image?: string }>();
+const selectedImage = computed(
+  () => props.image || images[Math.floor(Math.random() * images.length)],
+);
 </script>

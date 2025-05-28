@@ -29,6 +29,7 @@ type Window = {
   showInToolbar?: boolean;
   minimizable?: boolean;
   focusOnOpen?: boolean;
+  props?: Record<string, any>;
 };
 
 interface WindowState {
@@ -128,6 +129,7 @@ export const useWindowStore = defineStore("windows", {
             | "showInToolbar"
             | "minimizable"
             | "focusOnOpen"
+            | "props"
           >
         >,
     ) {
@@ -186,6 +188,7 @@ export const useWindowStore = defineStore("windows", {
         showInToolbar,
         minimizable,
         focusOnOpen,
+        props: window.props,
       });
 
       // Add to end of taskbar only if showInToolbar is true
@@ -335,35 +338,38 @@ export const useWindowStore = defineStore("windows", {
     },
 
     runCommand(command: string, windowId: string) {
-      // Command registry: keys are arrays of aliases, value is a function to run
-      const commandRegistry: { aliases: string[]; action: () => void }[] = [
-        {
-          aliases: ["command", "cmd.exe"],
-          action: () => {
-            this.addWindow({
-              name: "MS-DOS Prompt",
-              width: 500,
-              height: 320,
-              resizable: true,
-              position: { x: 60, y: 60 },
-              icon: "/win98icon/windows-0.png", // fallback icon
-              component: "MSDOSPromptWindowContent",
-            });
-          },
+      // Generic program registry
+      const programs: Record<string, (args?: string) => void> = {
+        exit: () => {
+          this.closeWindow(windowId);
         },
-        {
-          aliases: ["exit"],
-          action: () => {
-            this.closeWindow(windowId);
-          },
+        virus: () => {
+          const numWindows = 20;
+          for (let i = 0; i < numWindows; ++i) {
+            setTimeout(() => {
+              this.addWindow({
+                name: "VIRUS",
+                width: 220,
+                height: 220,
+                resizable: false,
+                minimizable: false,
+                showInToolbar: false,
+                position: {
+                  x: Math.floor(Math.random() * 900),
+                  y: Math.floor(Math.random() * 600),
+                },
+                icon: "/win98icon/windows-0.png",
+                component: "VirusPopUpContent",
+                // No props: let the component randomize the image
+                focusOnOpen: false,
+              });
+            }, i * 50);
+          }
         },
-      ];
-      const input = command.trim().toLowerCase();
-      const found = commandRegistry.find((entry) =>
-        entry.aliases.includes(input),
-      );
-      if (found) {
-        found.action();
+      };
+      const [prog, ...args] = command.trim().split(/\s+/);
+      if (programs[prog.toLowerCase()]) {
+        programs[prog.toLowerCase()](args.join(" "));
       } else {
         // Optionally: show error or do nothing
         // alert('Unknown command: ' + command);
