@@ -49,47 +49,6 @@
     >
       <slot></slot>
     </div>
-    <!-- Resize handles -->
-    <div
-      v-if="resizable"
-      class="absolute top-0 right-2 left-2 z-10 h-2 cursor-row-resize"
-      @mousedown="startResize('n', $event)"
-    />
-    <div
-      v-if="resizable"
-      class="absolute top-2 right-0 bottom-2 z-10 w-2 cursor-col-resize"
-      @mousedown="startResize('e', $event)"
-    />
-    <div
-      v-if="resizable"
-      class="absolute right-2 bottom-0 left-2 z-10 h-2 cursor-row-resize"
-      @mousedown="startResize('s', $event)"
-    />
-    <div
-      v-if="resizable"
-      class="absolute top-2 bottom-2 left-0 z-10 w-2 cursor-col-resize"
-      @mousedown="startResize('w', $event)"
-    />
-    <div
-      v-if="resizable"
-      class="absolute top-0 left-0 z-10 h-3 w-3 cursor-nwse-resize"
-      @mousedown="startResize('nw', $event)"
-    />
-    <div
-      v-if="resizable"
-      class="absolute top-0 right-0 z-10 h-3 w-3 cursor-nesw-resize"
-      @mousedown="startResize('ne', $event)"
-    />
-    <div
-      v-if="resizable"
-      class="absolute right-0 bottom-0 z-10 h-3 w-3 cursor-nwse-resize"
-      @mousedown="startResize('se', $event)"
-    />
-    <div
-      v-if="resizable"
-      class="absolute bottom-0 left-0 z-10 h-3 w-3 cursor-nesw-resize"
-      @mousedown="startResize('sw', $event)"
-    />
   </section>
 </template>
 
@@ -156,22 +115,18 @@ const windowIndex = computed(() => store.getDesktopIndex(props.id));
 
 const windowIcon = computed(() => store.getWindow(props.id)?.icon);
 
-const isResizing = ref(false);
-const resizeDirection = ref<string | null>(null);
-const resizeStart = ref({ x: 0, y: 0, width: 0, height: 0, left: 0, top: 0 });
-
-const width = computed(() => {
-  const window = store.getWindow(props.id);
-  return window?.width ?? props.width;
-});
-const height = computed(() => {
-  const window = store.getWindow(props.id);
-  return window?.height ?? props.height;
-});
-
 const isMinimizable = computed(() => {
   const window = store.getWindow(props.id);
   return window?.minimizable ?? props.minimizable;
+});
+
+const width = computed(() => {
+  const window = store.getWindow(props.id);
+  return window?.width;
+});
+const height = computed(() => {
+  const window = store.getWindow(props.id);
+  return window?.height;
 });
 
 onMounted(() => {
@@ -342,104 +297,6 @@ const stopTouchDrag = () => {
   isDragging.value = false;
   document.removeEventListener("touchmove", handleTouchMove);
   document.removeEventListener("touchend", stopTouchDrag);
-};
-
-const startResize = (direction: string, e: MouseEvent) => {
-  if (!props.resizable) return;
-  e.stopPropagation();
-  e.preventDefault();
-  isResizing.value = true;
-  resizeDirection.value = direction;
-  const win = store.getWindow(props.id);
-  resizeStart.value = {
-    x: e.clientX,
-    y: e.clientY,
-    width: win?.width ?? props.width,
-    height: win?.height ?? props.height,
-    left: win?.position.x ?? props.position.x,
-    top: win?.position.y ?? props.position.y,
-  };
-  document.addEventListener("mousemove", handleResizeMove);
-  document.addEventListener("mouseup", stopResize);
-};
-
-const handleResizeMove = (e: MouseEvent) => {
-  if (!isResizing.value || !resizeDirection.value) return;
-  const dx = e.clientX - resizeStart.value.x;
-  const dy = e.clientY - resizeStart.value.y;
-  let newWidth = resizeStart.value.width;
-  let newHeight = resizeStart.value.height;
-  let newLeft = resizeStart.value.left;
-  let newTop = resizeStart.value.top;
-  const bounds = desktopBounds.value;
-  // Edge/corner logic
-  if (resizeDirection.value.includes("e")) {
-    newWidth = Math.max(
-      props.minWidth,
-      Math.min(resizeStart.value.width + dx, bounds.width - newLeft),
-    );
-  }
-  if (resizeDirection.value.includes("s")) {
-    newHeight = Math.max(
-      props.minHeight,
-      Math.min(resizeStart.value.height + dy, bounds.height - newTop),
-    );
-  }
-  if (resizeDirection.value.includes("w")) {
-    newWidth = Math.max(
-      props.minWidth,
-      Math.min(
-        resizeStart.value.width - dx,
-        resizeStart.value.width + resizeStart.value.left,
-      ),
-    );
-    newLeft = Math.min(
-      resizeStart.value.left + dx,
-      resizeStart.value.left + resizeStart.value.width - props.minWidth,
-    );
-    newLeft = Math.max(
-      0,
-      Math.min(
-        newLeft,
-        resizeStart.value.left + resizeStart.value.width - props.minWidth,
-      ),
-    );
-    if (newLeft + newWidth > bounds.width) {
-      newWidth = bounds.width - newLeft;
-    }
-  }
-  if (resizeDirection.value.includes("n")) {
-    newHeight = Math.max(
-      props.minHeight,
-      Math.min(
-        resizeStart.value.height - dy,
-        resizeStart.value.height + resizeStart.value.top,
-      ),
-    );
-    newTop = Math.min(
-      resizeStart.value.top + dy,
-      resizeStart.value.top + resizeStart.value.height - props.minHeight,
-    );
-    newTop = Math.max(
-      0,
-      Math.min(
-        newTop,
-        resizeStart.value.top + resizeStart.value.height - props.minHeight,
-      ),
-    );
-    if (newTop + newHeight > bounds.height) {
-      newHeight = bounds.height - newTop;
-    }
-  }
-  store.setWindowSize(props.id, { width: newWidth, height: newHeight });
-  store.setWindowPosition(props.id, { x: newLeft, y: newTop });
-};
-
-const stopResize = () => {
-  isResizing.value = false;
-  resizeDirection.value = null;
-  document.removeEventListener("mousemove", handleResizeMove);
-  document.removeEventListener("mouseup", stopResize);
 };
 </script>
 

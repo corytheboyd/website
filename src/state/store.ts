@@ -19,12 +19,6 @@ type Window = {
   programId: ProgramId;
   minimized: boolean;
   position: Position;
-  minWidth?: number;
-  minHeight?: number;
-  resizable?: boolean;
-  showInToolbar?: boolean;
-  minimizable?: boolean;
-  focusOnOpen?: boolean;
   width: number;
   height: number;
   props?: Record<string, any>;
@@ -39,11 +33,6 @@ interface WindowState {
   focusedIconId: string | null;
   startMenuOpen: boolean; // Whether the start menu is open
 }
-
-const DEFAULT_WINDOW_MIN_SIZE = {
-  minWidth: 200,
-  minHeight: 100,
-};
 
 const DEFAULT_WINDOW_POSITION = {
   x: 100,
@@ -120,12 +109,6 @@ export const useWindowStore = defineStore("windows", {
       const id = uuidv4();
       const window = program.window;
       let position = window.defaultPosition ?? DEFAULT_WINDOW_POSITION;
-      let minWidth = DEFAULT_WINDOW_MIN_SIZE.minWidth;
-      let minHeight = DEFAULT_WINDOW_MIN_SIZE.minHeight;
-      let resizable = window.resizable ?? DEFAULT_WINDOW_OPTIONS.resizable;
-      let showInToolbar = DEFAULT_WINDOW_OPTIONS.showInToolbar;
-      let minimizable = DEFAULT_WINDOW_OPTIONS.minimizable;
-      let focusOnOpen = DEFAULT_WINDOW_OPTIONS.focusOnOpen;
       let width = window.width;
       let height = window.height;
 
@@ -163,25 +146,19 @@ export const useWindowStore = defineStore("windows", {
         programId,
         minimized: false,
         position,
-        minWidth,
-        minHeight,
-        resizable,
-        showInToolbar,
-        minimizable,
-        focusOnOpen,
         width,
         height,
         props,
       });
 
       // Add to end of taskbar only if showInToolbar is true
-      if (showInToolbar) {
+      if (program.showInToolbar) {
         this.taskbarOrder.push(id);
       }
       // Add to end of desktop order
       this.desktopOrder.push(id);
       // Set focus to the new window only if focusOnOpen is true
-      if (focusOnOpen) {
+      if (program.focusOnOpen) {
         this.setFocusedWindowId(id);
       }
       return id;
