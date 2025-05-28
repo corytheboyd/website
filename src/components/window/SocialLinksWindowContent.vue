@@ -12,6 +12,17 @@
       <ul class="flex flex-col gap-2">
         <li>
           <a
+            href="https://github.com/corytheboyd"
+            target="_blank"
+            class="social-link from-gray-300 via-gray-200 to-gray-300/0"
+          >
+            <i-tabler-brand-github class="social-link-icon text-gray-800" />
+            <span>https://github.com/corytheboyd</span>
+          </a>
+        </li>
+
+        <li>
+          <a
             href="https://ruby.social/@corytheboyd"
             target="_blank"
             class="social-link from-red-300 via-red-200 to-red-300/0"

@@ -16,6 +16,7 @@ declare module 'vue' {
     EarthWindowContent: typeof import('./src/components/window/EarthWindowContent.vue')['default']
     'ITablerBrand-': typeof import('~icons/tabler/brand-')['default']
     ITablerBrandBluesky: typeof import('~icons/tabler/brand-bluesky')['default']
+    ITablerBrandGithub: typeof import('~icons/tabler/brand-github')['default']
     ITablerBrandMastodon: typeof import('~icons/tabler/brand-mastodon')['default']
     ITablerBrandSoundcloud: typeof import('~icons/tabler/brand-soundcloud')['default']
     ITablerLink: typeof import('~icons/tabler/link')['default']

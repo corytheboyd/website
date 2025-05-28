@@ -49,6 +49,7 @@ export const programs: ProgramConfig[] = [
       width: 400,
       height: 300,
       resizable: true,
+      defaultPosition: { x: 0, y: 300 },
     },
     desktopIcon: {
       icon: "/win98icon/wm_file-2.png",
@@ -60,9 +61,10 @@ export const programs: ProgramConfig[] = [
     component: "EarthWindowContent",
     window: {
       icon: "/win98icon/world-0.png",
-      width: 400,
-      height: 300,
+      width: 250,
+      height: 250,
       resizable: true,
+      defaultPosition: { x: 0, y: 250 },
     },
     desktopIcon: {
       icon: "/win98icon/world-0.png",
@@ -74,9 +76,10 @@ export const programs: ProgramConfig[] = [
     component: "SocialLinksWindowContent",
     window: {
       icon: "/win98icon/users-0.png",
-      width: 400,
-      height: 300,
+      width: 325,
+      height: 275,
       resizable: false,
+      defaultPosition: { x: 35, y: 130 },
     },
     desktopIcon: {
       icon: "/win98icon/users-0.png",
