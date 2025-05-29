@@ -22,6 +22,7 @@ export interface ProgramConfig {
     height: number;
     resizable: boolean;
     defaultPosition?: { x: number; y: number };
+    title?: string;
   };
   desktopIcon?: {
     icon: string;
@@ -143,28 +144,42 @@ export const programs: ProgramConfig[] = [
   },
 ];
 
-// Central registry for program shortcuts
-export interface ProgramShortcut {
-  id: string;
-  name: string;
-  icon: string;
-  targetProgramId: ProgramId;
-  programArguments?: any;
-  windowArguments?: any;
+export interface ImageViewerProgramArguments {
+  src: string;
+  title: string;
+  width: number;
+  height: number;
 }
 
-export const programShortcuts: ProgramShortcut[] = [
+export type ProgramArgumentsMap = {
+  "image-viewer": ImageViewerProgramArguments;
+  // Add other program argument types here as needed
+  [key: string]: any;
+};
+
+export interface ProgramShortcut<T extends ProgramId = ProgramId> {
+  id: string;
+  name: string;
+  targetProgramId: T;
+  programArguments: ProgramArgumentsMap[T];
+  windowArguments?: Partial<NonNullable<ProgramConfig["window"]>>;
+}
+
+export const programShortcuts: ProgramShortcut<"image-viewer">[] = [
   {
     id: "four-byte-burger.png",
     name: "four-byte-burger.png",
-    icon: "/win98icon/image_old_gif-0.png",
     targetProgramId: "image-viewer",
     programArguments: {
       src: "/four-byte-burger.png",
       title: "four-byte-burger.png",
+      width: 300,
+      height: 400,
     },
     windowArguments: {
       title: "four-byte-burger.png",
+      width: 350,
+      height: 450,
     },
   },
 ];

@@ -82,7 +82,10 @@ function openFourByteBurger() {
   if (!fourByteBurgerShortcut) return;
   store.openProgram(fourByteBurgerShortcut.targetProgramId, {
     programArguments: fourByteBurgerShortcut.programArguments,
-    windowArguments: fourByteBurgerShortcut.windowArguments,
+    windowArguments: {
+      ...fourByteBurgerShortcut.windowArguments,
+      title: fourByteBurgerShortcut.name,
+    },
   });
   emit("close");
 }

@@ -16,6 +16,7 @@
         :id="window.id"
         :title="
           window.props?.windowArguments?.title ||
+          window.props?.windowArguments?.title ||
           getProgramById(window.programId)?.name
         "
         :icon="getProgramById(window.programId)?.window?.icon"

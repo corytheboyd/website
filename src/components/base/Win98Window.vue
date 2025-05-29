@@ -27,7 +27,7 @@
       @touchstart="startTouchDrag"
     >
       <div class="title-bar-text flex">
-        <img v-if="windowIcon" :src="windowIcon" alt="" class="window-icon" />
+        <img v-if="icon" :src="icon" alt="" class="window-icon" />
         <span>{{ title }}</span>
       </div>
       <div class="title-bar-controls">
@@ -74,6 +74,7 @@ interface Props {
   minHeight?: number;
   resizable?: boolean;
   minimizable?: boolean;
+  icon?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -87,6 +88,7 @@ const props = withDefaults(defineProps<Props>(), {
   minHeight: MIN_HEIGHT,
   resizable: true,
   minimizable: true,
+  icon: "",
 });
 
 const store = useWindowStore();
@@ -112,8 +114,6 @@ const minimized = computed(() => {
 const isFocused = computed(() => store.focusedWindowId === props.id);
 
 const windowIndex = computed(() => store.getDesktopIndex(props.id));
-
-const windowIcon = computed(() => store.getWindow(props.id)?.icon);
 
 const isMinimizable = computed(() => {
   const window = store.getWindow(props.id);

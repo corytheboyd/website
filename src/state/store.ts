@@ -122,7 +122,7 @@ export const useWindowStore = defineStore("windows", {
       programId: T,
       options?: {
         programArguments?: ProgramArgumentsMap[T];
-        windowArguments?: Partial<ProgramConfig["window"]> & { title?: string };
+        windowArguments?: Partial<NonNullable<ProgramConfig["window"]>>;
         position?: Position;
         [key: string]: any;
       },
@@ -131,11 +131,17 @@ export const useWindowStore = defineStore("windows", {
       if (!program?.window) return null;
 
       const id = uuidv4();
-      const window = program.window;
+      // Merge windowArguments over program.window
+      const mergedWindow = {
+        ...program.window,
+        ...(options?.windowArguments || {}),
+      };
       let position =
-        options?.position ?? window.defaultPosition ?? DEFAULT_WINDOW_POSITION;
-      let width = window.width;
-      let height = window.height;
+        options?.position ??
+        mergedWindow.defaultPosition ??
+        DEFAULT_WINDOW_POSITION;
+      let width = mergedWindow.width;
+      let height = mergedWindow.height;
 
       // Try to get desktop width and height from DOM
       let desktopRect =
