@@ -8,9 +8,10 @@
     <span
       v-if="submenu"
       :class="open ? 'text-white' : 'text-black'"
-      class="text-[8px]"
-      >▶</span
+      class="flex items-center text-[8px]"
     >
+      <i-tabler-caret-right-filled class="inline-block h-3 w-3 align-middle" />
+    </span>
     <ToolbarStartMenuSubMenu v-if="submenu && open" :items="submenu" />
   </div>
 </template>

@@ -6,9 +6,12 @@
   >
     <img :src="icon" class="h-7 w-7" :alt="label" />
     <span class="flex-1">{{ label }}</span>
-    <span v-if="submenu" class="text-[8px] text-black group-hover:text-white"
-      >▶</span
+    <span
+      v-if="submenu"
+      class="flex items-center text-[8px] text-black group-hover:text-white"
     >
+      <i-tabler-caret-right-filled class="inline-block h-3 w-3 align-middle" />
+    </span>
     <ToolbarStartMenuSubMenu
       v-if="submenu"
       :items="submenu"
