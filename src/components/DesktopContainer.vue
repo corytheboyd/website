@@ -1,7 +1,7 @@
 <template>
   <main
     ref="desktopArea"
-    class="relative z-20 m-auto flex w-full flex-col items-center justify-between select-none"
+    class="relative z-20 m-auto flex w-full flex-col items-center justify-between shadow-[0_8px_40px_16px_rgba(0,0,0,0.7)] drop-shadow-2xl select-none"
     :class="[
       // MOBILE VIEW: FULL SCREEN
       'h-full w-full',
