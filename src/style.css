@@ -3,7 +3,7 @@
 
 body {
   overscroll-behavior-y: none;
-  @apply h-screen w-screen;
+  @apply h-dvh w-full;
   @apply overflow-hidden;
 }
 

@@ -22,4 +22,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    allowedHosts: ["localhost", "macbook.taild3766c.ts.net"],
+  },
 });
