@@ -43,7 +43,11 @@
       </Win98IconContainer>
     </section>
 
-    <section class="w-full flex-shrink-0" ref="toolbarArea">
+    <section
+      class="w-full flex-shrink-0"
+      ref="toolbarArea"
+      style="padding-bottom: env(safe-area-inset-bottom)"
+    >
       <ToolbarContainer />
     </section>
   </main>
