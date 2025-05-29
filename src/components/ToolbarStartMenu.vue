@@ -92,24 +92,6 @@ function openFourByteBurger() {
 
 const menuItems: MenuItem[] = [
   {
-    icon: "/win98icon/directory_favorites-0.png",
-    label: "Favorites",
-    submenu: [
-      {
-        icon: "/win98icon/directory_open_file_mydocs-0.png",
-        label: "My Documents",
-      },
-      {
-        icon: "/win98icon/directory_open_file_mydocs-0.png",
-        label: "My Pictures",
-      },
-      {
-        icon: "/win98icon/directory_open_file_mydocs-0.png",
-        label: "My Music",
-      },
-    ],
-  },
-  {
     icon: "/win98icon/directory_open_file_mydocs-0.png",
     label: "Documents",
     submenu: [
@@ -118,15 +100,6 @@ const menuItems: MenuItem[] = [
         label: fourByteBurgerShortcut?.name,
         action: openFourByteBurger,
       },
-    ],
-  },
-  {
-    icon: "/win98icon/settings_gear-0.png",
-    label: "Settings",
-    submenu: [
-      { icon: "/win98icon/settings_gear-0.png", label: "Control Panel" },
-      { icon: "/win98icon/settings_gear-0.png", label: "Printers" },
-      { icon: "/win98icon/settings_gear-0.png", label: "Taskbar & Start Menu" },
     ],
   },
   { type: "divider" },

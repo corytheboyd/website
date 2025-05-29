@@ -40,7 +40,7 @@
       </div>
     </div>
     <div
-      class="window-body h-full overflow-auto"
+      class="window-body h-full overflow-hidden"
       :class="bodyClass"
       v-show="!minimized"
       :style="{
