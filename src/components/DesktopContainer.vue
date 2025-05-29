@@ -1,7 +1,7 @@
 <template>
   <main
     ref="desktopArea"
-    class="relative z-20 m-auto flex w-full flex-col items-center justify-center select-none"
+    class="relative z-20 m-auto flex w-full flex-col items-center justify-between select-none"
     :class="[
       // MOBILE VIEW: FULL SCREEN
       'h-full w-full',
@@ -9,7 +9,7 @@
       'md:aspect-4/3 md:h-auto md:max-h-full md:max-w-screen-lg',
     ]"
   >
-    <section class="win98-color-teal w-full flex-1">
+    <section class="win98-color-teal w-full flex-1 overflow-hidden">
       <Win98Window
         v-for="window in windows"
         :key="window.id"
@@ -43,7 +43,7 @@
       </Win98IconContainer>
     </section>
 
-    <section class="w-full" ref="toolbarArea">
+    <section class="w-full flex-shrink-0" ref="toolbarArea">
       <ToolbarContainer />
     </section>
   </main>
