@@ -125,7 +125,7 @@ export const programs: ProgramConfig[] = [
       height: 300,
       resizable: true,
     },
-    showInToolbar: true,
+    showInToolbar: false,
     focusOnOpen: false,
   },
   {
